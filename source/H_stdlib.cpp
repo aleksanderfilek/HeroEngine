@@ -4,7 +4,7 @@ DEBUG_CODE(
     size_t allocatedMemory = 0;  
 )
 
-void* Hero::resizeArray(void* ptr, size_t number, size_t size)
+void* Hero::resize(void* ptr, size_t number, size_t size)
 {
     #ifdef DEBUG
         size_t* p = ((size_t*)ptr) - 1;
