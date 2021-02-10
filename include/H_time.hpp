@@ -5,17 +5,18 @@ namespace Hero
 {
 
 class Time
-{
+{    
     private:
         static Time* _instance;
 
         double _deltaTime;
         double _timeScale;
 
-        static void SetDeltaTime(double value){ _instance->_deltaTime = value;}
+        void SetDeltaTime(double value){ _instance->_deltaTime = value;}
+
+        Time();
 
     public:
-        Time();
 
         static double GetDeltaTime(){ return _instance->_deltaTime*_instance->_timeScale; }
         static void SetScale(double value){ _instance->_timeScale = value; }
