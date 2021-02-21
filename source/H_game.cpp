@@ -22,26 +22,26 @@ void Init(const char *title, int width, int height, int sdlflags)
 {
     gameData = new GameData();
 
-    Hero::Window::Init(title, width, height, sdlflags);
+    Hero::Window::Engine::Init(title, width, height, sdlflags);
 
-    Hero::Event::Init();
+    Hero::Event::Engine::Init();
 
-    Hero::Input::Init();
+    Hero::Input::Engine::Init();
 
-    Hero::Time::Init();    
+    Hero::Time::Engine::Init();    
 
 }
 
 void Close()
 {
     //extern void Window_delete();
-    Hero::Window::Delete();
+    Hero::Window::Engine::Delete();
 
-    Hero::Event::Delete();
+    Hero::Event::Engine::Delete();
 
-    Hero::Input::Delete();
+    Hero::Input::Engine::Delete();
 
-    Hero::Time::Delete();
+    Hero::Time::Engine::Delete();
 }
 
 void Start(Level* startLevel)
@@ -57,7 +57,7 @@ void Start(Level* startLevel)
     int quit = 0;
     while (quit >= 0)
     {
-        Hero::Time::SetDeltaTime(elapsed_time);
+        Hero::Time::Engine::SetDeltaTime(elapsed_time);
 
         // Get actual timer
         timer = SDL_GetTicks();
@@ -65,14 +65,13 @@ void Start(Level* startLevel)
         CheckLevel();
 
         // Event loop
-        quit = Hero::Event::Update();
+        quit = Hero::Event::Engine::Update();
 
         // Update inputs
-        Hero::Input::Update();
+        Hero::Input::Engine::Update();
 
         // Do state update function
         gameData->currentLevel->Update();
-    glClear(GL_COLOR_BUFFER_BIT);
 
         // Do state draw function
         gameData->currentLevel->Draw();

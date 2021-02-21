@@ -7,11 +7,11 @@ namespace Hero
 {
 namespace Event
 {
-    #ifdef ENGINE
+    namespace Engine{
         void Init();
         void Delete();
         int Update();
-    #endif
+    }
 
     void SendEvent();
 }

@@ -7,11 +7,11 @@ namespace Hero
 {
 namespace Time
 {
-    #ifdef ENGINE
+    namespace Engine{
         void Init();
         void Delete();
         void SetDeltaTime(double value);
-    #endif
+    }
 
     double GetDeltaTime();
     void SetScale(double value);

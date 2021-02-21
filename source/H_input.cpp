@@ -41,15 +41,15 @@ namespace Input
         SDL_memcpy(inputData->previous_keyboard_state, inputData->current_keyboard_state, inputData->keyboard_state_number * sizeof(uint8_t));
     }
 
-    bool keyPressed(Key key){
+    bool keyPressed(KeyCode key){
         return inputData->current_keyboard_state[key] && inputData->previous_keyboard_state[key];
     }
 
-    bool keyDown(Key key){
+    bool keyDown(KeyCode key){
         return inputData->current_keyboard_state[key] && !inputData->previous_keyboard_state[key];
     }
 
-    bool keyUp(Key key){
+    bool keyUp(KeyCode key){
         return !inputData->current_keyboard_state[key] && inputData->previous_keyboard_state[key];
     }
 

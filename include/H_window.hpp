@@ -10,10 +10,10 @@ namespace Hero
 {
 namespace Window
 {
-    #ifdef ENGINE
+    namespace Engine{
         void Init(const char *title, int width, int height, int sdlflags);
         void Delete();
-    #endif
+    }
     
     void Render();
 
