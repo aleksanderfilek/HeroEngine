@@ -17,10 +17,10 @@ namespace Hero
     void* resize(void* ptr, size_t number, size_t size);
     #define Resize(ptr, number, type) resize(ptr, number, sizeof(type))
 }
-
+/*
 DEBUG_CODE(
 void* operator new(size_t size);
 void operator delete(void* ptr);
 )
-
+*/
 #endif

@@ -4,9 +4,11 @@ DEBUG_CODE(
     size_t allocatedMemory = 0;  
 )
 
-void* Hero::resize(void* ptr, size_t number, size_t size)
+namespace Hero
 {
-    #ifdef DEBUG
+void* resize(void* ptr, size_t number, size_t size)
+{
+    /*#ifdef DEBUG
         size_t* p = ((size_t*)ptr) - 1;
         allocatedMemory -= p[0];
         size_t* newptr = (size_t*)realloc(p, (number*size)+1);
@@ -14,12 +16,13 @@ void* Hero::resize(void* ptr, size_t number, size_t size)
         allocatedMemory += number*size;
         printf("allocated memory = %zu B\n", allocatedMemory);
         return newptr + 1;
-    #else
+    #else*/
         return realloc(ptr,number*size);
-    #endif
+    //#endif
 }
 
-
+}
+/*
 DEBUG_CODE(
 void* operator new(size_t size)
 {
@@ -38,3 +41,4 @@ void operator delete(void* ptr)
     free(p);
 }
 )
+*/
