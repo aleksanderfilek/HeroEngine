@@ -13,20 +13,23 @@ namespace Hero
 {
 namespace Time
 {
-    void Init()
+    namespace Engine
     {
-        timeData = new TimeData();
-    }
+        void Init()
+        {
+            timeData = new TimeData();
+        }
 
-    void Delete()
-    {
-        delete timeData;
-    }
+        void Delete()
+        {
+            delete timeData;
+        }
 
-    void SetDeltaTime(double value)
-    { 
-        timeData->deltaTime = value;
-        timeData->scaledTime = value * timeData->timeScale;
+        void SetDeltaTime(double value)
+        { 
+            timeData->deltaTime = value;
+            timeData->scaledTime = value * timeData->timeScale;
+        }
     }
 
     double GetDeltaTime()

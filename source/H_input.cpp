@@ -17,30 +17,32 @@ namespace Hero
 {
 namespace Input
 {
-    void Init()
+    namespace Engine
     {
-        inputData = new InputData();
+        void Init()
+        {
+            inputData = new InputData();
 
-        inputData->current_keyboard_state = SDL_GetKeyboardState(&inputData->keyboard_state_number);
-        inputData->previous_keyboard_state = (uint8_t *)calloc(inputData->keyboard_state_number, sizeof(uint8_t));
+            inputData->current_keyboard_state = SDL_GetKeyboardState(&inputData->keyboard_state_number);
+            inputData->previous_keyboard_state = (uint8_t *)calloc(inputData->keyboard_state_number, sizeof(uint8_t));
+        }
+
+        void Delete()
+        {
+            delete inputData->previous_keyboard_state;
+
+            delete inputData;
+        }
+
+        void Update()
+        {
+            //update mouse
+            inputData->previous_mouse_state = inputData->current_mouse_state;
+            inputData->current_mouse_state = SDL_GetMouseState(&inputData->mouse_position_X, &inputData->mouse_position_Y);
+            //update keyboard
+            SDL_memcpy(inputData->previous_keyboard_state, inputData->current_keyboard_state, inputData->keyboard_state_number * sizeof(uint8_t));
+        }
     }
-
-    void Delete()
-    {
-        delete inputData->previous_keyboard_state;
-
-        delete inputData;
-    }
-
-    void Update()
-    {
-        //update mouse
-        inputData->previous_mouse_state = inputData->current_mouse_state;
-        inputData->current_mouse_state = SDL_GetMouseState(&inputData->mouse_position_X, &inputData->mouse_position_Y);
-        //update keyboard
-        SDL_memcpy(inputData->previous_keyboard_state, inputData->current_keyboard_state, inputData->keyboard_state_number * sizeof(uint8_t));
-    }
-
     bool keyPressed(KeyCode key){
         return inputData->current_keyboard_state[key] && inputData->previous_keyboard_state[key];
     }

@@ -67,9 +67,6 @@ void Start(Level* startLevel)
         // Event loop
         quit = Hero::Event::Engine::Update();
 
-        // Update inputs
-        Hero::Input::Engine::Update();
-
         // Do state update function
         gameData->currentLevel->Update();
 
@@ -77,6 +74,9 @@ void Start(Level* startLevel)
         gameData->currentLevel->Draw();
 
         Hero::Window::Render();
+
+        // Update inputs
+        Hero::Input::Engine::Update();
 
         // Calculate elapsed time
         elapsed_time = (double)(SDL_GetTicks() - timer )/1000.0f;

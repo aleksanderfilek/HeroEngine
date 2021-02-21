@@ -23,12 +23,9 @@ public:
 
     void Update()
     {
-        if(Hero::Input::keyPressed(Hero::Input::Key::KeyCode_A)) // sprawdzenie czy klawisz A został przytrzymany
+        if(Hero::Input::keyUp(Hero::Input::KeyCode::A)) // sprawdzenie czy klawisz A został przytrzymany
         { 
-            // wysłanie eventu o zamknięciu okna
-            SDL_Event sdlevent;
-            sdlevent.type = SDL_QUIT;
-            SDL_PushEvent(&sdlevent);
+
         }
     }
 

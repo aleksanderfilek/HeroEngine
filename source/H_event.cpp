@@ -11,33 +11,35 @@ namespace Hero
 {
 namespace Event
 {
-    void Init()
+    namespace Engine
     {
-        eventData = new EventData();
-    }
+        void Init()
+        {
+            eventData = new EventData();
+        }
 
-    void Delete()
-    {
-        delete eventData;
-    }
+        void Delete()
+        {
+            delete eventData;
+        }
 
-    int Update()
-    {
-        while(SDL_PollEvent(&eventData->events) != 0){
-            switch (eventData->events.type)
-            {
-            case SDL_QUIT:
-                return -1;
-                break;
-            case SDL_WINDOWEVENT:
-                if(eventData->events.window.event == SDL_WINDOWEVENT_RESIZED){
-                    
+        int Update()
+        {
+            while(SDL_PollEvent(&eventData->events) != 0){
+                switch (eventData->events.type)
+                {
+                case SDL_QUIT:
+                    return -1;
+                    break;
+                case SDL_WINDOWEVENT:
+                    if(eventData->events.window.event == SDL_WINDOWEVENT_RESIZED){
+                        
+                    }
+                    break;
                 }
-                break;
             }
         }
     }
-
     void SendEvent()
     {
 
