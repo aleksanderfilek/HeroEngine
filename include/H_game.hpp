@@ -7,8 +7,9 @@
 #include"H_input.hpp"
 #include"H_time.hpp"
 
-#include<SDL2/SDL.h>
+#include"SDL.h"
 
+#include<cstdio>
 #include<stdint.h>
 
 namespace Hero

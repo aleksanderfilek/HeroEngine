@@ -1,7 +1,7 @@
 #ifndef HERO_INPUT_HPP
 #define HERO_INPUT_HPP
 
-#include<SDL2/SDL.h>
+#include"SDL.h"
 
 #include<stdio.h>
 #include<stdint.h>

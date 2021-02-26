@@ -1,7 +1,5 @@
 #include"H_game.hpp"
 
-#include<stdio.h>
-
 static void CheckLevel();
 static void CloseLevel();
 

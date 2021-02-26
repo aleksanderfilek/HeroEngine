@@ -3,7 +3,7 @@
 
 #include"H_stdlib.hpp"
 
-#include<GL/glew.h>
+#include"glew.h"
 
 namespace Hero{
     typedef unsigned int ShaderId;

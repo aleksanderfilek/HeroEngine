@@ -1,8 +1,10 @@
 #ifndef HERO_WINDOW_HPP
 #define HERO_WINDOW_HPP
 
-#include<SDL2/SDL.h>
-#include<GL/glew.h>
+#include"SDL.h"
+#include"glew.h"
+
+#include<cstdio>
 
 #include"H_math.hpp"
 
