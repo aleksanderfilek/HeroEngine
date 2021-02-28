@@ -1,6 +1,8 @@
 #ifndef HERO_MATH_HPP
 #define HERO_MATH_HPP
 
+#include <cstring>
+
 namespace Hero{
 
 #define PI 3.141596f

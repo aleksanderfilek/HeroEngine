@@ -36,82 +36,82 @@ namespace Hero
             }
         }
 
-        FILE* file = fopen(path, "r");
+        std::ifstream readFile;
+        readFile.open(path, std::ios::in | std::ios::binary);
 
-        if(file == NULL){
-            printf("Imposible to open the file!\n");
-            return -1;
-        }
-
-        unsigned int vertex_shader_size = 1024;
-        unsigned int vertex_shader_used_bytes = 0;
-        char* vertex_shader_code = (char*)calloc(vertex_shader_size, sizeof(char));
-
-        size_t fragment_shader_size = 1024;
-        size_t fragment_shader_used_bytes = 0;
-        char* fragment_shader_code = (char*)calloc(fragment_shader_size, sizeof(char));
-
-        int shader_type = -1;
-
-        char chunk[128];
-
-        while(fgets(chunk, sizeof(chunk), file) != NULL)
+        size_t vertexSize = 0;
+        char* vertexCode;
+        readFile.read((char*)&vertexSize, sizeof(size_t));
+        if(vertexSize > 0)
         {
-            if(strstr(chunk, "// vertex") != NULL)
-            {
-                shader_type = 0;
-                //continue;
-            }
-            else if(strstr(chunk, "// fragment") != NULL)
-            {
-                shader_type = 1;
-                //continue;
-            }
-
-            switch (shader_type)
-            {
-            case 0:
-                    if((vertex_shader_size - vertex_shader_used_bytes) < strlen(chunk)){
-                        vertex_shader_code = (char*)realloc(vertex_shader_code, vertex_shader_size + 1024);
-                        vertex_shader_size += 1024;
-                    }
-                    strcat(vertex_shader_code, chunk);
-                    vertex_shader_used_bytes += strlen(chunk);
-                break;  
-            case 1:
-                    if((fragment_shader_size - fragment_shader_used_bytes) < strlen(chunk)){
-                        fragment_shader_code = (char*)realloc(fragment_shader_code, fragment_shader_size + 1024);
-                        fragment_shader_size += 1024;
-                    }
-                    strcat(fragment_shader_code, chunk);
-                    fragment_shader_used_bytes += strlen(chunk);
-                break;
-            }
+            vertexCode = new char[vertexSize+1];
+            readFile.read(vertexCode, vertexSize);
+            vertexCode[vertexSize] = '\0';
         }
 
-        fclose(file);
+        size_t fragmentSize = 0;
+        char* fragmentCode;
+        readFile.read((char*)&fragmentSize, sizeof(size_t));
+        if(fragmentSize > 0)
+        {
+            fragmentCode = new char[fragmentSize+1];
+            readFile.read(fragmentCode, fragmentSize);
+            fragmentCode[fragmentSize] = '\0';
+        }
+
+        size_t geometrySize = 0;
+        char* geometryCode;
+        readFile.read((char*)&geometrySize, sizeof(size_t));
+        if(geometrySize > 0)
+        {
+            geometryCode = new char[geometrySize+1];
+            readFile.read(geometryCode, geometrySize);
+            geometryCode[geometrySize] = '\0';
+        }
+
+        readFile.close();        
 
         // Create shader program
-        int vertex, fragment;
-
-        vertex = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertex, 1, (const char**)&vertex_shader_code, NULL);
-        glCompileShader(vertex);
-
-        fragment = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragment, 1, (const char**)&fragment_shader_code, NULL);
-        glCompileShader(fragment);
-
         unsigned int program = glCreateProgram();
-        glAttachShader(program,vertex);
-        glAttachShader(program,fragment);
+
+        int vertex, fragment, geometry;
+
+        if(vertexSize > 0){
+            vertex = glCreateShader(GL_VERTEX_SHADER);
+            glShaderSource(vertex, 1, (const char**)&vertexCode, NULL);
+            glCompileShader(vertex);            
+        }
+
+        if(fragmentSize > 0){
+            fragment = glCreateShader(GL_FRAGMENT_SHADER);
+            glShaderSource(fragment, 1, (const char**)&fragmentCode, NULL);
+            glCompileShader(fragment);
+        }
+
+        if(geometrySize > 0){
+            geometry = glCreateShader(GL_GEOMETRY_SHADER);
+            glShaderSource(geometry, 1, (const char**)&geometryCode, NULL);
+            glCompileShader(geometry);
+        }
+
+        if(vertexSize > 0) glAttachShader(program, vertex);
+        if(fragmentSize > 0) glAttachShader(program, fragment);
+        if(geometrySize > 0) glAttachShader(program, geometry);
+
         glLinkProgram(program);
 
-        glDeleteShader(vertex);
-        glDeleteShader(fragment);
-
-        free(vertex_shader_code);
-        free(fragment_shader_code);
+        if(vertexSize > 0){
+            glDeleteShader(vertex);
+            delete[] vertexCode;
+        }
+        if(fragmentSize > 0){
+            glDeleteShader(fragment);
+            delete[] fragmentCode;
+        }
+        if(geometrySize > 0){
+            glDeleteShader(geometry);
+            delete[] geometryCode;
+        }
 
         // Create shader
         int index;
@@ -127,13 +127,13 @@ namespace Hero
         {
             this->allocatedElements++;
 
-            this->name = (char**)realloc(this->name, this->allocatedElements * sizeof(char*));
-            this->glId = (unsigned int*)realloc(this->glId, this->allocatedElements * sizeof(unsigned int));
+            this->name = (char**)std::realloc(this->name, this->allocatedElements * sizeof(char*));
+            this->glId = (unsigned int*)std::realloc(this->glId, this->allocatedElements * sizeof(unsigned int));
 
             index = this->allocatedElements - 1; // get new index
         }
 
-        this->name[index] = (char*)malloc(strlen(path)+1);
+        this->name[index] = new char[strlen(path)+1];
         strcpy(this->name[index], path);
         this->glId[index] = program;
         

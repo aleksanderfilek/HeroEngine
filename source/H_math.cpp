@@ -131,7 +131,7 @@ inline float rad2deg(float radians)
 
 void matrix_identity(matrix4x4& matrix)
 {
-    memset(&matrix, 0, sizeof(matrix4x4));
+    std::memset(&matrix, 0, sizeof(matrix4x4));
     matrix.v[0].x = 1.0f;
     matrix.v[1].y = 1.0f;
     matrix.v[2].z = 1.0f;
@@ -142,8 +142,8 @@ void matrix_projection(matrix4x4& matrix, int width, int height, float FOV, floa
 {
     float aspectRatio = (float)width/(float)height;
     float tg = tanf(FOV*0.5f*PI/180.0f);
-    
-    memset(&matrix, 0, sizeof(matrix4x4));
+
+    std::memset(&matrix, 0, sizeof(matrix4x4));
     matrix.v[0].x = 1.0f/(aspectRatio*tg);
     // matrix.v[0].y = 0.0f;
     // matrix.v[0].z = 0.0f;

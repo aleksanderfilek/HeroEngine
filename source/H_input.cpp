@@ -24,7 +24,7 @@ namespace Input
             inputData = new InputData();
 
             inputData->current_keyboard_state = SDL_GetKeyboardState(&inputData->keyboard_state_number);
-            inputData->previous_keyboard_state = (uint8_t *)calloc(inputData->keyboard_state_number, sizeof(uint8_t));
+            inputData->previous_keyboard_state = new uint8_t[inputData->keyboard_state_number];
         }
 
         void Delete()

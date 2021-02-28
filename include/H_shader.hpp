@@ -1,9 +1,12 @@
 #ifndef HERO_SHADER_HPP
 #define HERO_SHADER_HPP
 
-#include"H_stdlib.hpp"
+#include<GL\glew.h>
 
-#include"glew.h"
+#include<string.h>
+#include<cstdlib>
+#include<iostream>
+#include<fstream>
 
 namespace Hero{
     typedef unsigned int ShaderId;
@@ -15,7 +18,7 @@ namespace Hero{
         char** name;
         unsigned int* glId;
     public:
-        ShaderManager(unsigned int size);
+        ShaderManager(unsigned int size = 0);
         ~ShaderManager();
 
         ShaderId LoadShader(const char* path);

@@ -1,8 +1,10 @@
 {
     "C_Cpp.default.includePath": [
-        "${workspaceFolder}\\include\\*",
-        "${workspaceFolder}\\libs\\SDL2\\include\\*",
-        "${workspaceFolder}\\libs\\Glew\\include\\*"
-
-    ]
+        "${workspaceFolder}\\include\\*"
+    ],
+    "files.associations": {
+        "fstream": "cpp",
+        "*.tcc": "cpp",
+        "new": "cpp"
+    }
 }

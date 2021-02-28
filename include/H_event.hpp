@@ -1,7 +1,10 @@
 #ifndef HERO_EVENT_HPP
 #define HERO_EVENT_HPP
 
-#include"SDL.h"
+#include<SDL\SDL.h>
+
+#include<iostream>
+#include<cstdlib>
 
 namespace Hero
 {

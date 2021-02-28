@@ -1,7 +1,6 @@
 #include<iostream>
 
 #include"Hero.hpp"
-#include<stdio.h>
 
 class Scene:public Hero::Level
 {
@@ -18,7 +17,8 @@ public:
 
     void Start()
     {
-
+        Hero::ShaderManager manager;
+        manager.LoadShader("shader.glslbin");
     }
 
     void Update()

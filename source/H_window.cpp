@@ -23,7 +23,7 @@ namespace Window
             windowData->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, sdlflags | SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
             if(!windowData->window){
-                printf("Window could not be created! SDL Error: %s\n",SDL_GetError());
+                std::cout<<"Window could not be created! SDL Error: "<<SDL_GetError()<<std::endl;
                 return;
             }
 

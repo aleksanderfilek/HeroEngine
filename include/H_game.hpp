@@ -7,7 +7,7 @@
 #include"H_input.hpp"
 #include"H_time.hpp"
 
-#include"SDL.h"
+#include<SDL\SDL.h>
 
 #include<cstdio>
 #include<stdint.h>
