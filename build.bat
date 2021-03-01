@@ -8,6 +8,7 @@ g++ -c -Iinclude  source\H_time.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu
 g++ -c -Iinclude  source\H_math.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32 -o H_math.o
 g++ -c -Iinclude  source\H_shader.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32 -o H_shader.o
 g++ -c -Iinclude  source\H_stdlib.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32 -o H_stdlib.o
+g++ -c -Iinclude  source\H_mesh.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32 -o H_mesh.o
 
 ar rcs -o lib/libHero.lib *.o
 del *.o
