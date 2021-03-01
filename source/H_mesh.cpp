@@ -137,7 +137,6 @@ namespace Hero
     void Mesh::Draw()
     {
         glBindVertexArray(this->_VAO);
-        //glDrawArrays(GL_TRIANGLES, 0, this->_verticesCount);
         glDrawElements(GL_TRIANGLES, this->_indicesCount, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
