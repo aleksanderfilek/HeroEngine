@@ -2,40 +2,14 @@
 
 namespace Hero
 {
-    ShaderManager::ShaderManager(unsigned int size)
-    {        
-        this->allocatedElements = size;
-        this->name = new char*[size];
-        this->glId = new unsigned int[size];
+
+    Shader::~Shader()
+    {
+        glDeleteShader(this->glID);
     }
 
-    ShaderManager::~ShaderManager()
+    void Shader::Load(const std::string& path)
     {
-        for(int i = 0; i < this->allocatedElements; i++)
-        {
-            if(this->name[i] == NULL){
-                continue;
-            }
-
-            delete this->name[i];
-            glDeleteProgram(this->glId[i]);
-        }
-
-        delete this->name;
-        delete this->glId;
-        this->allocatedElements = 0;
-    }
-
-    ShaderId ShaderManager::LoadShader(const char* path)
-    {
-        for(int i = 0; i < this->allocatedElements; i++)
-        {
-            if(this->name[i] != NULL && strcmp(path, this->name[i]) == 0)
-            {
-                return i;
-            }
-        }
-
         std::ifstream readFile;
         readFile.open(path, std::ios::in | std::ios::binary);
 
@@ -46,7 +20,7 @@ namespace Hero
         {
             vertexCode = new char[vertexSize+1];
             readFile.read(vertexCode, vertexSize);
-            //vertexCode[vertexSize] = '\0';
+            vertexCode[vertexSize] = '\0';
         }
 
         size_t fragmentSize = 0;
@@ -56,7 +30,7 @@ namespace Hero
         {
             fragmentCode = new char[fragmentSize+1];
             readFile.read(fragmentCode, fragmentSize);
-            //fragmentCode[fragmentSize] = '\0';
+            fragmentCode[fragmentSize] = '\0';
         }
 
         size_t geometrySize = 0;
@@ -69,15 +43,18 @@ namespace Hero
             geometryCode[geometrySize] = '\0';
         }
 
-        readFile.close();        
+        readFile.close();
 
         // Create shader program
+        unsigned int program = glCreateProgram();
+
         int vertex, fragment, geometry;
 
         if(vertexSize > 0){
             vertex = glCreateShader(GL_VERTEX_SHADER);
             glShaderSource(vertex, 1, (const char**)&vertexCode, NULL);
             glCompileShader(vertex);        
+            
             int  success;
             char infoLog[512];
             glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
@@ -85,13 +62,22 @@ namespace Hero
             {
                 glGetShaderInfoLog(vertex, 512, NULL, infoLog);
                 std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-            }    
+            }
+
+            glAttachShader(program, vertex);
+            glGetProgramiv(program, GL_ATTACHED_SHADERS, &success);
+            if(!success)
+            {
+                glGetProgramInfoLog(program, 512, NULL, infoLog);
+                std::cout << "ERROR::PROGRAM::VERTEX::ATTACHED_FAILED\n" << infoLog << std::endl;
+            }
         }
 
         if(fragmentSize > 0){
             fragment = glCreateShader(GL_FRAGMENT_SHADER);
             glShaderSource(fragment, 1, (const char**)&fragmentCode, NULL);
             glCompileShader(fragment);
+
             int  success;
             char infoLog[512];
             glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
@@ -100,12 +86,21 @@ namespace Hero
                 glGetShaderInfoLog(fragment, 512, NULL, infoLog);
                 std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
             }
+
+            glAttachShader(program, fragment);
+            glGetProgramiv(program, GL_ATTACHED_SHADERS, &success);
+            if(!success)
+            {
+                glGetProgramInfoLog(program, 512, NULL, infoLog);
+                std::cout << "ERROR::PROGRAM::FRAGMENT::ATTACHED_FAILED\n" << infoLog << std::endl;
+            }
         }
 
         if(geometrySize > 0){
             geometry = glCreateShader(GL_GEOMETRY_SHADER);
             glShaderSource(geometry, 1, (const char**)&geometryCode, NULL);
             glCompileShader(geometry);
+
             int  success;
             char infoLog[512];
             glGetShaderiv(geometry, GL_COMPILE_STATUS, &success);
@@ -114,19 +109,24 @@ namespace Hero
                 glGetShaderInfoLog(geometry, 512, NULL, infoLog);
                 std::cout << "ERROR::SHADER::GEOMETRY::COMPILATION_FAILED\n" << infoLog << std::endl;
             }
-        }
-        unsigned int program = glCreateProgram();
 
-        if(vertexSize > 0) glAttachShader(program, vertex);
-        if(fragmentSize > 0) glAttachShader(program, fragment);
-        if(geometrySize > 0) glAttachShader(program, geometry);
+            glAttachShader(program, geometry);
+            glGetProgramiv(program, GL_ATTACHED_SHADERS, &success);
+            if(!success)
+            {
+                glGetProgramInfoLog(program, 512, NULL, infoLog);
+                std::cout << "ERROR::PROGRAM::GEOMETRY::ATTACHED_FAILED\n" << infoLog << std::endl;
+            }
+        }
 
         glLinkProgram(program);
         int  success;
         char infoLog[512];
-        if(!success) {
+        glGetProgramiv(program, GL_LINK_STATUS, &success);
+        if(!success)
+        {
             glGetProgramInfoLog(program, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::PROGRAM::LINKIG_FAILED\n" << infoLog << std::endl;
+            std::cout << "ERROR::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
         }
 
         if(vertexSize > 0){
@@ -142,63 +142,22 @@ namespace Hero
             delete[] geometryCode;
         }
 
-        // Create shader
-        int index;
-        for(index = 0; index < this->allocatedElements; index++)
-        {
-            if(this->name[index] == NULL)
-            {
-                break;
-            }
-        }
-
-        if(index == this->allocatedElements)
-        {
-            this->allocatedElements++;
-
-            this->name = (char**)std::realloc(this->name, this->allocatedElements * sizeof(char*));
-            this->glId = (unsigned int*)std::realloc(this->glId, this->allocatedElements * sizeof(unsigned int));
-
-            index = this->allocatedElements - 1; // get new index
-        }
-
-        this->name[index] = new char[strlen(path)+1];
-        strcpy(this->name[index], path);
-        this->glId[index] = program;
-        
-        return index;
+        this->glID = program;
     }
 
-    void ShaderManager::DeleteShader(ShaderId id)
+    void Shader::Bind()
     {
-        if(this->name[id] == NULL)
-        return;
-
-        delete this->name[id];
-        this->name[id] = NULL;
-        glDeleteProgram(this->glId[id]);
+        glUseProgram(this->glID);
+        glCheckError();
     }
 
-    void ShaderManager::BindShader(ShaderId id)
+    unsigned int Shader::GetGlID()
     {
-        glUseProgram(this->glId[id]);
+        return this->glID;
     }
 
-    int ShaderManager::GetShaderId(const char* path)
+    unsigned int Shader::GetUniformLocation(const char* uniformName)
     {
-        for(int i = 0; i < this->allocatedElements; i++)
-        {
-            if(this->name[i] != NULL && strcmp(path, this->name[i]) == 0)
-            {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    unsigned int ShaderManager::GetUniformLocation(ShaderId id, const char* uniformName)
-    {
-        return glGetUniformLocation(this->glId[id], uniformName);
+        return glGetUniformLocation(this->glID, uniformName);
     }
 }

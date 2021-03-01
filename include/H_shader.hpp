@@ -8,25 +8,20 @@
 #include<iostream>
 #include<fstream>
 
-namespace Hero{
-    typedef unsigned int ShaderId;
+#include"H_stdlib.hpp"
 
-    class ShaderManager
+namespace Hero{
+    class Shader
     {
     private:
-        unsigned int allocatedElements;
-        char** name;
-        unsigned int* glId;
+        unsigned int glID;
     public:
-        ShaderManager(unsigned int size = 0);
-        ~ShaderManager();
+        ~Shader();
 
-        ShaderId LoadShader(const char* path);
-        void DeleteShader(ShaderId id);
-        void BindShader(ShaderId id);
-        int GetShaderId(const char* path);
-        unsigned int GetUniformLocation(ShaderId id, const char* uniformName);
-
+        void Load(const std::string& path);
+        void Bind();
+        unsigned int GetGlID();
+        unsigned int GetUniformLocation(const char* uniformName);
     };
 }
 #endif
