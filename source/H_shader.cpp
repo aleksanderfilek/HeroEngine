@@ -46,7 +46,7 @@ namespace Hero
         {
             vertexCode = new char[vertexSize+1];
             readFile.read(vertexCode, vertexSize);
-            vertexCode[vertexSize] = '\0';
+            //vertexCode[vertexSize] = '\0';
         }
 
         size_t fragmentSize = 0;
@@ -56,7 +56,7 @@ namespace Hero
         {
             fragmentCode = new char[fragmentSize+1];
             readFile.read(fragmentCode, fragmentSize);
-            fragmentCode[fragmentSize] = '\0';
+            //fragmentCode[fragmentSize] = '\0';
         }
 
         size_t geometrySize = 0;
@@ -72,33 +72,62 @@ namespace Hero
         readFile.close();        
 
         // Create shader program
-        unsigned int program = glCreateProgram();
-
         int vertex, fragment, geometry;
 
         if(vertexSize > 0){
             vertex = glCreateShader(GL_VERTEX_SHADER);
             glShaderSource(vertex, 1, (const char**)&vertexCode, NULL);
-            glCompileShader(vertex);            
+            glCompileShader(vertex);        
+            int  success;
+            char infoLog[512];
+            glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
+            if(!success)
+            {
+                glGetShaderInfoLog(vertex, 512, NULL, infoLog);
+                std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+            }    
         }
 
         if(fragmentSize > 0){
             fragment = glCreateShader(GL_FRAGMENT_SHADER);
             glShaderSource(fragment, 1, (const char**)&fragmentCode, NULL);
             glCompileShader(fragment);
+            int  success;
+            char infoLog[512];
+            glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
+            if(!success)
+            {
+                glGetShaderInfoLog(fragment, 512, NULL, infoLog);
+                std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+            }
         }
 
         if(geometrySize > 0){
             geometry = glCreateShader(GL_GEOMETRY_SHADER);
             glShaderSource(geometry, 1, (const char**)&geometryCode, NULL);
             glCompileShader(geometry);
+            int  success;
+            char infoLog[512];
+            glGetShaderiv(geometry, GL_COMPILE_STATUS, &success);
+            if(!success)
+            {
+                glGetShaderInfoLog(geometry, 512, NULL, infoLog);
+                std::cout << "ERROR::SHADER::GEOMETRY::COMPILATION_FAILED\n" << infoLog << std::endl;
+            }
         }
+        unsigned int program = glCreateProgram();
 
         if(vertexSize > 0) glAttachShader(program, vertex);
         if(fragmentSize > 0) glAttachShader(program, fragment);
         if(geometrySize > 0) glAttachShader(program, geometry);
 
         glLinkProgram(program);
+        int  success;
+        char infoLog[512];
+        if(!success) {
+            glGetProgramInfoLog(program, 512, NULL, infoLog);
+            std::cout << "ERROR::SHADER::PROGRAM::LINKIG_FAILED\n" << infoLog << std::endl;
+        }
 
         if(vertexSize > 0){
             glDeleteShader(vertex);
