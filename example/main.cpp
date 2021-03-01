@@ -7,8 +7,8 @@ class Scene:public Hero::Level
 {
 public:
     Hero::Mesh mesh;
-    Hero::ShaderManager manager;
-    double time = 0;
+    Hero::Shader shader;
+    Hero::Texture texture;
 
     Scene()
     {
@@ -22,16 +22,20 @@ public:
 
     void Start()
     {
-        unsigned int i = manager.LoadShader("example/shader.glslbin");
-
-        manager.BindShader(i);
+        shader.Load("example/shader.glslbin");
 
         mesh.Load("example/sphere.daebin");
+
+        texture.Load("example/default.png");
+
+        shader.Bind();
+
+        texture.Bind();
+
     }
 
     void Update()
     {
-        time += Hero::Time::GetDeltaTime();
         if(Hero::Input::keyUp(Hero::Input::KeyCode::A)) // sprawdzenie czy klawisz A został przytrzymany
         { 
 
@@ -42,6 +46,8 @@ public:
     {
 
         glClear(GL_COLOR_BUFFER_BIT);
+
+        shader.Bind();
 
         mesh.Draw();
     }
