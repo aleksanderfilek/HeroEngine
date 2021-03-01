@@ -9,8 +9,10 @@ g++ -c -Iinclude  source\H_math.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu
 g++ -c -Iinclude  source\H_shader.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32 -o H_shader.o
 g++ -c -Iinclude  source\H_stdlib.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32 -o H_stdlib.o
 g++ -c -Iinclude  source\H_mesh.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32 -o H_mesh.o
+g++ -c -Iinclude  source\H_texture.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32 -lsoil -o H_texture.o
 
 ar rcs -o lib/libHero.lib *.o
 del *.o
 
-g++ -Iinclude example\main.cpp lib\libHero.lib -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32
+echo Build game
+g++ -Iinclude example\main.cpp lib\libHero.lib -lSDL2main -lSDL2 -lsoil -lglew32 -lopengl32 -lglu32

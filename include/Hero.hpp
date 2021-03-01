@@ -12,5 +12,6 @@
 #include"H_event.hpp"
 #include"H_shader.hpp"
 #include"H_mesh.hpp"
+#include"H_texture.hpp"
 
 #endif
