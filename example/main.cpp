@@ -1,10 +1,15 @@
 #include<iostream>
 
 #include"Hero.hpp"
+#include<cmath>
 
 class Scene:public Hero::Level
 {
 public:
+    Hero::Mesh mesh;
+    Hero::ShaderManager manager;
+    double time = 0;
+
     Scene()
     {
 
@@ -17,12 +22,16 @@ public:
 
     void Start()
     {
-        Hero::ShaderManager manager;
-        manager.LoadShader("shader.glslbin");
+        unsigned int i = manager.LoadShader("example/shader.glslbin");
+
+        manager.BindShader(i);
+
+        mesh.Load("example/sphere.daebin");
     }
 
     void Update()
     {
+        time += Hero::Time::GetDeltaTime();
         if(Hero::Input::keyUp(Hero::Input::KeyCode::A)) // sprawdzenie czy klawisz A został przytrzymany
         { 
 
@@ -32,6 +41,9 @@ public:
     void Draw()
     {
 
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        mesh.Draw();
     }
 
     void Close()
