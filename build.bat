@@ -15,4 +15,4 @@ ar rcs -o lib/libHero.lib *.o
 del *.o
 
 echo Build game
-g++ -Iinclude example\main.cpp lib\libHero.lib -lSDL2main -lSDL2 -lsoil -lglew32 -lopengl32 -lglu32
+g++ -Iinclude example\main.cpp lib\libHero.lib -lSDL2main -lSDL2 -lSDL2_ttf -lsoil -lglew32 -lopengl32 -lglu32

@@ -1,39 +1,22 @@
 #include"H_game.hpp"
 
-static void CheckLevel();
-static void CloseLevel();
-
-struct GameData
-{
-    Hero::Level* currentLevel;
-    Hero::Level* nextLevel;
-};
-
-GameData* gameData;
-
 namespace Hero
 {
-namespace Game
-{
 
-void Init(const char *title, int width, int height, int sdlflags)
+Game::Game(const char *title, int width, int height, int sdlflags)
 {
-    gameData = new GameData();
-
-    Hero::Window::Engine::Init(title, width, height, sdlflags);
+    this->window = new Window(title, width, height, sdlflags);
 
     Hero::Event::Engine::Init();
 
     Hero::Input::Engine::Init();
 
     Hero::Time::Engine::Init();    
-
 }
 
-void Close()
+Game::~Game()
 {
-    //extern void Window_delete();
-    Hero::Window::Engine::Delete();
+    delete this->window;
 
     Hero::Event::Engine::Delete();
 
@@ -42,11 +25,10 @@ void Close()
     Hero::Time::Engine::Delete();
 }
 
-void Start(Level* startLevel)
+void Game::Start(Level* startLevel)
 {
     // Set next state, then i will be transfered to current state
     SetLevel(startLevel);
-    
 
     uint32_t timer;
     double elapsed_time = 0.0f;
@@ -66,12 +48,12 @@ void Start(Level* startLevel)
         quit = Hero::Event::Engine::Update();
 
         // Do state update function
-        gameData->currentLevel->Update();
+        this->currentLevel->Update();
 
         // Do state draw function
-        gameData->currentLevel->Draw();
+        this->currentLevel->Draw();
 
-        Hero::Window::Render();
+        this->window->Render();
 
         // Update inputs
         Hero::Input::Engine::Update();
@@ -81,53 +63,58 @@ void Start(Level* startLevel)
     }
 }
 
-void SetLevel(Level* level)
+Window* Game::GetWindow()
 {
-    gameData->nextLevel = level;
-}
-}
+    return this->window;
 }
 
-void CheckLevel()
+void Game::SetLevel(Level* level)
+{
+    this->nextLevel = level;
+}
+
+void Game::CheckLevel()
 {
     // Check if next state exist
-    if(gameData->nextLevel){
+    if(this->nextLevel){
 
         // Check if current state exist
-        if(gameData->currentLevel){
+        if(this->currentLevel){
 
-            gameData->currentLevel->Close();
+            this->currentLevel->Close();
             // Free current state memory
-            delete gameData->currentLevel;
+            delete this->currentLevel;
         }
 
         // Set next state to current state
-        gameData->currentLevel = gameData->nextLevel;
-        // Forget next state. It is not free, because now current state point to gameData memory area
-        gameData->nextLevel = NULL;
+        this->currentLevel = this->nextLevel;
+        // Forget next state. It is not free, because now current state point to this memory area
+        this->nextLevel = NULL;
         // Run start function of current state
-        gameData->currentLevel->Start();
+        this->currentLevel->Start();
     }
 }
 
-void CloseLevel()
+void Game::CloseLevel()
 {
 
     // Check if current state exist
-    if(gameData->currentLevel){
+    if(this->currentLevel){
 
-        gameData->currentLevel->Close();
+        this->currentLevel->Close();
 
         // Free current state memory
-        delete gameData->currentLevel;
-        gameData->currentLevel = NULL;
+        delete this->currentLevel;
+        this->currentLevel = NULL;
     }
 
     // Check if next state exist
-    if(gameData->nextLevel){
+    if(this->nextLevel){
 
         // Free current state memory
-        delete gameData->nextLevel;
-        gameData->nextLevel = NULL;
+        delete this->nextLevel;
+        this->nextLevel = NULL;
     }
+}
+
 }

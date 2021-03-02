@@ -60,13 +60,11 @@ public:
 
 int main(int argc, char *argv[])
 {
-    Hero::Game::Init("Test", 640, 480); // inicjalizacja silnika i tworzenie okna
+    Hero::Game game("Test", 640, 480);
 
     Scene* startlevel = new Scene(); // stworzenie początkowego levelu
 
-    Hero::Game::Start(startlevel); // uruchomienie silnika
-
-    Hero::Game::Close(); // zamknięcie silnika
+    game.Start(startlevel); // uruchomienie silnika
 
     return 0;
 }

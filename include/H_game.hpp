@@ -15,14 +15,26 @@
 namespace Hero
 {
 
-namespace Game
+class Game
 {
-    void Init(const char *title, int width, int height, int sdlflags = 0);
+private:
+    Window* window;
+
+    Level* currentLevel = nullptr;
+    Level* nextLevel = nullptr;
+
+    void CheckLevel();
+    void CloseLevel();
+public:
+    Game(const char *title, int width, int height, int sdlflags = 0);
+    ~Game();
+
     void Start(Level* startLevel);
-    void Close();
 
     void SetLevel(Level* level);
-}
+
+    Window* GetWindow();
+};
 }
 
 #endif
