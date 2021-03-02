@@ -3,26 +3,30 @@
 namespace Hero
 {
 
+Game* Game::instance = nullptr;
+
 Game::Game(const char *title, int width, int height, int sdlflags)
 {
-    this->window = new Window(title, width, height, sdlflags);
+    instance = this;
 
-    Hero::Event::Engine::Init();
+    this->windowSystem = new WindowSystem(title, width, height, sdlflags);
 
-    Hero::Input::Engine::Init();
+    this->eventSystem = new EventSystem();
 
-    Hero::Time::Engine::Init();    
+    this->inputSystem = new InputSystem();
+
+    this->globalTime = new Time();
 }
 
 Game::~Game()
 {
-    delete this->window;
+    delete this->windowSystem;
 
-    Hero::Event::Engine::Delete();
+    delete this->eventSystem;
 
-    Hero::Input::Engine::Delete();
+    delete this->inputSystem;
 
-    Hero::Time::Engine::Delete();
+    delete this->globalTime;
 }
 
 void Game::Start(Level* startLevel)
@@ -37,7 +41,7 @@ void Game::Start(Level* startLevel)
     int quit = 0;
     while (quit >= 0)
     {
-        Hero::Time::Engine::SetDeltaTime(elapsed_time);
+        this->globalTime->SetDeltaTime(elapsed_time);
 
         // Get actual timer
         timer = SDL_GetTicks();
@@ -45,7 +49,7 @@ void Game::Start(Level* startLevel)
         CheckLevel();
 
         // Event loop
-        quit = Hero::Event::Engine::Update();
+        quit = this->eventSystem->Update();
 
         // Do state update function
         this->currentLevel->Update();
@@ -53,19 +57,29 @@ void Game::Start(Level* startLevel)
         // Do state draw function
         this->currentLevel->Draw();
 
-        this->window->Render();
+        this->windowSystem->Render();
 
         // Update inputs
-        Hero::Input::Engine::Update();
+        this->inputSystem->Update();
 
         // Calculate elapsed time
         elapsed_time = (double)(SDL_GetTicks() - timer )/1000.0f;
     }
 }
 
-Window* Game::GetWindow()
+WindowSystem* Game::GetWindowSystem()
 {
-    return this->window;
+    return instance->windowSystem;
+}
+
+EventSystem* Game::GetEventSystem()
+{
+    return instance->eventSystem;
+}
+
+InputSystem* Game::GetInputSystem()
+{
+    return instance->inputSystem;
 }
 
 void Game::SetLevel(Level* level)

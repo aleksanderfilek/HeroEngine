@@ -8,15 +8,17 @@
 
 namespace Hero
 {
-namespace Event
-{
-    namespace Engine{
-        void Init();
-        void Delete();
-        int Update();
-    }
 
-    void SendEvent();
+    class EventSystem
+    {
+    private:
+        SDL_Event events;
+    public:
+        EventSystem();
+        ~EventSystem();
+
+        int Update();
+    };
 
     typedef void (*EventFunction)(void* object, void *args, int argc);
 
@@ -33,8 +35,6 @@ namespace Event
         void Clear();
         void Invoke(void* object, void *args, int argc);
     };
-
-}
 }
 
 #endif

@@ -18,7 +18,13 @@ namespace Hero
 class Game
 {
 private:
-    Window* window;
+    static Game* instance;
+
+    WindowSystem* windowSystem;
+    EventSystem* eventSystem;
+    InputSystem* inputSystem;
+
+    Time* globalTime;
 
     Level* currentLevel = nullptr;
     Level* nextLevel = nullptr;
@@ -33,8 +39,11 @@ public:
 
     void SetLevel(Level* level);
 
-    Window* GetWindow();
+    static WindowSystem* GetWindowSystem();
+    static EventSystem* GetEventSystem();
+    static InputSystem* GetInputSystem();
 };
+
 }
 
 #endif

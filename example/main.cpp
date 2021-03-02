@@ -38,7 +38,7 @@ public:
     {
         if(Hero::Input::keyUp(Hero::Input::KeyCode::A)) // sprawdzenie czy klawisz A został przytrzymany
         { 
-
+            std::cout<<"klik"<<std::endl;
         }
     }
 

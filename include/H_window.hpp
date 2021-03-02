@@ -16,7 +16,7 @@
 namespace Hero
 {
 
-    class Window
+    class WindowSystem
     {
     private:
         int2 screenSize;
@@ -25,8 +25,8 @@ namespace Hero
         SDL_Renderer* renderer;
         SDL_GLContext glContext;
     public:
-        Window(const char *title, int width, int height, int sdlflags);
-        ~Window();
+        WindowSystem(const char *title, int width, int height, int sdlflags);
+        ~WindowSystem();
 
         int2 GetScreenSize();
         SDL_Window* GetWindow();

@@ -9,8 +9,7 @@
 
 namespace Hero
 {
-namespace Input
-{
+    namespace Input{
     enum Mouse:uint8_t
     {
         Left = 1,
@@ -264,23 +263,51 @@ namespace Input
         AUDIOFASTFORWARD = 286,
     };
 
-    namespace Engine{
-        void Init();
-        void Delete();
-        void Update();
     }
 
-    bool keyPressed(KeyCode key);
-    bool keyDown(KeyCode key);
-    bool keyUp(KeyCode key);
+    class InputSystem
+    {
+    private:
+        static InputSystem* instance;
 
-    bool mouseButtonPressed(Mouse button);
-    bool mouseButtonDown(Mouse button);
-    bool mouseButtonUp(Mouse button);
+        int keyboard_state_number = 0;
+        const uint8_t *current_keyboard_state = NULL;
+        uint8_t *previous_keyboard_state = NULL;
+        int32_t current_mouse_state, previous_mouse_state;
+        int mouse_position_X = 0;
+        int mouse_position_Y = 0;
 
-    void getMousePosition(int *x, int *y);
-    void setMousePosition(int x, int y);
-}
+    public:
+        InputSystem();
+        ~InputSystem();
+
+        void Update();
+
+        static bool keyPressed(Input::KeyCode key);
+        static bool keyDown(Input::KeyCode key);
+        static bool keyUp(Input::KeyCode key);
+
+        static bool mouseButtonPressed(Input::Mouse button);
+        static bool mouseButtonDown(Input::Mouse button);
+        static bool mouseButtonUp(Input::Mouse button);
+
+        static void getMousePosition(int *x, int *y);
+        static void setMousePosition(int x, int y);
+    };
+
+    namespace Input{
+
+    inline bool keyPressed(KeyCode key) { return InputSystem::keyPressed(key); }
+    inline bool keyDown(KeyCode key) { return InputSystem::keyDown(key); }
+    inline bool keyUp(KeyCode key) { return InputSystem::keyUp(key); }
+
+    inline bool mouseButtonPressed(Mouse button) { return InputSystem::mouseButtonPressed(button); }
+    inline bool mouseButtonDown(Mouse button) { return InputSystem::mouseButtonDown(button); }
+    inline bool mouseButtonUp(Mouse button) { return InputSystem::mouseButtonUp(button); }
+
+    inline void getMousePosition(int *x, int *y){ InputSystem::getMousePosition(x,y); }
+    inline void setMousePosition(int x, int y){ InputSystem::setMousePosition(x,y); }
+    }
 }
 
 #endif

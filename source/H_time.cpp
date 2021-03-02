@@ -1,51 +1,36 @@
 #include"H_time.hpp"
 
-struct TimeData
-{
-    double deltaTime = 0;
-    double timeScale = 1;
-    double scaledTime = 0;
-};
-
-TimeData* timeData;
 
 namespace Hero
 {
-namespace Time
-{
-    namespace Engine
+
+    Time* Time::instance = nullptr;
+
+    Time::Time()
     {
-        void Init()
-        {
-            timeData = new TimeData();
-        }
-
-        void Delete()
-        {
-            delete timeData;
-        }
-
-        void SetDeltaTime(double value)
-        { 
-            timeData->deltaTime = value;
-            timeData->scaledTime = value * timeData->timeScale;
-        }
+        instance = this;
+        startupTime = SDL_GetTicks();
     }
 
-    double GetDeltaTime()
+    Time::~Time()
+    {
+        
+    }
+
+    double Time::GetDeltaTime()
     { 
-        return timeData->scaledTime; 
+        return instance->scaledTime; 
     }
 
-    void SetScale(double value)
+    void Time::SetScale(double value)
     { 
-        timeData->timeScale = value; 
-        timeData->scaledTime = value * timeData->deltaTime;
+        instance->timeScale = value; 
+        instance->scaledTime = value * instance->deltaTime;
     }
 
-    double GetScale()
+    double Time::GetScale()
     { 
-        return timeData->timeScale; 
+        return instance->timeScale; 
     }
-}
+
 }

@@ -3,7 +3,7 @@
 namespace Hero
 {
 
-Window::Window(const char *title, int width, int height, int sdlflags)
+WindowSystem::WindowSystem(const char *title, int width, int height, int sdlflags)
 {
     this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, sdlflags | SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
@@ -45,7 +45,7 @@ Window::Window(const char *title, int width, int height, int sdlflags)
     }
 }
 
-Window::~Window()
+WindowSystem::~WindowSystem()
 {
     TTF_Quit();
 
@@ -56,27 +56,27 @@ Window::~Window()
     this->window = nullptr;
 }
 
-int2 Window::GetScreenSize()
+int2 WindowSystem::GetScreenSize()
 {
     return this->screenSize;
 }
 
-SDL_Window* Window::GetWindow()
+SDL_Window* WindowSystem::GetWindow()
 {
     return this->window;
 }
 
-SDL_Renderer* Window::GetRenderer()
+SDL_Renderer* WindowSystem::GetRenderer()
 {
     return this->renderer;
 }
 
-SDL_GLContext Window::GetGlContext()
+SDL_GLContext WindowSystem::GetGlContext()
 {
     return this->glContext;
 }
 
-void Window::Render()
+void WindowSystem::Render()
 {
     SDL_GL_SwapWindow(this->window);
 }
