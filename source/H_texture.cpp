@@ -28,6 +28,7 @@ namespace Hero
         if(!image)
         {
             std::cout<<"Could not load texture: "<<path<<std::endl;
+            return;
         }
 
         unsigned int gl_id;
@@ -55,7 +56,7 @@ namespace Hero
 
     void Texture::Bind()
     {
-        glActiveTexture(GL_TEXTURE0);
+        glActiveTexture(GL_TEXTURE0 + Texture::bindedTexturesCount);
         glCheckError();
         glBindTexture(GL_TEXTURE_2D, this->glId);
         glCheckError();        

@@ -1,9 +1,11 @@
 #ifndef HERO_TEXTURE_HPP
 #define HERO_TEXTURE_HPP
 
-#include<string>
 #include<GL\glew.h>
 #include<SOIL\SOIL.h>
+#include<SDL\SDL.h>
+
+#include<string>
 #include<iostream>
 
 #include"H_math.hpp"

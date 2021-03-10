@@ -6,6 +6,28 @@
 namespace Hero
 {
 
+const int2 int2::operator+ (const int2& rhs) const
+{
+    return { x + rhs.x, y + rhs.y };
+}
+
+const int2 int2::operator- (const int2& rhs) const
+{
+    return { this->x - rhs.x, this->y - rhs.y };
+}
+
+int2& int2::operator+=(const int2& rhs)
+{
+    this->x += rhs.x;
+    this->y += rhs.y;
+}
+
+int2& int2::operator -= (const int2& rhs)
+{
+    this->x -= rhs.x;
+    this->y -= rhs.y;
+}
+
 float2 add(const float2& a, const float2& b)
 {
     float2 vec = {a.x + b.x, a.y + b.y};
@@ -164,7 +186,14 @@ void matrix_projection(matrix4x4& matrix, int width, int height, float FOV, floa
 
 void matrix_orthographic(matrix4x4& matrix, int width, int height, float near, float far)
 {
-
+    std::memset(&matrix, 0, sizeof(matrix4x4));
+    matrix.v[0].x = 2.0f/width;
+    matrix.v[1].y = -2.0f/height;
+    matrix.v[2].z = -2.0f/(far - near);
+    matrix.v[3].w = 1;
+    matrix.v[0].w = -1;
+    matrix.v[1].w = 1;
+    matrix.v[2].z = -(far + near)/(far - near);
 }
 
 void matrix_lookAt(matrix4x4& matrix, float3 eye, float3 target, float3 up)

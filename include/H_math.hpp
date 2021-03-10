@@ -13,7 +13,15 @@ namespace Hero{
 typedef struct int2
 {
     int x,y;
+
+    const int2 operator+ (const int2& rhs) const;
+    const int2 operator- (const int2& rhs) const;
+    int2& operator+= (const int2& rhs);
+    int2& operator-= (const int2& rhs);
 }int2;
+
+#define int2zero {0,0}
+#define int2ne {1,1}
 
 typedef struct int4
 {
