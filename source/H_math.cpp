@@ -190,10 +190,10 @@ void matrix_orthographic(matrix4x4& matrix, int width, int height, float near, f
     matrix.v[0].x = 2.0f/width;
     matrix.v[1].y = -2.0f/height;
     matrix.v[2].z = -2.0f/(far - near);
+    matrix.v[3].x = -1;
+    matrix.v[3].y = 1;
+    matrix.v[3].z = (far + near)/(far - near);
     matrix.v[3].w = 1;
-    matrix.v[0].w = -1;
-    matrix.v[1].w = 1;
-    matrix.v[2].z = -(far + near)/(far - near);
 }
 
 void matrix_lookAt(matrix4x4& matrix, float3 eye, float3 target, float3 up)
@@ -256,9 +256,9 @@ void matrix_translate(matrix4x4& matrix, float3 translation){
 }
 
 void matrix_scale(matrix4x4& matrix, float3 scale){
-    matrix.v[0].x *= scale.x;
-    matrix.v[1].y *= scale.y;
-    matrix.v[2].z *= scale.z;
+    matrix.v[0].x = scale.x;
+    matrix.v[1].y = scale.y;
+    matrix.v[2].z = scale.z;
 }
 
 void matrix_rotateAxisX(matrix4x4& matrix, float angle){

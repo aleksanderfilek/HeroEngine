@@ -77,10 +77,10 @@ void Text::SetText(const std::string& text)
     glBindTexture(GL_TEXTURE_2D, 0);
     DEBUG_CODE(glCheckError();)
 
-    SDL_FreeSurface(surface);
-
     this->_id = texture;
     this->SetSize({surface->w, surface->h});
+
+    SDL_FreeSurface(surface);
 }
 
 void Text::Draw()
