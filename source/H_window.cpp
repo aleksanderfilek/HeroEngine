@@ -12,7 +12,7 @@ WindowSystem::WindowSystem(const char *title, int width, int height, int sdlflag
         return;
     }
     
-    this->renderer = SDL_CreateRenderer(this->window, - 1, SDL_RENDERER_ACCELERATED);
+    this->renderer = SDL_CreateRenderer(this->window, - 1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if(!this->renderer)
     {
         std::cout<<"Renderer could not be created! SDL Error: "<<SDL_GetError()<<std::endl;

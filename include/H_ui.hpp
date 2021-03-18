@@ -5,6 +5,7 @@
 #include"H_game.hpp"
 #include"H_math.hpp"
 #include"H_stdlib.hpp"
+#include"H_graphics.hpp"
 
 #include<SDL\SDL_ttf.h>
 
@@ -12,6 +13,7 @@
 #include<string>
 #include<stdint.h>
 #include<cmath>
+#include<vector>
 
 namespace Hero
 {
@@ -68,6 +70,24 @@ public:
 
     void Update(){};
     void Draw();
+};
+
+class Group: public UIElement
+{
+private:
+    std::vector<UIElement*> elements;
+public:
+    Group();
+    ~Group();
+
+    inline unsigned int GetCount(){ return elements.size(); }
+
+    void Update();
+    void Draw();
+
+    unsigned int Add(UIElement* element);
+    void Remove(unsigned int index);
+    void Clear();
 };
 
 }

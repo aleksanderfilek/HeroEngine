@@ -16,6 +16,8 @@ Game::Game(const char *title, int width, int height, int sdlflags)
     this->inputSystem = new InputSystem();
 
     this->globalTime = new Time();
+
+    this->renderer = new Renderer2D(width, height);
 }
 
 Game::~Game()
@@ -27,6 +29,8 @@ Game::~Game()
     delete this->inputSystem;
 
     delete this->globalTime;
+
+    delete this->renderer;
 }
 
 void Game::Start(Level* startLevel)

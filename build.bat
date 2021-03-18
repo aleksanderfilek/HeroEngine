@@ -11,6 +11,7 @@ g++ -c -D DEBUG -Iinclude  source\H_stdlib.cpp  -lSDL2main -lSDL2 -lglew32 -lope
 g++ -c -D DEBUG -Iinclude  source\H_mesh.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32 -o H_mesh.o
 g++ -c -D DEBUG -Iinclude  source\H_texture.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32 -lsoil -o H_texture.o
 g++ -c -D DEBUG -Iinclude  source\H_ui.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32 -lsoil -o H_ui.o
+g++ -c -D DEBUG -Iinclude  source\H_graphics.cpp  -lSDL2main -lSDL2 -lglew32 -lopengl32 -lglu32 -lsoil -o H_graphics.o
 
 ar rcs -o lib/libHero.lib *.o
 del *.o

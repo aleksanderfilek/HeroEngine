@@ -6,13 +6,10 @@
 class Scene:public Hero::Level
 {
 public:
-    Hero::Mesh mesh;
     Hero::Shader shader;
+    Hero::Group group;
     //Hero::Texture texture;
-    Hero::Text *text;
     Hero::Font *font;
-    Hero::matrix4x4 view;
-    Hero::matrix4x4 model;
     unsigned int ColorLoc;
     double timer = 0.0;
 
@@ -30,34 +27,26 @@ public:
     {
 
         shader.Load("example/shader.glslbin");
-
-        mesh.Load("example/plane.daebin");
-
-        //texture.Load("example/default.png");
+        Hero::Renderer2D::SetShader(&shader);
 
         font = new Hero::Font("example/arial.ttf", 28);
 
         Hero::Color color = {255, 255, 255, 255};
 
-        text = new Hero::Text(font);
+        Hero::Text* text = new Hero::Text(font);
         text->SetColor(color);
         text->SetText("Hello, World!");
 
-        Hero::matrix_orthographic(view, 640, 480, 0, 100);
+        Hero::Text* text2 = new Hero::Text(font);
+        text2->SetColor(color);
+        text2->SetText("Alek jest sexi!!!");
+        text2->SetRelativePosition({200, 200});
 
-        Hero::matrix_identity(model);
-        Hero::matrix_translate(model, {0, 0 ,0});
-        Hero::int2 size = text->GetSize();
-        Hero::matrix_scale(model, {(float)size.x, (float)size.y, 0});
+        group.Add(text);
+        group.Add(text2);
 
-        shader.Bind();
-        unsigned int modelLoc = shader.GetUniformLocation("model");
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (float*)(&(model.v[0])));
-        unsigned int viewLoc = shader.GetUniformLocation("view");
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (float*)(&(view.v[0])));
         ColorLoc = shader.GetUniformLocation("color");
         
-        text->Draw();
     }
 
     void Update()
@@ -65,7 +54,6 @@ public:
         if(Hero::Input::keyPressed(Hero::Input::KeyCode::A)) // sprawdzenie czy klawisz A został przytrzymany
         { 
             timer += Hero::Time::GetDeltaTime();
-            std::cout<<timer<<std::endl;
         }
 
     }
@@ -82,14 +70,11 @@ public:
             1.0f};
         glUniform4fv(ColorLoc, 1, col);
 
-        mesh.Draw();
-        DEBUG_CODE(glCheckError();)
-
+        group.Draw();
     }
 
     void Close()
     {
-        delete text;
         delete font;
     } 
 };

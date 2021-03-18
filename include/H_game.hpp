@@ -6,6 +6,7 @@
 #include"H_event.hpp"
 #include"H_input.hpp"
 #include"H_time.hpp"
+#include"H_graphics.hpp"
 
 #include<SDL\SDL.h>
 
@@ -23,6 +24,7 @@ private:
     WindowSystem* windowSystem;
     EventSystem* eventSystem;
     InputSystem* inputSystem;
+    Renderer2D* renderer;
 
     Time* globalTime;
 
