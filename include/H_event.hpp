@@ -1,7 +1,7 @@
 #ifndef HERO_EVENT_HPP
 #define HERO_EVENT_HPP
 
-#include<SDL\SDL.h>
+#include"H_defines.hpp"
 
 #include<iostream>
 #include<cstdlib>

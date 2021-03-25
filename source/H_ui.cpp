@@ -44,16 +44,14 @@ Text::~Text()
     glDeleteTextures(1, &this->_id);
 }
 
-void Text::SetText(const std::string& text)
+void Text::Apply()
 {
-    if(this->_text.length() == 0)
+    if(this->_id != 0)
     {
         glDeleteTextures(1, &this->_id);
     }
-        
-    this->_text.assign(text);
 
-    SDL_Surface* surface = TTF_RenderText_Blended( this->_font->_font, text.c_str(), this->_color );
+    SDL_Surface* surface = TTF_RenderText_Blended( this->_font->_font, this->_text.c_str(), this->_color );
     if( !surface)
     {
         std::cout<<"Unable to render text surface! SDL_ttf Error: "<<TTF_GetError()<<std::endl;

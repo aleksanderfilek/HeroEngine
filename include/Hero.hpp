@@ -1,7 +1,7 @@
 #ifndef HERO_HPP
 #define HERO_HPP
 
-#include"HeroDefines.hpp"
+#include"H_defines.hpp"
 #include"H_game.hpp"
 #include"H_window.hpp"
 #include"H_level.hpp"

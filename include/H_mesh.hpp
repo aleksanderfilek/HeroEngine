@@ -2,8 +2,7 @@
 #define HERO_MESH_HPP
 
 #include"H_math.hpp"
-
-#include<GL\glew.h>
+#include"H_defines.hpp"
 
 #include<string>
 #include<iostream>

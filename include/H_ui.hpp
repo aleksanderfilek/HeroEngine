@@ -7,7 +7,7 @@
 #include"H_stdlib.hpp"
 #include"H_graphics.hpp"
 
-#include<SDL\SDL_ttf.h>
+#include"H_defines.hpp"
 
 #include<iostream>
 #include<string>
@@ -58,15 +58,16 @@ private:
     std::string _text;
     Color _color = {255, 255, 255, 255};
     const Font* _font;
-    unsigned int _id;
+    unsigned int _id = 0;
 public:
     Text(const Font* font);
     ~Text();
 
     inline std::string GetText(){ return std::string(this->_text.c_str()); };
-    void SetText(const std::string& text);
+    inline void SetText(const std::string& text){ this->_text.assign(text); }
     inline Color GetColor(){ return _color; }
     inline void SetColor(Color& color){ this->_color = color; }
+    void Apply();
 
     void Update(){};
     void Draw();

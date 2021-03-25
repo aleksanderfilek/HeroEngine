@@ -1,12 +1,13 @@
 #ifndef HERO_SHADER_HPP
 #define HERO_SHADER_HPP
 
-#include<GL\glew.h>
+#include"H_defines.hpp"
 
 #include<string.h>
 #include<cstdlib>
 #include<iostream>
 #include<fstream>
+#include<cstdint>
 
 #include"H_stdlib.hpp"
 

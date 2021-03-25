@@ -8,7 +8,7 @@
 #include"H_time.hpp"
 #include"H_graphics.hpp"
 
-#include<SDL\SDL.h>
+#include"H_defines.hpp"
 
 #include<cstdio>
 #include<stdint.h>

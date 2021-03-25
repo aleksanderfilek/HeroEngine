@@ -1,10 +1,11 @@
 #ifndef H_stdlib_HPP
 #define H_stdlib_HPP
 
+#include"H_defines.hpp"
+
 #include<stdlib.h>
 #include<string.h>
 #include<stdio.h>
-#include<GL\glew.h>
 #include<iostream>
 #include<string>
 

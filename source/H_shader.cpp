@@ -13,9 +13,10 @@ namespace Hero
         std::ifstream readFile;
         readFile.open(path, std::ios::in | std::ios::binary);
 
-        size_t vertexSize = 0;
+        std::uint32_t vertexSize = 0;
         char* vertexCode;
-        readFile.read((char*)&vertexSize, sizeof(size_t));
+        readFile.read((char*)&vertexSize, sizeof(std::uint32_t));
+
         if(vertexSize > 0)
         {
             vertexCode = new char[vertexSize+1];
@@ -23,9 +24,9 @@ namespace Hero
             vertexCode[vertexSize] = '\0';
         }
 
-        size_t fragmentSize = 0;
+        std::uint32_t fragmentSize = 0;
         char* fragmentCode;
-        readFile.read((char*)&fragmentSize, sizeof(size_t));
+        readFile.read((char*)&fragmentSize, sizeof(std::uint32_t));
         if(fragmentSize > 0)
         {
             fragmentCode = new char[fragmentSize+1];
@@ -33,9 +34,9 @@ namespace Hero
             fragmentCode[fragmentSize] = '\0';
         }
 
-        size_t geometrySize = 0;
+        std::uint32_t geometrySize = 0;
         char* geometryCode;
-        readFile.read((char*)&geometrySize, sizeof(size_t));
+        readFile.read((char*)&geometrySize, sizeof(std::uint32_t));
         if(geometrySize > 0)
         {
             geometryCode = new char[geometrySize+1];

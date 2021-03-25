@@ -1,13 +1,7 @@
 #ifndef HERO_WINDOW_HPP
 #define HERO_WINDOW_HPP
 
-#include<GL\glew.h>
-#include<SDL\SDL.h>
-#include<SDL\SDL_opengl.h>
-#include<SDL\SDL_ttf.h>
-#include<GL\glu.h>
-#include<GL\gl.h>
-
+#include"H_defines.hpp"
 
 #include<iostream>
 

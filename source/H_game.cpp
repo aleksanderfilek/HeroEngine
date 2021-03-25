@@ -67,7 +67,7 @@ void Game::Start(Level* startLevel)
         this->inputSystem->Update();
 
         // Calculate elapsed time
-        elapsed_time = (double)(SDL_GetTicks() - timer )/1000.0f;
+        elapsed_time = (double)(SDL_GetTicks() - timer)/1000.0f;
     }
 }
 

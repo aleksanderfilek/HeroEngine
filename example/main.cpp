@@ -8,10 +8,9 @@ class Scene:public Hero::Level
 public:
     Hero::Shader shader;
     Hero::Group group;
-    //Hero::Texture texture;
     Hero::Font *font;
-    unsigned int ColorLoc;
     double timer = 0.0;
+    Hero::Text* text;
 
     Scene()
     {
@@ -31,21 +30,21 @@ public:
 
         font = new Hero::Font("example/arial.ttf", 28);
 
-        Hero::Color color = {255, 255, 255, 255};
+        Hero::Color color = {0, 0, 255, 255};
 
-        Hero::Text* text = new Hero::Text(font);
+        text = new Hero::Text(font);
         text->SetColor(color);
         text->SetText("Hello, World!");
+        text->Apply();
 
         Hero::Text* text2 = new Hero::Text(font);
         text2->SetColor(color);
-        text2->SetText("Alek jest sexi!!!");
+        text2->SetText("Testowy napis");
         text2->SetRelativePosition({200, 200});
+        text2->Apply();
 
         group.Add(text);
         group.Add(text2);
-
-        ColorLoc = shader.GetUniformLocation("color");
         
     }
 
@@ -54,6 +53,18 @@ public:
         if(Hero::Input::keyPressed(Hero::Input::KeyCode::A)) // sprawdzenie czy klawisz A został przytrzymany
         { 
             timer += Hero::Time::GetDeltaTime();
+
+            float col[] = {
+                sinf((float)timer)*0.6f + 0.4f, 
+                0.0f, 
+                cosf((float)timer)*0.4f + 0.6f, 
+                1.0f};
+            Hero::Color color = {(uint8_t)(col[0] * 255), 
+                                (uint8_t)(col[1] * 255), 
+                                (uint8_t)(col[2] * 255), 
+                                255};
+            text->SetColor(color);
+            text->Apply();
         }
 
     }
@@ -62,13 +73,6 @@ public:
     {
 
         glClear(GL_COLOR_BUFFER_BIT);
-
-        float col[] = {
-            sinf((float)timer)*0.6f + 0.4f, 
-            0.0f, 
-            cosf((float)timer)*0.4f + 0.6f, 
-            1.0f};
-        glUniform4fv(ColorLoc, 1, col);
 
         group.Draw();
     }

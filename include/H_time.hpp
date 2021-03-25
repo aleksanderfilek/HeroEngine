@@ -1,7 +1,7 @@
 #ifndef H_timer_HPP
 #define H_timer_HPP
 
-#include<SDL\SDL.h>
+#include"H_defines.hpp"
 
 #include<stdint.h>
 

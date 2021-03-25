@@ -1,9 +1,9 @@
 #ifndef HERO_INPUT_HPP
 #define HERO_INPUT_HPP
 
-#include<SDL\SDL.h>
-#include<iostream>
+#include"H_defines.hpp"
 
+#include<iostream>
 #include<stdio.h>
 #include<stdint.h>
 
