@@ -15,7 +15,7 @@ namespace Hero{
     class Shader
     {
     private:
-        unsigned int glID;
+        unsigned int glID = 0;
     public:
         ~Shader();
 

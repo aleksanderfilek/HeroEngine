@@ -21,6 +21,8 @@ namespace Hero
     };
 
     typedef void (*EventFunction)(void* object, void *args, int argc);
+    #define event(name) void name(void* object, void *args, int argc)
+    #define EventFromClass(func) (Hero::EventFunction)&func
 
     class Event
     {

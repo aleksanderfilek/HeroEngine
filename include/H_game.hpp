@@ -33,17 +33,28 @@ private:
 
     void CheckLevel();
     void CloseLevel();
+
+    #if RUNTIME_INJECTION == 1
+        Event* runtimeInjection;
+    #endif
 public:
     Game(const char *title, int width, int height, int sdlflags = 0);
     ~Game();
 
     void Start(Level* startLevel);
 
-    void SetLevel(Level* level);
+    static void SetLevel(Level* level);
 
     static WindowSystem* GetWindowSystem();
     static EventSystem* GetEventSystem();
     static InputSystem* GetInputSystem();
+
+    #if RUNTIME_INJECTION == 1
+        inline static void RuntimeInject(EventFunction function){ 
+            instance->runtimeInjection->Add(function); }
+        inline static void RuntimeInjectionClear(){
+            instance->runtimeInjection->Clear(); }
+    #endif
 };
 
 }

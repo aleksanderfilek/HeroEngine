@@ -5,7 +5,9 @@ namespace Hero
 
     Shader::~Shader()
     {
-        glDeleteShader(this->glID);
+        glDeleteProgram(this->glID);
+        glCheckError();
+        this->glID = 0;
     }
 
     void Shader::Load(const std::string& path)

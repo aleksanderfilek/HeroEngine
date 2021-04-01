@@ -28,6 +28,18 @@ int2& int2::operator -= (const int2& rhs)
     this->y -= rhs.y;
 }
 
+bool intersectInt4Point(int4 rect, int2 point)
+{
+    if(rect.x > point.x || rect.x + rect.w < point.x)
+        return false;
+
+    if(rect.y > point.y || rect.y + rect.y < point.y)
+        return false;
+
+    return true;
+}
+
+
 float2 add(const float2& a, const float2& b)
 {
     float2 vec = {a.x + b.x, a.y + b.y};
@@ -202,24 +214,10 @@ void matrix_lookAt(matrix4x4& matrix, float3 eye, float3 target, float3 up)
     normalize(f);
 
     float3 r = cross_product(f, up);
+    r = {-r.x, -r.y, -r.z};
     normalize(r);
 
     float3 u = cross_product(r, f);
-
-    // matrix.v[0].x = r.x;
-    // matrix.v[0].y = r.y;
-    // matrix.v[0].z = r.z;
-    // matrix.v[0].w = 0.0f;
-
-    // matrix.v[1].x = u.x;
-    // matrix.v[1].y = u.y;
-    // matrix.v[1].z = u.z;
-    // matrix.v[1].w = 0.0f;
-
-    // matrix.v[2].x = f.x;
-    // matrix.v[2].y = f.y;
-    // matrix.v[2].z = f.z;
-    // matrix.v[2].w = 0.0f;
 
     matrix.v[0].x = r.x;
     matrix.v[1].x = r.y;
@@ -236,11 +234,6 @@ void matrix_lookAt(matrix4x4& matrix, float3 eye, float3 target, float3 up)
     matrix.v[0].w = 0.0f;
     matrix.v[1].w = 0.0f;
     matrix.v[2].w = 0.0f;
-
-    // matrix.v[3].x = -eye.x;
-    // matrix.v[3].y = -eye.y;
-    // matrix.v[3].z = -eye.z;
-    // matrix.v[3].w = 1.0f;
 
     matrix.v[3].x = -dot_product(r,eye);
     matrix.v[3].y = -dot_product(u,eye);
