@@ -42,7 +42,7 @@ WindowSystem::WindowSystem(const char *title, int width, int height, int sdlflag
 
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
+    
     if(TTF_Init() < 0)
     {
         std::cout<<"SDL_ttf could not be initialize! SDL_ttf Error: "<<TTF_GetError()<<std::endl;

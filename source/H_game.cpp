@@ -18,16 +18,10 @@ Game::Game(const char *title, int width, int height, int sdlflags)
     this->globalTime = new Time();
 
     this->renderer = new Renderer2D(width, height);
-
-    #if RUNTIME_INJECTION == 1
-        this->runtimeInjection = new Event();
-    #endif
 }
 
 Game::~Game()
 {
-    this->CloseLevel();
-
     delete this->windowSystem;
 
     delete this->eventSystem;
@@ -37,10 +31,6 @@ Game::~Game()
     delete this->globalTime;
 
     delete this->renderer;
-
-    #if RUNTIME_INJECTION == 1
-        delete this->runtimeInjection;
-    #endif
 }
 
 void Game::Start(Level* startLevel)
@@ -62,10 +52,6 @@ void Game::Start(Level* startLevel)
         // Update current state
         CheckLevel();
 
-        #if RUNTIME_INJECTION == 1
-            this->runtimeInjection->Invoke(nullptr, nullptr, 0);
-        #endif
-
         // Event loop
         quit = this->eventSystem->Update();
 
@@ -82,11 +68,6 @@ void Game::Start(Level* startLevel)
 
         // Calculate elapsed time
         elapsed_time = (double)(SDL_GetTicks() - timer)/1000.0f;
-
-        #if FPS_COUNTER == 1
-            double fps = 1000.0/(SDL_GetTicks() - timer);
-            std::cout<<"fps: "<<fps<<std::endl;
-        #endif
     }
 }
 
@@ -107,7 +88,7 @@ InputSystem* Game::GetInputSystem()
 
 void Game::SetLevel(Level* level)
 {
-    instance->nextLevel = level;
+    this->nextLevel = level;
 }
 
 void Game::CheckLevel()

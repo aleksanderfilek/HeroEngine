@@ -1,10 +1,4 @@
-#define WINDOWS 1
-#define LINUX 0
-
-#define RUNTIME_INJECTION 1
-#define FPS_COUNTER 0
-
-#if WINDOWS == 1
+#ifdef WINDOWS
     #include<SDL\SDL.h>
     #include<GL\glew.h>
     #include<SOIL\SOIL.h>
@@ -12,7 +6,7 @@
     #include<SDL\SDL_ttf.h>
     #include<GL\glu.h>
     #include<GL\gl.h>
-#elif LINUX == 1
+#else
     #include<SDL2/SDL.h>
     #include<GL/glew.h>
     #include<SOIL/SOIL.h>
