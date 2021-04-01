@@ -7,7 +7,7 @@ Renderer2D* Renderer2D::instance = nullptr;
 Renderer2D::Renderer2D(int width, int height)
 {
     this->instance = this;
-    this->mesh.Load("example/plane.daebin");
+    this->mesh.Load("example/resources/models/plane.daebin");
     Hero::matrix_orthographic(this->view, width, height, 0, 100);
 }
 

@@ -8,6 +8,11 @@
 namespace Hero
 {
 
+inline void ClearRenderer()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 class Renderer2D
 {
 private:
@@ -29,7 +34,6 @@ public:
         shader->Bind();
     }
 };
-
 
 }
 #endif

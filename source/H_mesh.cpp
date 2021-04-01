@@ -1,5 +1,7 @@
 #include"H_mesh.hpp"
 
+unsigned int DrawType = GL_TRIANGLES;
+
 namespace Hero
 {
     Mesh::Mesh()
@@ -137,7 +139,7 @@ namespace Hero
     void Mesh::Draw()
     {
         glBindVertexArray(this->_VAO);
-        glDrawElements(GL_TRIANGLES, this->_indicesCount, GL_UNSIGNED_INT, 0);
+        glDrawElements(DrawType, this->_indicesCount, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
 }

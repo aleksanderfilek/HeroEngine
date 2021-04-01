@@ -17,6 +17,8 @@ namespace Hero
     Texture::~Texture()
     {
         glDeleteTextures(1, &this->glId);
+        this->glId = 0;
+        glCheckError();
     }
 
     void Texture::Load(const std::string& path)
@@ -33,14 +35,15 @@ namespace Hero
 
         unsigned int gl_id;
         glGenTextures(1, &gl_id);
+        glCheckError();
         glBindTexture(GL_TEXTURE_2D, gl_id);
-
+        glCheckError();
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        
+        glCheckError();
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        
+        glCheckError();
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, 
             GL_RGB, GL_UNSIGNED_BYTE, image);
         glCheckError();
@@ -56,17 +59,16 @@ namespace Hero
 
     void Texture::Bind()
     {
-        glActiveTexture(GL_TEXTURE0 + Texture::bindedTexturesCount);
+        glActiveTexture(GL_TEXTURE0);
         glCheckError();
         glBindTexture(GL_TEXTURE_2D, this->glId);
         glCheckError();        
-        Texture::bindedTexturesCount++;
     }
 
     void Texture::Unbind()
     {
-        glDisable(GL_TEXTURE_2D);
-        Texture::bindedTexturesCount = 0;
+        /*glDisable(GL_TEXTURE_2D);
+        Texture::bindedTexturesCount = 0;*/
     }
 
     int2 Texture::GetSize()

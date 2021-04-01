@@ -1,6 +1,7 @@
 {
     "C_Cpp.default.includePath": [
-        "${workspaceFolder}/include/*"
+        "${workspaceFolder}/include/*",
+        "${workspaceFolder}/example/include/*"
     ],
     "files.associations": {
         "fstream": "cpp",

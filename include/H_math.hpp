@@ -28,6 +28,8 @@ typedef struct int4
     int x,y,w,h;
 }int4;
 
+bool intersectInt4Point(int4 rect, int2 point);
+
 typedef struct float2
 {
     float x,y;
