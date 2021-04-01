@@ -153,16 +153,6 @@ void normalize(float3& vector)
     vector.z /= _length;
 }
 
-inline float deg2rad(float degree)
-{
-    return (degree * PI)/180.0f;
-}
-
-inline float rad2deg(float radians)
-{
-    return (180.0f * radians)/PI;
-}
-
 void matrix_identity(matrix4x4& matrix)
 {
     std::memset(&matrix, 0, sizeof(matrix4x4));
@@ -218,6 +208,7 @@ void matrix_lookAt(matrix4x4& matrix, float3 eye, float3 target, float3 up)
     normalize(r);
 
     float3 u = cross_product(r, f);
+    u = {-u.x, -u.y, -u.z};
 
     matrix.v[0].x = r.x;
     matrix.v[1].x = r.y;
@@ -254,70 +245,70 @@ void matrix_scale(matrix4x4& matrix, float3 scale){
     matrix.v[2].z = scale.z;
 }
 
-void matrix_rotateAxisX(matrix4x4& matrix, float angle){
+void matrix_rotateAxisX(matrix4x4& matrix, float radians){
     float a = matrix.v[0].y;
     float b = matrix.v[0].z;
-    matrix.v[0].y = a*cosf(angle) - b*sinf(angle);
-    matrix.v[0].z = a*sinf(angle) + b*cosf(angle);
+    matrix.v[0].y = a*cosf(radians) - b*sinf(radians);
+    matrix.v[0].z = a*sinf(radians) + b*cosf(radians);
     a = matrix.v[1].y;
     b = matrix.v[1].z;
-    matrix.v[1].y = a*cosf(angle) - b*sinf(angle);
-    matrix.v[1].z = a*sinf(angle) + b*cosf(angle);
+    matrix.v[1].y = a*cosf(radians) - b*sinf(radians);
+    matrix.v[1].z = a*sinf(radians) + b*cosf(radians);
     a = matrix.v[2].y;
     b = matrix.v[2].z;
-    matrix.v[2].y = a*cosf(angle) - b*sinf(angle);
-    matrix.v[2].z = a*sinf(angle) + b*cosf(angle);
+    matrix.v[2].y = a*cosf(radians) - b*sinf(radians);
+    matrix.v[2].z = a*sinf(radians) + b*cosf(radians);
     a = matrix.v[3].y;
     b = matrix.v[3].z;   
-    matrix.v[3].y = a*cosf(angle) - b*sinf(angle);
-    matrix.v[3].z = a*sinf(angle) + b*cosf(angle);
+    matrix.v[3].y = a*cosf(radians) - b*sinf(radians);
+    matrix.v[3].z = a*sinf(radians) + b*cosf(radians);
 }
 
-void matrix_rotateAxisY(matrix4x4& matrix, float angle){
+void matrix_rotateAxisY(matrix4x4& matrix, float radians){
     float a = matrix.v[0].x;
     float b = matrix.v[0].z;
-    matrix.v[0].x = a*cosf(angle) + b*sinf(angle);
-    matrix.v[0].z = -a*sinf(angle) + b*cosf(angle);
+    matrix.v[0].x = a*cosf(radians) + b*sinf(radians);
+    matrix.v[0].z = -a*sinf(radians) + b*cosf(radians);
     a = matrix.v[1].x;
     b = matrix.v[1].z;
-    matrix.v[1].x = a*cosf(angle) + b*sinf(angle);
-    matrix.v[1].z = -a*sinf(angle) + b*cosf(angle);
+    matrix.v[1].x = a*cosf(radians) + b*sinf(radians);
+    matrix.v[1].z = -a*sinf(radians) + b*cosf(radians);
     a = matrix.v[2].x;
     b = matrix.v[2].z;
-    matrix.v[2].x = a*cosf(angle) + b*sinf(angle);
-    matrix.v[2].z = -a*sinf(angle) + b*cosf(angle);
+    matrix.v[2].x = a*cosf(radians) + b*sinf(radians);
+    matrix.v[2].z = -a*sinf(radians) + b*cosf(radians);
     a = matrix.v[3].x;
     b = matrix.v[3].z;   
-    matrix.v[3].x = a*cosf(angle) + b*sinf(angle);
-    matrix.v[3].z = -a*sinf(angle) + b*cosf(angle);
+    matrix.v[3].x = a*cosf(radians) + b*sinf(radians);
+    matrix.v[3].z = -a*sinf(radians) + b*cosf(radians);
 }
 
-void matrix_rotateAxisZ(matrix4x4& matrix, float angle){
+void matrix_rotateAxisZ(matrix4x4& matrix, float radians){
     float a = matrix.v[0].x;
     float b = matrix.v[0].y;
-    matrix.v[0].x = a*cosf(angle) + b*sinf(angle);
-    matrix.v[0].y = -a*sinf(angle) + b*cosf(angle);
+    matrix.v[0].x = a*cosf(radians) + b*sinf(radians);
+    matrix.v[0].y = -a*sinf(radians) + b*cosf(radians);
     a = matrix.v[1].x;
     b = matrix.v[1].y;
-    matrix.v[1].x = a*cosf(angle) + b*sinf(angle);
-    matrix.v[1].y = -a*sinf(angle) + b*cosf(angle);
+    matrix.v[1].x = a*cosf(radians) + b*sinf(radians);
+    matrix.v[1].y = -a*sinf(radians) + b*cosf(radians);
     a = matrix.v[2].x;
     b = matrix.v[2].y;
-    matrix.v[2].x = a*cosf(angle) + b*sinf(angle);
-    matrix.v[2].y = -a*sinf(angle) + b*cosf(angle);
+    matrix.v[2].x = a*cosf(radians) + b*sinf(radians);
+    matrix.v[2].y = -a*sinf(radians) + b*cosf(radians);
     a = matrix.v[3].x;
     b = matrix.v[3].y;   
-    matrix.v[3].x = a*cosf(angle) + b*sinf(angle);
-    matrix.v[3].y = -a*sinf(angle) + b*cosf(angle);
+    matrix.v[3].x = a*cosf(radians) + b*sinf(radians);
+    matrix.v[3].y = -a*sinf(radians) + b*cosf(radians);
 }
 
-void matrix_rotate(matrix4x4& matrix, float3 rotation){
-    if(rotation.x != 0.0f)
-        matrix_rotateAxisX(matrix, rotation.x);
-    if(rotation.y != 0.0f)
-        matrix_rotateAxisY(matrix, rotation.y);
-    if(rotation.z != 0.0f)
-        matrix_rotateAxisZ(matrix, rotation.z);
+void matrix_rotate(matrix4x4& matrix, float3 radiansRotation){
+    if(radiansRotation.x != 0.0f)
+        matrix_rotateAxisX(matrix, radiansRotation.x);
+    if(radiansRotation.y != 0.0f)
+        matrix_rotateAxisY(matrix, radiansRotation.y);
+    if(radiansRotation.z != 0.0f)
+        matrix_rotateAxisZ(matrix, radiansRotation.z);
 }
 
 }

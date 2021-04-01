@@ -18,7 +18,7 @@ void World::Start()
 
     this->camera = new Camera(viewLoc, projectionLoc);
     this->camera->SetProjection(1280, 720, 60.0f, 0.1f, 1000.0f);
-    Hero::float3 postion = {0.0f, 0.0f, 0.0f};
+    Hero::float3 postion = {0.0f, 2.0f, 0.0f};
     Hero::float3 target = {0.0f, 0.0f, 1.0f};
     this->camera->SetPosition(postion);
     this->camera->SetLookAtTarget(target);
@@ -27,7 +27,8 @@ void World::Start()
 
     Hero::matrix4x4 model;
     Hero::matrix_identity(model);
-    Hero::matrix_scale(model, {1.0f, 1.0f, 1.0f});
+    Hero::matrix_scale(model, {100.0f, 100.0f, 100.0f});
+    Hero::matrix_rotateAxisX(model, Hero::deg2rad(90.0f));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &model.v[0].x);  
 }
 

@@ -69,8 +69,15 @@ typedef struct
     float4 v[4];
 }matrix4x4;
 
-float deg2rad(float degree);
-float rad2deg(float radians);
+inline float deg2rad(float degree)
+{
+    return (degree * PI)/180.0f;
+}
+
+inline float rad2deg(float radians)
+{
+    return (180.0f * radians)/PI;
+}
 
 void matrix_identity(matrix4x4& matrix);
 void matrix_projection(matrix4x4& matrix, int width, int height, float FOV, float near, float far);
@@ -79,10 +86,10 @@ void matrix_lookAt(matrix4x4& matrix, float3 eye, float3 target, float3 up);
 
 void matrix_translate(matrix4x4& matrix, float3 translation);
 void matrix_scale(matrix4x4& matrix, float3 scale);
-void matrix_rotateAxisX(matrix4x4& matrix, float angle);
-void matrix_rotateAxisY(matrix4x4& matrix, float angle);
-void matrix_rotateAxisZ(matrix4x4& matrix, float angle);
-void matrix_rotate(matrix4x4& matrix, float3 rotation);
+void matrix_rotateAxisX(matrix4x4& matrix, float radians);
+void matrix_rotateAxisY(matrix4x4& matrix, float radians);
+void matrix_rotateAxisZ(matrix4x4& matrix, float radians);
+void matrix_rotate(matrix4x4& matrix, float3 radiansRotation);
 
 }
 
