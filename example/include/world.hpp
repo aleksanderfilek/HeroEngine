@@ -5,6 +5,9 @@
 
 #include"camera.hpp"
 #include"player.hpp"
+#include"sector.hpp"
+
+#define SECTOR_COUNT 5
 
 class World:public Hero::Level
 {
@@ -13,14 +16,15 @@ private:
     Hero::Mesh* groundMesh;
     Hero::Shader* standardShader;
 
+    Sector** sectors;
+
     Camera* camera;
-    //Player* player;
+    Player* player;
     
-public:
-    void Start() override;
-    void Update() override;
-    void Draw() override;
-    void Close() override;
+    void OnStart() override;
+    void OnUpdate() override;
+    void OnDraw() override;
+    void OnClose() override;
 };
 
 #endif

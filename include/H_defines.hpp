@@ -1,5 +1,5 @@
-#define WINDOWS 1
-#define LINUX 0
+#define WINDOWS 0
+#define LINUX 1
 
 #define RUNTIME_INJECTION 1
 #define FPS_COUNTER 0

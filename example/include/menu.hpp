@@ -17,11 +17,10 @@ private:
     event(StartBtn_Click);
     event(QuitBtn_Click);
 
-public:
-    void Start() override;
-    void Update() override;
-    void Draw() override;
-    void Close() override;
+    void OnStart() override;
+    void OnUpdate() override;
+    void OnDraw() override;
+    void OnClose() override;
 };
 
 #endif

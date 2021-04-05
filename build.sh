@@ -1,4 +1,6 @@
 #!/bin/bash
+if [ $1 -eq 1 ];
+then
 echo Building realse library
 g++ -c -D DEBUG -D LINUX -Iinclude  source/H_game.cpp -o H_game.o
 g++ -c -D DEBUG -D LINUX -Iinclude  source/H_window.cpp -o H_window.o
@@ -12,9 +14,11 @@ g++ -c -D DEBUG -D LINUX -Iinclude  source/H_mesh.cpp -o H_mesh.o
 g++ -c -D DEBUG -D LINUX -Iinclude  source/H_texture.cpp -o H_texture.o
 g++ -c -D DEBUG -D LINUX -Iinclude  source/H_ui.cpp -o H_ui.o
 g++ -c -D DEBUG -D LINUX -Iinclude  source/H_graphics.cpp -o H_graphics.o
+g++ -c -D DEBUG -D LINUX -Iinclude  source/H_level.cpp -o H_level.o
 
 ar rcs -o lib/libHero.lib *.o
 rm *.o
+fi
 
 echo Build game
-g++ -D DEBUG -D LINUX -Iinclude example/main.cpp lib/libHero.lib -lSDL2main -lSDL2 -lSDL2_ttf -lSOIL -lGL -lGLU -lGLEW
+g++ -D DEBUG -D LINUX -Iinclude -Iexample/include example/source/*.cpp lib/libHero.lib -fpermissive -lSDL2main -lSDL2 -lSDL2_ttf -lSOIL -lGL -lGLU -lGLEW

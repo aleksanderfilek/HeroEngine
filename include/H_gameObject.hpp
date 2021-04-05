@@ -1,5 +1,8 @@
-#ifndef GAMEOBJECT_HPP
-#define GAMEOBJECT_HPP
+#ifndef HERO_GAMEOBJECT_HPP
+#define HERO_GAMEOBJECT_HPP
+
+namespace Hero
+{
 
 class GameObject
 {
@@ -11,5 +14,7 @@ public:
     virtual void Draw() = 0;
     virtual void Close() = 0;
 };
+
+}
 
 #endif

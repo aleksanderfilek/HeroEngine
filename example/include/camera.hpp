@@ -3,18 +3,25 @@
 
 #include"Hero.hpp"
 
-#include"gameObject.hpp"
-#include"components.hpp"
+#include"sector.hpp"
+#include"emath.hpp"
 
-class Camera: public GameObject
+#include<cmath>
+
+class Camera: public Hero::GameObject
 {
 private:
-    Hero::float3 position = {0.0f, 0.0f, 0.0f};
-    Hero::float3 target;
+    Hero::float3 worldPosition;
+    Hero::float3 localPosition = {0.0f, 0.0f, 0.0f};
+    Hero::float3 lookTarget = {0.0f, 0.0f, 1.0f};
+
+    Hero::float3* targetPosition;
 
     unsigned int viewLoc, projectionLoc;
     Hero::matrix4x4 viewMatrix;
     Hero::matrix4x4 projectionMatrix;
+    Hero::matrix4x4 projectionViewMatrix;
+
 public:
     Camera(unsigned int _viewLoc, unsigned int _projectionLoc);
 
@@ -23,11 +30,12 @@ public:
     void Draw(){}
     void Close();
 
-    inline void SetPosition(Hero::float3& _position){ position = _position; }
-    inline Hero::float3 GetPosition(){ return position; }
-    inline void SetLookAtTarget(Hero::float3& _target){ target = _target; }
+    inline void SetTarget(Hero::float3* _target){ targetPosition = _target; }
 
+    Hero::int2 GetSectorIndices() const;
     void SetProjection(int width, int height, float FOV, float near, float far);
+    Hero::float3 ScreenToWorldVector();
+
 };
 
 #endif

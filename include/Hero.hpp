@@ -15,5 +15,6 @@
 #include"H_texture.hpp"
 #include"H_ui.hpp"
 #include"H_graphics.hpp"
+#include"H_gameObject.hpp"
 
 #endif

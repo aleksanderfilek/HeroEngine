@@ -14,7 +14,7 @@ event(prymityw)
     
 }
 
-void Menu::Start()
+void Menu::OnStart()
 {
     this->fontBig = new Hero::Font("example/resources/arial.ttf", 100);
     this->fontSmall = new Hero::Font("example/resources/arial.ttf", 28);
@@ -68,20 +68,20 @@ void Menu::Start()
 
 }
 
-void Menu::Update()
+void Menu::OnUpdate()
 {
 
     this->uiGroup->Update();
 }
 
-void Menu::Draw()
+void Menu::OnDraw()
 {
     Hero::ClearRenderer();
 
     this->uiGroup->Draw();
 }
 
-void Menu::Close()
+void Menu::OnClose()
 {
     delete this->fontBig;
     delete this->fontSmall;
