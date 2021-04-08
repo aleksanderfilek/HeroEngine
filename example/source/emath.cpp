@@ -2,10 +2,10 @@
 
 Hero::float4 matrix_vector(Hero::matrix4x4& matrix, Hero::float4& vector)
 {
-    float x = vector.x*matrix.v[0].x + vector.y*matrix.v[0].y + vector.z*matrix.v[0].z + vector.w*matrix.v[0].w;
-    float y = vector.x*matrix.v[1].x + vector.y*matrix.v[1].y + vector.z*matrix.v[1].z + vector.w*matrix.v[1].w;
-    float z = vector.x*matrix.v[2].x + vector.y*matrix.v[2].y + vector.z*matrix.v[2].z + vector.w*matrix.v[2].w;
-    float w = vector.x*matrix.v[3].x + vector.y*matrix.v[3].y + vector.z*matrix.v[3].z + vector.w*matrix.v[3].w;
+    float x = vector.x*matrix.v[0].x + vector.y*matrix.v[1].x + vector.z*matrix.v[2].x + vector.w*matrix.v[3].x;
+    float y = vector.x*matrix.v[0].y + vector.y*matrix.v[1].y + vector.z*matrix.v[2].y + vector.w*matrix.v[3].y;
+    float z = vector.x*matrix.v[0].z + vector.y*matrix.v[1].z + vector.z*matrix.v[2].z + vector.w*matrix.v[3].z;
+    float w = vector.x*matrix.v[0].w + vector.y*matrix.v[1].w + vector.z*matrix.v[2].w + vector.w*matrix.v[3].w;
 
     return {x, y, z, w};
 }
@@ -190,4 +190,17 @@ bool matrix_invert(const float* m, float*& invOut)
         invOut[i] = inv[i] * det;
 
     return true;
+}
+
+float lerp(float a, float b, float t)
+{
+    return (1 - t)*a + t*b;
+}
+
+Hero::float3 Float3Lerp(const Hero::float3& p0, const Hero::float3& p1, float t)
+{
+    float x = (1 - t)*p0.x + t*p1.x;
+    float y = (1 - t)*p0.y + t*p1.y;
+    float z = (1 - t)*p0.z + t*p1.z;
+    return {x, y, z};
 }

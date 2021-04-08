@@ -16,9 +16,9 @@ g++ -c -D DEBUG -D LINUX -Iinclude  source/H_ui.cpp -o H_ui.o
 g++ -c -D DEBUG -D LINUX -Iinclude  source/H_graphics.cpp -o H_graphics.o
 g++ -c -D DEBUG -D LINUX -Iinclude  source/H_level.cpp -o H_level.o
 
-ar rcs -o lib/libHero.lib *.o
+ar rcs -o lib/libHero.a *.o
 rm *.o
 fi
 
 echo Build game
-g++ -D DEBUG -D LINUX -Iinclude -Iexample/include example/source/*.cpp lib/libHero.lib -fpermissive -lSDL2main -lSDL2 -lSDL2_ttf -lSOIL -lGL -lGLU -lGLEW
+g++ -D DEBUG -Iinclude -Iexample/include example/source/*.cpp lib/libHero.lib -fpermissive -lSDL2main -lSDL2 -lSDL2_ttf -lSOIL -lGL -lGLU -lGLEW

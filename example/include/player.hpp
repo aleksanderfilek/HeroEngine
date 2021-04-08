@@ -3,6 +3,10 @@
 
 #include"Hero.hpp"
 
+#include"camera.hpp"
+#include"components.hpp"
+#include"anim.hpp"
+
 class Player: public Hero::GameObject
 {
 private: 
@@ -13,6 +17,12 @@ private:
     Hero::Mesh* mesh;
     Hero::Texture* texture;
     unsigned int modelLoc;
+
+    Camera* camera;
+
+    Transform root;
+    Transform child;
+    Animator* animator;
 public:
     Player(unsigned int _modelLoc);
     ~Player();
@@ -23,6 +33,7 @@ public:
     void Close();
 
     inline Hero::float3* GetPositionRef(){ return &this->position; }
+    inline void SetCamera(Camera* _camera){ this->camera = _camera; }
 };
 
 #endif

@@ -5,7 +5,7 @@
 
 #include<cmath>
 
-#define SECTOR_SCALE 1
+#define SECTOR_SCALE 10
 
 class Sector: public Hero::Level
 {

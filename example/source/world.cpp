@@ -27,6 +27,8 @@ void World::OnStart()
     this->camera->Start();
     this->camera->SetTarget(this->player->GetPositionRef());
 
+    this->player->SetCamera(this->camera);
+
     this->sectors = new Sector*[SECTOR_COUNT];
     for(int i = 0; i < SECTOR_COUNT; i++)
     {
@@ -40,6 +42,7 @@ void World::OnStart()
         };
     }
 
+    player->Start();
 }
 
 void World::OnUpdate()
@@ -54,7 +57,7 @@ void World::OnUpdate()
 void World::OnDraw()
 {
     Hero::ClearRenderer();
-    
+
     this->defaultTexture->Bind();
     for(int x = 0; x < SECTOR_COUNT; x++)
     {
@@ -89,11 +92,11 @@ void CalculateSectors(const Camera* camera, Sector** sectors)
     {
         for(int y = 0; y < SECTOR_COUNT; y++)
         {
-            sectors[x][y].SetVisible(true);
+            sectors[x][y].SetVisible(false);
         }
     }
 
-    /*Hero::int2 indices = camera->GetSectorIndices();
+    Hero::int2 indices = camera->GetSectorIndices();
 
     for(int x = -1; x < 2; x++)
     {
@@ -103,5 +106,5 @@ void CalculateSectors(const Camera* camera, Sector** sectors)
                 sectors[indices.x - x][indices.y -y].SetVisible(true);
             }
         }
-    }*/
+    }
 }

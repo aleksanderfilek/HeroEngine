@@ -20,7 +20,9 @@ private:
     unsigned int viewLoc, projectionLoc;
     Hero::matrix4x4 viewMatrix;
     Hero::matrix4x4 projectionMatrix;
-    Hero::matrix4x4 projectionViewMatrix;
+
+    float distance = 10.0f;
+    float targetDistance = 10.0f;
 
 public:
     Camera(unsigned int _viewLoc, unsigned int _projectionLoc);
@@ -35,7 +37,7 @@ public:
     Hero::int2 GetSectorIndices() const;
     void SetProjection(int width, int height, float FOV, float near, float far);
     Hero::float3 ScreenToWorldVector();
-
+    inline Hero::float3 GetPosition(){ return Hero::add(this->worldPosition, this->localPosition);};
 };
 
 #endif

@@ -127,7 +127,7 @@ float length(const float3& vector)
     float x2 = vector.x * vector.x; 
     float y2 = vector.y * vector.y;
     float z2 = vector.z * vector.z;
-    return (float)sqrt(x2 + y2 + z2);
+    return sqrtf(x2 + y2 + z2);
 }
 
 float3 normalized(const float3& vector)

@@ -34,5 +34,5 @@ void Sector::SetPosition(Hero::float3& position)
     Hero::matrix_identity(this->modelMatrix);
     Hero::matrix_scale(this->modelMatrix, {SECTOR_SCALE, SECTOR_SCALE, 1});
     Hero::matrix_rotateAxisX(this->modelMatrix, Hero::deg2rad(90.0f));
-    Hero::matrix_translate(this->modelMatrix, {position.x * 2*SECTOR_SCALE, 0.0f, position.z *2* SECTOR_SCALE});
+    Hero::matrix_translate(this->modelMatrix, {position.x * SECTOR_SCALE, 0.0f, position.z * SECTOR_SCALE});
 }
