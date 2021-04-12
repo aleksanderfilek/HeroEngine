@@ -7,6 +7,7 @@
 #include"player.hpp"
 #include"worldUI.hpp"
 #include"light.hpp"
+#include"trigger.hpp"
 
 class World:public Hero::Level
 {
@@ -26,6 +27,8 @@ private:
     Hero::Mesh* groundMesh;
     Hero::Texture* groundTexture;
     Hero::matrix4x4 groundMatrix;
+
+    Trigger* trigger;
 
     void OnStart() override;
     void OnUpdate() override;

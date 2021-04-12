@@ -1,5 +1,10 @@
 #include"world.hpp"
 
+event(kolizja)
+{
+    std::cout<<"Kolizja"<<std::endl;
+}
+
 void World::OnStart()
 {   
     this->basicShader = new Hero::Shader();
@@ -47,6 +52,11 @@ void World::OnStart()
     Hero::matrix_rotateAxisX(this->groundMatrix, Hero::deg2rad(-90.0f));
     Hero::matrix_translate(this->groundMatrix, {-50.0f, 0.0f, 50.0f});
 
+    this->trigger = new Trigger(this->player->GetPositionRef());
+    this->trigger->SetPosition({-1.0f, 0.0f, 5.0f});
+    this->trigger->SetSize({2.0f, 2.0f, 2.0f});
+    this->trigger->AddEvent(kolizja);
+
     this->player->Start();
     this->camera->Start();
     this->worldUI->Start();
@@ -58,6 +68,7 @@ void World::OnUpdate()
     this->player->Update();
     this->camera->Update();
     this->worldUI->Update();
+    this->trigger->Update();
 }
 
 void World::OnDraw()
