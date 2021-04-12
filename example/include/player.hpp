@@ -3,6 +3,7 @@
 
 #include"Hero.hpp"
 
+#include"emath.hpp"
 #include"camera.hpp"
 #include"components.hpp"
 #include"anim.hpp"
@@ -10,19 +11,29 @@
 class Player: public Hero::GameObject
 {
 private: 
-    Hero::float3 position;
-    float angle;
-    Hero::matrix4x4 modelMatrix;
-
-    Hero::Mesh* mesh;
-    Hero::Texture* texture;
     unsigned int modelLoc;
-
-    Camera* camera;
-
     Transform root;
-    Transform child;
+    Hero::Texture* texture;
+    Transform bones[15];
+    Hero::Mesh meshes[15];
+
+    Skeleton* skeleton;
     Animator* animator;
+
+    int health = 500;
+    const int maxHealth =  1000;
+
+    const float moveSpeed = 2.0f;
+    const float runSpeed = 5.0f;
+    float currentSpeed;
+    float targetSpeed;
+
+    const float sprintRestorationSpeed = 1.0f;
+    const float sprintLostSpeed = 3.0f;
+    const float maxSprintTime = 10.0f;
+    float sprintTime;
+    bool sprintRestoring = false;
+
 public:
     Player(unsigned int _modelLoc);
     ~Player();
@@ -32,8 +43,11 @@ public:
     void Draw();
     void Close();
 
-    inline Hero::float3* GetPositionRef(){ return &this->position; }
-    inline void SetCamera(Camera* _camera){ this->camera = _camera; }
+    inline Hero::float3* GetPositionRef(){ return &this->root.position; }
+    inline int GetHealth(){ return this->health; }
+    inline int GetMaxHealth(){ return this->maxHealth; }
+    inline float GetSprint(){ return this->sprintTime; }
+    inline float GetMaxSprint(){ return this->maxSprintTime; }
 };
 
 #endif

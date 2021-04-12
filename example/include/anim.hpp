@@ -26,6 +26,8 @@ public:
     ~KeyFrame();
 
     inline Transform GetTransform(unsigned int id){ return this->transforms[id]; }
+    inline void SetTransform(unsigned int id, Transform& _transform)
+                                { this->transforms[id] = _transform; }
     inline float GetTime(){ return this->time; }
 };
 
@@ -39,6 +41,9 @@ public:
     void AddBone(Transform* transform, unsigned int parendId);
 
     bool Update(KeyFrame* previousFrame, KeyFrame* nextFrame, float time);
+
+    inline Bone GetBone(unsigned int id){ return this->bones[id]; }
+    inline unsigned int GetBonesCount(){ return this->bones.size(); }
 };
 
 
@@ -80,6 +85,8 @@ public:
     void Stop();
 
     void Update();
+
+    inline bool IsPlaying(){ return this->isPlaying; }
 };
 
 #endif

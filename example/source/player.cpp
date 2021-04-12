@@ -1,121 +1,179 @@
 #include"player.hpp"
 
-Player::Player(unsigned int _modelLoc)
+Player::Player(unsigned int _modelLoc):modelLoc(_modelLoc)
 {
-    this->position = {0.0f, 0.0f, 0.0f};
+    this->meshes[0].Load("example/resources/models/player/player_hips.daebin");
+    this->meshes[1].Load("example/resources/models/player/player_stomach.daebin");
+    this->meshes[2].Load("example/resources/models/player/player_chest.daebin");
+    this->meshes[3].Load("example/resources/models/player/player_neck.daebin");
+    this->meshes[4].Load("example/resources/models/player/player_head.daebin");
+    this->meshes[5].Load("example/resources/models/player/player_lupperleg.daebin");
+    this->meshes[6].Load("example/resources/models/player/player_llowerleg.daebin");
+    this->meshes[7].Load("example/resources/models/player/player_lfoot.daebin");
+    this->meshes[8].Load("example/resources/models/player/player_rupperleg.daebin");
+    this->meshes[9].Load("example/resources/models/player/player_rlowerleg.daebin");
+    this->meshes[10].Load("example/resources/models/player/player_rfoot.daebin");
+    this->meshes[11].Load("example/resources/models/player/player_lupperarm.daebin");
+    this->meshes[12].Load("example/resources/models/player/player_llowerarm.daebin");
+    this->meshes[13].Load("example/resources/models/player/player_rupperarm.daebin");
+    this->meshes[14].Load("example/resources/models/player/player_rlowerarm.daebin");    
 
-    this->modelLoc = _modelLoc;
+    this->skeleton = new Skeleton();
+    this->skeleton->AddBone(&this->bones[0], 0);
+    this->skeleton->AddBone(&this->bones[1], 0);
+    this->skeleton->AddBone(&this->bones[2], 1);
+    this->skeleton->AddBone(&this->bones[3], 2);
+    this->skeleton->AddBone(&this->bones[4], 3);
+    this->skeleton->AddBone(&this->bones[5], 0);
+    this->skeleton->AddBone(&this->bones[6], 5);
+    this->skeleton->AddBone(&this->bones[7], 6);
+    this->skeleton->AddBone(&this->bones[8], 0);
+    this->skeleton->AddBone(&this->bones[9], 8);
+    this->skeleton->AddBone(&this->bones[10], 9);
+    this->skeleton->AddBone(&this->bones[11], 2);
+    this->skeleton->AddBone(&this->bones[12], 11);
+    this->skeleton->AddBone(&this->bones[13], 2);
+    this->skeleton->AddBone(&this->bones[14], 13);
 
-    this->mesh = new Hero::Mesh();
-    this->mesh->Load("example/resources/models/player.daebin");
+    this->animator = new Animator(this->skeleton);
+    this->animator->AddAnimation("example/resources/anims/player_idle.anim");
 
     this->texture = new Hero::Texture();
     this->texture->Load("example/resources/textures/player.png");
 
-        Hero::matrix_identity(root.matrix);
-        Hero::matrix_scale(root.matrix, root.scale);
-        Hero::matrix_rotate(root.matrix, root.rotation);
-        Hero::matrix_translate(root.matrix, root.position);
-
-        Hero::matrix_identity(child.matrix);
-        Hero::matrix_scale(child.matrix, child.scale);
-        Hero::matrix_rotate(child.matrix, child.rotation);
-        Hero::matrix_translate(child.matrix, child.position);
-
-
+    this->currentSpeed = this->moveSpeed;
+    this->sprintTime = this->maxSprintTime;
+    
+    this->root.position = {0.0f, 0.0f, 0.0f};
+    this->root.scale = {0.4f, 0.4f, 0.4f};
 }
 
 Player::~Player()
 {
-
+    delete this->texture;
+    delete this->skeleton;
+    delete this->animator;
 }
 
 void Player::Start()
 {
-    Skeleton* skeleton = new Skeleton();
 
-    skeleton->AddBone(&root, 0);
-    skeleton->AddBone(&child, 0);
-
-    animator = new Animator(skeleton);
-
-    animator->AddAnimation("example/resources/anims/player_idle.anim");
-    animator->Play("player_idle", true);
+    this->animator->Play("player_idle", true);
 
 }
 
 void Player::Update()
 {
-
-    animator->Update();
-    
-    Hero::float3 mouseRay = this->camera->ScreenToWorldVector();
-    Hero::float3 cameraPos = this->camera->GetPosition();
-
-    float x = cameraPos.x - (mouseRay.x/mouseRay.y)*cameraPos.y;
-    float y = 0.0f;
-    float z = cameraPos.z - (mouseRay.z/mouseRay.y)*cameraPos.y;
-    
-    Hero::float3 bVec = Hero::substract({x,y,z}, this->position);
-    Hero::normalize(bVec);
-
-    float dotProduct = bVec.x;
-    float aLength = 1.0f;
-    float bLength = Hero::length(bVec);
-    float cos = dotProduct/(aLength * bLength);
-    float alpha = acosf(cos);
-    alpha *= (z>this->position.z)?-1.0f:1.0f;
-    alpha -= PI/2.0f;
-
-    Hero::float3 forward = bVec;
-    Hero::float3 right = Hero::normalized(Hero::cross_product(forward, {0.0f, 1.0f, 0.0f}));
-
-
-    Hero::float3 deltaPosition = {0.0f, 0.0f, 0.0f};
-    if(Hero::Input::keyPressed(Hero::Input::W))
+    this->animator->Update();
+/*
+    if(this->sprintTime <= 0.0f)
     {
-        deltaPosition = Hero::add(deltaPosition, forward);
+        this->sprintRestoring = true;
     }
-    else if(Hero::Input::keyPressed(Hero::Input::S))
+    if(this->sprintRestoring == true)
     {
-        deltaPosition = Hero::substract(deltaPosition, forward);
-    }
-    if(Hero::Input::keyPressed(Hero::Input::D))
-    {
-        deltaPosition = Hero::substract(deltaPosition, right);
-    }
-    else if(Hero::Input::keyPressed(Hero::Input::A))
-    {
-        deltaPosition = Hero::add(deltaPosition, right);
+        this->sprintTime += this->sprintRestorationSpeed 
+                                * Hero::Time::GetDeltaTime();
+        if(this->sprintTime >= this->maxSprintTime)
+        {
+            this->sprintRestoring = false;
+        }
     }
 
-    deltaPosition = Hero::multiply(deltaPosition, 5.0f*Hero::Time::GetDeltaTime());
-    Hero::float3 newPos = Hero::add(deltaPosition, this->position);
+    if(this->sprintRestoring == false 
+            && Hero::Input::keyPressed(Hero::Input::KeyCode::LSHIFT))
+    {
+        this->targetSpeed = this->runSpeed;
+        this->sprintTime -= this->sprintLostSpeed 
+                            * Hero::Time::GetDeltaTime();
+    }
+    else
+    {
+        this->targetSpeed = this->moveSpeed;
+    }
+*/
+    this->currentSpeed = lerp(this->currentSpeed, this->targetSpeed, 
+                                4.0f*Hero::Time::GetDeltaTime());
 
-    this->position = newPos;
+    Hero::float3 moveVector = {0.0f, 0.0f, 0.0f};
 
-    Hero::matrix_identity(this->modelMatrix);
-    //Hero::matrix_scale(this->modelMatrix, {0.5f, 0.5f, 0.5f});
-    Hero::matrix_rotateAxisY(this->modelMatrix, alpha);
-    Hero::matrix_translate(this->modelMatrix, {position.x, 0.0f, position.z});
+    if(Hero::Input::keyPressed(Hero::Input::KeyCode::W))
+    {
+        Hero::float3 dir = {0.0f, 0.0f, 1.0f};
+        moveVector = Hero::add(moveVector, dir);
+    }
+    else if(Hero::Input::keyPressed(Hero::Input::KeyCode::S))
+    {
+        Hero::float3 dir = {0.0f, 0.0f, -1.0f};
+        moveVector = Hero::add(moveVector, dir);
+    }
+
+    if(Hero::Input::keyPressed(Hero::Input::KeyCode::A))
+    {
+        Hero::float3 dir = {-1.0f, 0.0f, 0.0f};
+        moveVector = Hero::add(moveVector, dir);
+    }
+    else if(Hero::Input::keyPressed(Hero::Input::KeyCode::D))
+    {
+        Hero::float3 dir = {1.0f, 0.0f, 0.0f};
+        moveVector = Hero::add(moveVector, dir);
+    }
+
+
+    Hero::normalize(moveVector);
+
+    float moveVecLength = Hero::length(moveVector);
+    if(moveVecLength != 0.0f)
+    {
+        float cos = moveVector.x/moveVecLength;
+        float alpha = acosf(cos);
+        alpha *= (moveVector.z > 0.0f)?-1.0f:1.0f;
+        alpha -= PI/2.0f;
+
+        this->root.rotation.y = alpha;
+    }
+
+    const float speed = this->moveSpeed * Hero::Time::GetDeltaTime();
+    moveVector = Hero::multiply(moveVector, speed);
+
+    this->root.position = Hero::add(this->root.position, moveVector);
+
+    Hero::matrix_identity(this->root.matrix);
+    Hero::matrix_scale(this->root.matrix, this->root.scale);
+    Hero::matrix_rotate(this->root.matrix, this->root.rotation);
+    Hero::matrix_translate(this->root.matrix, this->root.position);
+
+    for(int i = 0; i < 15; i++)
+    {
+        this->bones[i].matrix = 
+            matrix_matrix(this->root.matrix, this->bones[i].matrix);
+    }
+
+
+    /*
+    this->transform.position = Hero::add(this->transform.position, moveVector);
+
+    Hero::matrix4x4& matrix = this->transform.matrix;
+    Hero::matrix_identity(matrix);
+    Hero::matrix_scale(matrix, this->transform.scale);
+    Hero::matrix_rotate(matrix, this->transform.rotation);
+    Hero::matrix_translate(matrix, this->transform.position);
+    */
 }
 
 void Player::Draw()
 {
     this->texture->Bind();
 
-    glUniformMatrix4fv(this->modelLoc, 1, GL_FALSE, &this->root.matrix.v[0].x);  
-    glCheckError();
-    this->mesh->Draw();
-
-    glUniformMatrix4fv(this->modelLoc, 1, GL_FALSE, &this->child.matrix.v[0].x);  
-    glCheckError();
-    this->mesh->Draw();
+    for(int i = 0; i < 15; i++)
+    {
+        glUniformMatrix4fv(this->modelLoc, 1, GL_FALSE, &this->bones[i].matrix.v[0].x);
+        glCheckError();
+        this->meshes[i].Draw();
+    }
 }
 
 void Player::Close()
 {
-    delete mesh;
-    delete texture;
-    delete animator;
+    
 }

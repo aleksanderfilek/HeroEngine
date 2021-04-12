@@ -30,7 +30,7 @@ WindowSystem::WindowSystem(const char *title, int width, int height, int sdlflag
 
     this->glContext = SDL_GL_CreateContext(this->window);
 
-    SDL_GL_SetSwapInterval(1);
+    SDL_GL_SetSwapInterval(VSYNC);
 
     glewExperimental = GL_TRUE;
 

@@ -5,22 +5,28 @@
 
 #include"camera.hpp"
 #include"player.hpp"
-#include"sector.hpp"
-
-#define SECTOR_COUNT 5
+#include"worldUI.hpp"
+#include"light.hpp"
 
 class World:public Hero::Level
 {
 private:
-    Hero::Texture* defaultTexture;
-    Hero::Mesh* groundMesh;
-    Hero::Shader* standardShader;
-
-    Sector** sectors;
+    Hero::Shader* basicShader;
+    Hero::Shader* grassShader;
 
     Camera* camera;
     Player* player;
-    
+    WorldUI* worldUI;
+    Sun* sun;
+
+    Hero::Mesh* stone1Mesh;
+    Hero::Texture* stone1Texture;
+    Hero::matrix4x4 stoneMatrix;
+
+    Hero::Mesh* groundMesh;
+    Hero::Texture* groundTexture;
+    Hero::matrix4x4 groundMatrix;
+
     void OnStart() override;
     void OnUpdate() override;
     void OnDraw() override;

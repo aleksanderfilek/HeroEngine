@@ -3,6 +3,7 @@
 
 #define RUNTIME_INJECTION 1
 #define FPS_COUNTER 0
+#define VSYNC 1
 
 #if WINDOWS == 1
     #include<SDL\SDL.h>

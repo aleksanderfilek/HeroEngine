@@ -3,7 +3,6 @@
 
 #include"Hero.hpp"
 
-#include"sector.hpp"
 #include"emath.hpp"
 
 #include<cmath>
@@ -11,33 +10,31 @@
 class Camera: public Hero::GameObject
 {
 private:
-    Hero::float3 worldPosition;
+    unsigned int viewLoc, projectionLoc;
+    Hero::matrix4x4 viewMatrix;
+    Hero::matrix4x4 projectionMatrix;
+    
+    Hero::float3 worldPosition = {0.0f, 0.0f, 0.0f};
     Hero::float3 localPosition = {0.0f, 0.0f, 0.0f};
     Hero::float3 lookTarget = {0.0f, 0.0f, 1.0f};
 
     Hero::float3* targetPosition;
-
-    unsigned int viewLoc, projectionLoc;
-    Hero::matrix4x4 viewMatrix;
-    Hero::matrix4x4 projectionMatrix;
-
-    float distance = 10.0f;
-    float targetDistance = 10.0f;
 
 public:
     Camera(unsigned int _viewLoc, unsigned int _projectionLoc);
 
     void Start();
     void Update();
-    void Draw(){}
+    void Draw();
     void Close();
 
     inline void SetTarget(Hero::float3* _target){ targetPosition = _target; }
+    //Hero::float3 ScreenToWorldVector();
 
-    Hero::int2 GetSectorIndices() const;
-    void SetProjection(int width, int height, float FOV, float near, float far);
-    Hero::float3 ScreenToWorldVector();
-    inline Hero::float3 GetPosition(){ return Hero::add(this->worldPosition, this->localPosition);};
+    inline void BindViewMatrix(unsigned int loc){
+        glUniformMatrix4fv(loc, 1, GL_FALSE, &this->viewMatrix.v[0].x);}
+    inline void BindProjectionMatrix(unsigned int loc){
+        glUniformMatrix4fv(loc, 1, GL_FALSE, &this->projectionMatrix.v[0].x);}
 };
 
 #endif

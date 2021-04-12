@@ -2,17 +2,15 @@
 
 event(prymityw)
 {
-    //extern unsigned int DrawType;
+    extern unsigned int DrawType;
     if(Hero::Input::keyPressed(Hero::Input::F1))
     {
-        //DrawType = GL_LINE_STRIP;
-            SDL_Delay(500);
-
+        DrawType = GL_LINE_STRIP;
     }
-    /*else
+    else
     {
         DrawType = GL_TRIANGLES;
-    }*/
+    }
 }
 
 void Menu::OnStart()

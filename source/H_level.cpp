@@ -36,6 +36,7 @@ void Level::Close()
     for(GameObject* g : this->gameObjects)
     {
         g->Close();
+        delete g;
     }
 }
 

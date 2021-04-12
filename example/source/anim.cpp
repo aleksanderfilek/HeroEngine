@@ -56,6 +56,7 @@ bool Skeleton::Update(KeyFrame* previousFrame, KeyFrame* nextFrame, float time)
 
             transform.matrix = matrix;
         }
+        
     }
 
     return dt >= 1.0f;
@@ -167,6 +168,25 @@ void Animator::AddAnimation(const std::string& path)
     {
         delete anim;
         return;
+    }
+
+    for(int f = 0; f<anim->FrameCount(); f++)
+    {
+        KeyFrame* frame = anim->GetFrame(f);
+        std::vector<Transform> newTransform;
+        for(int b = 1; b < this->skeleton->GetBonesCount(); b++)
+        {
+            Transform transform = frame->GetTransform(b);
+            Transform parentTransform = 
+                frame->GetTransform(this->skeleton->GetBone(b).parentId);
+            Hero::float3 newPosition = Hero::substract(transform.position, parentTransform.position);
+            transform.position = newPosition;
+            newTransform.push_back(transform);
+        }
+        for(int i = 1; i <= newTransform.size(); i++)
+        {
+            frame->SetTransform(i, newTransform[i-1]);
+        }
     }
 
     this->animations.push_back(anim);
