@@ -19,6 +19,3 @@ g++ -c -D DEBUG -D LINUX -Iinclude  source/H_level.cpp -o H_level.o
 ar rcs -o lib/libHero.a *.o
 rm *.o
 fi
-
-echo Build game
-g++ -D DEBUG -Iinclude -Iexample/include example/source/*.cpp lib/libHero.lib -fpermissive -lSDL2main -lSDL2 -lSDL2_ttf -lSOIL -lGL -lGLU -lGLEW

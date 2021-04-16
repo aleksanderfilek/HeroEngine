@@ -18,6 +18,3 @@ g++ -c -D DEBUG -Iinclude  source\H_level.cpp -o H_level.o
 ar rcs -o lib/libHero.lib *.o
 del *.o
 )
-
-echo Build game
-g++ -D DEBUG -Iinclude -Iexample\include example\source\*.cpp lib\libHero.lib -lSDL2main -lSDL2 -lSDL2_ttf -lsoil -lglew32 -lopengl32 -lglu32 
