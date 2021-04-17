@@ -3,8 +3,8 @@
 
 #include<iostream>
 #include<vector>
-#include<typeinfo>
 #include<cstdint>
+#include<typeinfo>
 
 #include"Hero_Config.hpp"
 #include"Hero_Utilities.hpp"
@@ -33,18 +33,27 @@ bool AddSystem(T* newSystem)
     {
         if(typeid(*newSystem) == typeid(*sys))
         {
-            DEBUG_CODE( std::cout<<"[Core] - "<<((ISystem*)newSystem)->name()<<" already exists"<<std::endl; )
+            DEBUG_CODE( std::cout<<"[Core] - "<<newSystem->GetName()<<" already exists"<<std::endl; )
             return true;
         }
     }
-
-    DEBUG_CODE( std::cout<<"[Core] - "<<((ISystem*)newSystem)->name()<<" successfully added"<<std::endl; )
     
+    int index;
+    for(index = 0; index < this->_systems.size(); index++)
+    {
+        if(newSystem->priority() <= this->_systems[index]->priority())
+        {
+            break;
+        }
+    }
+
     if(this->_running){
         ((ISystem*)newSystem)->Init();
     }
 
-    this->_systems.push_back(newSystem);
+    this->_systems.insert(this->_systems.begin() + index, newSystem);
+
+    DEBUG_CODE( std::cout<<"[Core] - "<<newSystem->GetName()<<" successfully added"<<std::endl; )
 
     return true;
 }
@@ -63,14 +72,21 @@ bool RemoveSystem()
 
     if(index == this->_systems.size())
     {
-        DEBUG_CODE( std::cout<<"[Core] - System "<<typeid(T).name()<<" does not exist and could not be deleted"<<std::endl; )
+        DEBUG_CODE( std::cout<<"[Core] - "<<T::name<<" does not exist and could not be removed"<<std::endl; )
         return false;
     }
     
-    DEBUG_CODE( std::cout<<"[Core] - System "<<typeid(T).name()<<" successfully removed"<<std::endl; )
+    ISystem*& system = this->_systems[index];
 
-    this->_systems[index]->Close();
+    if(system->_inited)
+    {
+        system->Close();
+    }
+
+    delete system;
     this->_systems.erase(this->_systems.begin() + index);
+
+    DEBUG_CODE( std::cout<<"[Core] - "<<T::name<<" successfully removed"<<std::endl; )
 
     return true;
 }
