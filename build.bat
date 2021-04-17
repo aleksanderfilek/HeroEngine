@@ -1,9 +1,9 @@
 @echo off
 if %1==1 (
 echo Building debug library
-g++ -c -D DEBUG -Iinclude  source\Core\Hero_Core.cpp
-g++ -c -D DEBUG -Iinclude  source\Systems\Hero_Window.cpp
-g++ -c -D DEBUG -Iinclude  source\Systems\Hero_Event.cpp
+g++ -c -D DEBUG -Iinclude  source\Core\*.cpp
+g++ -c -D DEBUG -Iinclude  source\Systems\*.cpp
+g++ -c -D DEBUG -Iinclude  source\*.cpp
 
 del lib\libHero.lib
 ar rcs -o lib/libHero.lib *.o
