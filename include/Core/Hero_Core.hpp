@@ -16,6 +16,8 @@ namespace Hero
 class Core
 {
 private:
+    static Core* instance;
+
     std::vector<ISystem*> _systems;
     bool _running = false;
 
@@ -25,6 +27,8 @@ public:
 
     void Start();
     void Close();
+
+    static Core* Get(){ return instance; }
 
 template<class T> 
 bool AddSystem(T* newSystem)

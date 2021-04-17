@@ -2,6 +2,7 @@
 #define HERO_WINDOW_H
 
 #include<iostream>
+#include<cstdint>
 
 #include"Hero_Config.hpp"
 #include"Hero_Utilities.hpp"
@@ -35,6 +36,8 @@ public:
 
     static const char* name; 
     const char* GetName(){ return name; }
+
+    std::uint8_t priority(){ return 0; }
 
     inline SDL_Window* GetWindow(){ return this->_window; }
     inline SDL_Renderer* GetRenderer(){ return this->_renderer; }

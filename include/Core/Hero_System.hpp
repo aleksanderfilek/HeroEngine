@@ -2,6 +2,9 @@
 #define HERO_SYSTEM_H
 
 #include<cstdint>
+#include<iostream>
+
+#include"Hero_Utilities.hpp"
 
 namespace Hero
 {
@@ -18,17 +21,19 @@ public:
     ISystem(){}
     virtual ~ISystem(){};
 
+    virtual const char* GetName() = 0;
+
     virtual void Init()
     {   this->_inited = true;
-        DEBUG_CODE( std::cout<<"["<<this->GetName()<<"] - Initializing"<<std::endl; ) }
+        DEBUG_CODE( std::cout<<"["<<this->GetName()<<"] - Initializing"<<std::endl; ) 
+    }
 
     virtual void Update(double  deltaTime) = 0;
 
     virtual void Close()
     { DEBUG_CODE( std::cout<<"["<<this->GetName()<<"] - Closing"<<std::endl; ) }
-
-    virtual const char* GetName() = 0;
-    static std::uint8_t priority(){ return 127; }
+    
+    virtual std::uint8_t priority(){ return 127; }
 };
 
 }

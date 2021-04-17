@@ -3,9 +3,13 @@
 namespace Hero
 {
 
+Core* Core::instance = nullptr;
+
 Core::Core()
 {
     DEBUG_CODE( std::cout<<"[Core] - Initializing"<<std::endl; )
+
+    Core::instance = this;
 }
 
 Core::~Core()
@@ -33,8 +37,6 @@ void Core::Start()
     std::uint32_t timer;
     double deltaTime = 0.0;
 
-    double time = 0.0;
-
     while (this->_running)
     {
         timer = SDL_GetTicks();
@@ -44,20 +46,17 @@ void Core::Start()
             sys->Update(deltaTime);
         }
 
-        time += deltaTime;
-        if(time > 1.0)
-        {
-            this->Close();
-        }
-
         deltaTime = (double)(SDL_GetTicks() - timer)/1000.0;
 
     }
 
-    for(ISystem* sys: this->_systems)
+
+    std::vector<ISystem*>::iterator i = this->_systems.end();
+    while (i != this->_systems.begin())
     {
-        sys->Close();
-    }
+        --i;
+        (*i)->Close();
+    } 
 }
 
 void Core::Close()
