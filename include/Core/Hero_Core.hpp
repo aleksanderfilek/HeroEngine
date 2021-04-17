@@ -72,7 +72,7 @@ bool RemoveSystem()
 
     if(index == this->_systems.size())
     {
-        DEBUG_CODE( std::cout<<"[Core] - "<<T::name<<" does not exist and could not be removed"<<std::endl; )
+        DEBUG_CODE( std::cout<<"[Core] - "<<T::name<<" does not exist and could not be deleted"<<std::endl; )
         return false;
     }
     

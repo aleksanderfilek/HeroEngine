@@ -5,3 +5,5 @@
 #include"Core/Hero_System.hpp"
 
 #include"Systems/Hero_Window.hpp"
+
+#include"Hero_Math.hpp"
