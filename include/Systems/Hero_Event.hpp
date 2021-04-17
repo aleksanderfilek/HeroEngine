@@ -29,7 +29,7 @@ public:
     ~Event();
 
     void Init();
-    void Update(double deltaTime);
+    void Update();
     void Close();
 
     static const char* name; 

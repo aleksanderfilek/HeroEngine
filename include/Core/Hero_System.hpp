@@ -28,7 +28,7 @@ public:
         DEBUG_CODE( std::cout<<"["<<this->GetName()<<"] - Initializing"<<std::endl; ) 
     }
 
-    virtual void Update(double  deltaTime) = 0;
+    virtual void Update() = 0;
 
     virtual void Close()
     { DEBUG_CODE( std::cout<<"["<<this->GetName()<<"] - Closing"<<std::endl; ) }

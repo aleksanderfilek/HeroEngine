@@ -9,6 +9,7 @@
 #include"Hero_Config.hpp"
 #include"Hero_Utilities.hpp"
 #include"Hero_System.hpp"
+#include"Hero_Time.hpp"
 
 namespace Hero
 {
@@ -21,6 +22,7 @@ private:
     std::vector<ISystem*> _systems;
     bool _running = false;
 
+    Time* time;
 public:
     Core();
     ~Core();

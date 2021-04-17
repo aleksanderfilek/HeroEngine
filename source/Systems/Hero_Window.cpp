@@ -67,7 +67,7 @@ void Window::Init()
     ISystem::Init();
 }
 
-void Window::Update(double deltaTime)
+void Window::Update()
 {
 
 }

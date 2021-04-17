@@ -43,7 +43,7 @@ void Core::Start()
 
         for(ISystem* sys: this->_systems)
         {
-            sys->Update(deltaTime);
+            sys->Update();
         }
 
         deltaTime = (double)(SDL_GetTicks() - timer)/1000.0;

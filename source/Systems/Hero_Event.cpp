@@ -21,7 +21,7 @@ void Event::Init()
     ISystem::Init();
 }
 
-void Event::Update(double deltaTime)
+void Event::Update()
 {
     //std::memset(this->states, false, sizeof(this->states));
 
