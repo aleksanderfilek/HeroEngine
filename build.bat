@@ -3,6 +3,7 @@ if %1==1 (
 echo Building debug library
 g++ -c -D DEBUG -Iinclude  source\Core\Hero_Core.cpp
 g++ -c -D DEBUG -Iinclude  source\Systems\Hero_Window.cpp
+g++ -c -D DEBUG -Iinclude  source\Systems\Hero_Event.cpp
 
 del lib\libHero.lib
 ar rcs -o lib/libHero.lib *.o
