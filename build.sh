@@ -10,3 +10,5 @@ rm lib/libHero.a
 ar rcs -o lib/libHero.a *.o
 rm *.o
 fi
+
+g++ -D DEBUG -Iinclude main.cpp lib/libHero.a -lSDL2main -lSDL2 -lSDL2_ttf -lsoil -lGLEW -lGL -lGLU 
