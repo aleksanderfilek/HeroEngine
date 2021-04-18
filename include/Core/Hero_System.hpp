@@ -1,5 +1,5 @@
-#ifndef HERO_SYSTEM_H
-#define HERO_SYSTEM_H
+#ifndef HERO_SYSTEM_HPP
+#define HERO_SYSTEM_HPP
 
 #include<cstdint>
 #include<iostream>

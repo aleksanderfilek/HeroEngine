@@ -1,5 +1,5 @@
-#ifndef HERO_CORE_H
-#define HERO_CORE_H
+#ifndef HERO_CORE_HPP
+#define HERO_CORE_HPP
 
 #include<iostream>
 #include<vector>

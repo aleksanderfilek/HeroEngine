@@ -1,5 +1,5 @@
-#ifndef HERO_UTILITIES_H
-#define HERO_UtILITIES_H
+#ifndef HERO_UTILITIES_HPP
+#define HERO_UtILITIES_HPP
 
 namespace Hero
 {

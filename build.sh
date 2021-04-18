@@ -4,7 +4,6 @@ then
 echo Building realse library
 g++ -c -D DEBUG -Iinclude  source/Core/*.cpp
 g++ -c -D DEBUG -Iinclude  source/Systems/*.cpp
-g++ -c -D DEBUG -Iinclude  source/*.cpp
 
 rm lib/libHero.a
 ar rcs -o lib/libHero.a *.o
