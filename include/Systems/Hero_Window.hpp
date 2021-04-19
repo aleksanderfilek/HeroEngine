@@ -46,6 +46,8 @@ public:
     inline int2 GetScreenSize(){ return this->_windowInfo.screenSize; }
 
     void Apply(); //aktualizuje okno, rozmiar okna, fullscreen
+
+    inline void Render(){ SDL_GL_SwapWindow(this->_window); }
 };
 
 }

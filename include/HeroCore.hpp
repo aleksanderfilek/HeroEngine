@@ -6,5 +6,7 @@
 #include"Core/Hero_Core.hpp"
 #include"Core/Hero_System.hpp"
 #include"Core/Hero_Math.hpp"
+#include"Core/Hero_Time.hpp"
+#include"Core/Hero_Texture.hpp"
 
 #endif

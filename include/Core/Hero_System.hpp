@@ -34,6 +34,9 @@ public:
     { DEBUG_CODE( std::cout<<"["<<this->GetName()<<"] - Closing"<<std::endl; ) }
     
     virtual std::uint8_t priority(){ return 127; }
+
+    inline void PrintMessage(const char* msg)
+    { DEBUG_CODE( std::cout<<"["<<this->GetName()<<"] - "<<msg<<std::endl; ) }
 };
 
 }

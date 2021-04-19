@@ -28,7 +28,7 @@ public:
     ~Core();
 
     void Start();
-    void Close();
+    static void Close(){ Core::instance->_running = false; }
 
     static Core* Get(){ return instance; }
 
@@ -97,10 +97,10 @@ bool RemoveSystem()
     return true;
 }
 
-template<class T>
-T* GetSystem()
+template<class T> 
+static T* GetSystem()
 {
-    for(ISystem* sys: this->_systems)
+    for(ISystem* sys: instance->_systems)
     {
         if(typeid(T) == typeid(*sys))
         {

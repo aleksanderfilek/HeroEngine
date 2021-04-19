@@ -59,9 +59,4 @@ void Core::Start()
     } 
 }
 
-void Core::Close()
-{
-    this->_running = false;
-}
-
 }
