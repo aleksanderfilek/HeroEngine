@@ -3,7 +3,7 @@
 namespace Hero
 {
 
-    Texture::Texture(const std::string& path)
+    Texture::Texture(const std::string& path, std::uint8_t textureFlags)
     {
         // load texture from file
         int width, height;
@@ -20,17 +20,25 @@ namespace Hero
         glCheckError();
         glBindTexture(GL_TEXTURE_2D, gl_id);
         glCheckError();
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        
+        int param = (textureFlags & 1)?GL_LINEAR: GL_NEAREST;
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
         glCheckError();
+
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glCheckError();
+
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, 
             GL_RGB, GL_UNSIGNED_BYTE, image);
         glCheckError();
-        glGenerateMipmap(GL_TEXTURE_2D);
-        glCheckError();
+
+        if(textureFlags & 128){
+            glGenerateMipmap(GL_TEXTURE_2D);
+            glCheckError();
+        }
+
         SOIL_free_image_data(image);
         glBindTexture(GL_TEXTURE_2D, 0);
         glCheckError();

@@ -3,6 +3,7 @@
 
 #include<iostream>
 #include<string>
+#include<cstdint>
 
 #include"Core/Hero_Config.hpp"
 #include"Core/Hero_Utilities.hpp"
@@ -18,7 +19,16 @@ private:
     int2 _size;
 
 public:
-    Texture(const std::string& path);
+    enum class TextureFlag : std::uint8_t
+    {
+        Nearest = 0,
+        Linear = 1,
+        NoMipmap = 0,
+        Mipmap =  128       
+    };
+
+    Texture(const std::string& path, std::uint8_t textureFlags = 
+        (std::uint8_t)TextureFlag::Linear | (std::uint8_t)TextureFlag::Mipmap);
     ~Texture();
 
     void Bind();
