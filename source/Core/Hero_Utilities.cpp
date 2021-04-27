@@ -20,3 +20,69 @@ GLenum glCheckError_(const char *file, int line)
     }
     return errorCode;
 }
+
+GLint glShaderCheckError_(GLuint shader, GLenum pname ,const char *file, int line)
+{
+    GLint errorCode;
+    glGetShaderiv(shader, pname, &errorCode);
+    if(!errorCode)
+    {
+        char infoLog[512];
+        glGetShaderInfoLog(shader, 512, NULL, infoLog);
+
+        GLint shaderType;
+        glGetShaderiv(shader, GL_SHADER_TYPE, &shaderType);
+        switch(shaderType)
+        {
+        case GL_VERTEX_SHADER:
+            std::cout<<"Error: Vertex Shader - ";
+            break;
+        case GL_GEOMETRY_SHADER:
+            std::cout<<"Error: Geometry Shader - ";
+            break;
+        case GL_FRAGMENT_SHADER:
+            std::cout<<"Error: Fragment Shader - ";
+            break;
+        }
+
+        switch (pname)
+        {
+        case  GL_DELETE_STATUS :
+            std::cout<<"Delete Status Failed ";
+            break;
+        case  GL_COMPILE_STATUS :
+            std::cout<<"Compile Status Failed ";
+            break;
+        }
+
+        std::cout << infoLog << " | " << file << " (" << line << ")" << std::endl;
+    }
+
+    return errorCode;
+}
+
+GLint glProgramCheckError_(GLuint program, GLenum pname ,const char *file, int line)
+{
+    GLint errorCode;
+    glGetProgramiv(program, pname, &errorCode);
+    if(!errorCode)
+    {
+        char infoLog[512];
+        glGetProgramInfoLog(program, 512, NULL, infoLog);
+        switch(pname)
+        {
+            case GL_DELETE_STATUS:
+                std::cout<<"Delete Status Failed";
+            break;
+            case GL_ATTACHED_SHADERS:
+                std::cout<<"Attach Status Failed";
+            break;
+            case GL_LINK_STATUS:
+                std::cout<<"Link Status Failed";
+            break;
+        }
+        std::cout << infoLog << " | " << file << " (" << line << ")" << std::endl;
+    }
+
+    return errorCode;
+}
