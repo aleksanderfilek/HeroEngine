@@ -1,7 +1,7 @@
 @echo off
 if %1==1 (
 echo Building debug library
-g++ -c -D DEBUG -Iinclude  source\Core\*.cpp
+g++ -c -D DEBUG -Iinclude  source\Core\*.cpp 
 g++ -c -D DEBUG -Iinclude  source\Systems\*.cpp
 
 del lib\libHero.lib

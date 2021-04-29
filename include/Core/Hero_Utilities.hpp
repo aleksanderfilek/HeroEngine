@@ -25,7 +25,6 @@ GLint glShaderCheckError_(GLuint shader, GLenum pname ,const char *file, int lin
 GLint glProgramCheckError_(GLuint program, GLenum pname ,const char *file, int line);
 #define glProgramCheckError(program, type) glProgramCheckError_(program, type, __FILE__, __LINE__) 
 
-
 }
 
 #endif

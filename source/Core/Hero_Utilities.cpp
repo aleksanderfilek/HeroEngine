@@ -1,4 +1,6 @@
 #include"Core/Hero_Utilities.hpp"
+namespace Hero
+{
 
 GLenum glCheckError_(const char *file, int line)
 {
@@ -85,4 +87,6 @@ GLint glProgramCheckError_(GLuint program, GLenum pname ,const char *file, int l
     }
 
     return errorCode;
+}
+
 }

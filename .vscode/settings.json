@@ -1,7 +1,6 @@
 {
     "C_Cpp.default.includePath": [
         "${workspaceFolder}/include/*",
-        "${workspaceFolder}/example/include/*"
     ],
     "files.associations": {
         "fstream": "cpp",
@@ -49,6 +48,9 @@
         "typeinfo": "cpp",
         "optional": "cpp",
         "string_view": "cpp",
-        "ctime": "cpp"
+        "ctime": "cpp",
+        "xlocale": "cpp",
+        "xstring": "cpp",
+        "xutility": "cpp"
     }
 }
