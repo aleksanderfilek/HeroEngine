@@ -195,12 +195,18 @@ void BindShader(const Shader* shader)
     glCheckError();
 }
 
-Mesh* LoadMesh(const std::string& path)
+Mesh* LoadMeshRef(const std::string& path)
 {
     return nullptr;
 }
 
-void UnloadMesh(Mesh* mesh)
+Mesh LoadMesh(const std::string& path)
+{
+    Mesh mesh;
+    return mesh;
+}
+
+void UnloadMeshRef(Mesh* mesh)
 {
     for(auto buff: mesh->buffers)
     {
@@ -214,6 +220,21 @@ void UnloadMesh(Mesh* mesh)
     glDeleteBuffers(1, &mesh->VBO);
     glDeleteBuffers(1, &mesh->EBO);
     free(mesh);
+}
+
+void UnloadMesh(Mesh& mesh)
+{
+    for(auto buff: mesh.buffers)
+    {
+       free(buff.array);
+    }
+    mesh.buffers.clear();
+
+    free(mesh.indices.array);
+
+    glDeleteBuffers(1, &mesh.VAO);
+    glDeleteBuffers(1, &mesh.VBO);
+    glDeleteBuffers(1, &mesh.EBO);
 }
 
 void DrawMesh(const Mesh* mesh)

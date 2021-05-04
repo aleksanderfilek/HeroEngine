@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ $1 -eq 1 ];
 then
-echo Building realse library
+echo Building debug library
 g++ -c -D DEBUG -Iinclude  source/Core/*.cpp
 g++ -c -D DEBUG -Iinclude  source/Systems/*.cpp
 
@@ -10,4 +10,5 @@ ar rcs -o lib/libHero.a *.o
 rm *.o
 fi
 
-g++ -D DEBUG -Iinclude main.cpp lib/libHero.a -lSDL2main -lSDL2 -lSDL2_ttf -lsoil -lGLEW -lGL -lGLU 
+echo Building debug game
+g++ -D DEBUG -Iinclude main.cpp lib/libHero.a -lSDL2main -lSDL2 -lSDL2_ttf -lSOIL -lGLEW -lGL -lGLU 

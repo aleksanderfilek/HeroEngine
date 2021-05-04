@@ -3,7 +3,7 @@
 
 #include"Core/Hero_Core.hpp"
 #include"Core/Hero_System.hpp"
-#include"Core/Hero_Config.hpp"
+#include"Hero_Config.hpp"
 #include"Core/Hero_Level.hpp"
 
 namespace Hero

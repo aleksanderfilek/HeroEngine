@@ -3,7 +3,7 @@
 
 #include<cstdint>
 
-#include"Core/Hero_Config.hpp"
+#include"Hero_Config.hpp"
 #include"Core/Hero_System.hpp"
 
 namespace Hero

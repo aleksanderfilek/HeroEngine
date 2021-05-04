@@ -6,7 +6,7 @@
 #include<fstream>
 #include<vector>
 
-#include"Core/Hero_Config.hpp"
+#include"Hero_Config.hpp"
 #include"Core/Hero_Utilities.hpp"
 #include"Core/Hero_Math.hpp"
 
@@ -75,8 +75,10 @@ struct Mesh
     meshBufferI indices;
 };
 
-Mesh* LoadMesh(const std::string& path);
-void UnloadMesh(Mesh* mesh);
+Mesh* LoadMeshRef(const std::string& path);
+Mesh LoadMesh(const std::string& path);
+void UnloadMeshRef(Mesh* mesh);
+void UnloadMesh(Mesh& mesh);
 void DrawMesh(const Mesh* mesh);
 void GenerateMesh(Mesh* mesh);
 

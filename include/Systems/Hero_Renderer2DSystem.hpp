@@ -3,10 +3,10 @@
 
 #include<cstdint>
 
-#include"Core/Hero_Config.hpp"
+#include"Hero_Config.hpp"
 #include"Core/Hero_Core.hpp"
 #include"Core/Hero_System.hpp"
-#include"Systems/Hero_Window.hpp"
+#include"Systems/Hero_WindowSystem.hpp"
 
 namespace Hero
 {
@@ -33,6 +33,9 @@ public:
         { glClearColor(red, green, blue, 1.0f); }
     static inline void ClearColor(std::uint8_t red, std::uint8_t green, std::uint8_t blue)
         { glClearColor((float)red/255.0f, (float)green/255.0f, (float)blue/255.0f, 1.0f); }
+
+    static inline void Clear()
+        { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
     static inline void Render(){ Renderer2D::instance->_windowSystem->Render(); }
 };

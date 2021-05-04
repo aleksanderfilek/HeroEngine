@@ -4,7 +4,7 @@
 #include<iostream>
 #include<cstdint>
 
-#include"Core/Hero_Config.hpp"
+#include"Hero_Config.hpp"
 #include"Core/Hero_Utilities.hpp"
 #include"Core/Hero_System.hpp"
 #include"Core/Hero_Math.hpp"

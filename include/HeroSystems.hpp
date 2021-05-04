@@ -1,10 +1,11 @@
 #ifndef HEROSYSTEMS_HPP
 #define HEROSYSTEMS_HPP
 
-#include"Systems/Hero_Window.hpp"
-#include"Systems/Hero_Event.hpp"
-#include"Systems/Hero_Input.hpp"
-#include"Systems/Hero_Resources.hpp"
-#include"Systems/Hero_Level.hpp"
+#include"Systems/Hero_WindowSystem.hpp"
+#include"Systems/Hero_EventSystem.hpp"
+#include"Systems/Hero_InputSystem.hpp"
+#include"Systems/Hero_ResourcesSystem.hpp"
+#include"Systems/Hero_LevelSystem.hpp"
+#include"Systems/Hero_Renderer2DSystem.hpp"
 
 #endif

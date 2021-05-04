@@ -4,7 +4,7 @@
 #include<iostream>
 #include<string>
 
-#include"Core/Hero_Config.hpp"
+#include"Hero_Config.hpp"
 
 namespace Hero
 {
