@@ -75,12 +75,22 @@ struct Mesh
     meshBufferI indices;
 };
 
-Mesh* LoadMeshRef(const std::string& path);
-Mesh LoadMesh(const std::string& path);
-void UnloadMeshRef(Mesh* mesh);
-void UnloadMesh(Mesh& mesh);
+Mesh* LoadMesh(const std::string& path);
+void UnloadMesh(Mesh* mesh);
 void DrawMesh(const Mesh* mesh);
 void GenerateMesh(Mesh* mesh);
+
+namespace Extra
+{   
+    Texture LoadTextureByCopy(const std::string& path);
+    void UnloadTextureByCopy(Texture& texture);
+
+    Mesh LoadMeshByCopy(const std::string& path);
+    void UnloadMeshByCopy(Mesh& mesh);
+
+    Mesh LoadMeshByCopy(const std::string& path);
+    void UnloadMeshByCopy(Mesh* mesh);
+}
 
 }
 

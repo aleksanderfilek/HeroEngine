@@ -3,6 +3,7 @@
 
 #include<vector>
 #include<string>
+#include<fstream>
 
 #include"Core/Hero_System.hpp"
 #include"Core/Hero_Resources.hpp"
@@ -48,7 +49,8 @@ public:
     Texture* GetTexture(uint32_t index);
     Shader* GetShader(uint32_t index);
 
-    void RebuildMesh();
+    // TODO: in future
+    //void LoadFromFile(const std::string& path);
 
     void Clear();
 };
