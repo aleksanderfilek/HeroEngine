@@ -6,25 +6,29 @@
 #include<fstream>
 
 #include"Core/Hero_System.hpp"
-#include"Core/Hero_Resources.hpp"
+#include"Core/Hero_Mesh.hpp"
+#include"Core/Hero_Texture.hpp"
+#include"Core/Hero_Shader.hpp"
+
+
 
 namespace Hero
 {
-
 
 class Resources : public ISystem
 {
 private:
     std::vector<std::pair<bool, Mesh>> meshes;
-    std::vector<std::pair<bool, Texture>> textures;
-    std::vector<std::pair<bool, Shader>> shaders;
-
-    std::vector<std::pair<const std::string&, uint32_t*>> addMeshes;
+    std::vector<std::string> addMeshes;
     std::vector<uint32_t> removeMeshes;
-    std::vector<std::pair<const std::string&, uint32_t*>> addTextures;
-    std::vector<uint32_t> removeTextures;
-    std::vector<std::pair<const std::string&, uint32_t*>> addShaders;
+
+    std::vector<std::pair<bool, Shader>> shaders;
+    std::vector<std::string> addShaders;
     std::vector<uint32_t> removeShaders;
+
+    std::vector<std::pair<bool, Texture>> textures;
+    std::vector<std::string> addTextures;
+    std::vector<uint32_t> removeTextures;
 
 public:
     Resources();
@@ -37,23 +41,27 @@ public:
     static const char* name; 
     const char* GetName(){ return name; }
 
-    void AddMesh(const std::string& path, uint32_t* ptrIndex);
-    void AddTexture(const std::string& path, uint32_t* ptrIndex);
-    void AddShader(const std::string& path, uint32_t* ptrIndex);
+    std::uint8_t priority(){ return 10; }
 
-    void RemoveMesh(uint32_t index);
-    void RemoveTexture(uint32_t index);
-    void RemoveShader(uint32_t index);
+    void AddMesh(const std::string& path);
+    void RemoveMeshByName(const std::string& name);
+    Mesh* GetMeshByName(const std::string& name);
 
-    Mesh* GetMesh(uint32_t index);
-    Texture* GetTexture(uint32_t index);
-    Shader* GetShader(uint32_t index);
+    void AddShader(const std::string& path);
+    void RemoveShaderByName(const std::string& name);
+    Shader* GetShaderByName(const std::string& name);
+
+    void AddTexture(const std::string& path);
+    void RemoveTextureByName(const std::string& name);
+    Texture* GetTextureByName(const std::string& name);
 
     // TODO: in future
     //void LoadFromFile(const std::string& path);
 
     void Clear();
 };
+
+//#define RegisterResourceType()
 
 }
 
