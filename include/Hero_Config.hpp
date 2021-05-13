@@ -1,6 +1,8 @@
 #define Windows 1
 #define Linux 0
 
+#define Profile
+
 #if Windows == 1
     #include<SDL\SDL.h>
     #include<GL\glew.h>

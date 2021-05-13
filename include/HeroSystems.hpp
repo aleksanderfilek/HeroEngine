@@ -7,5 +7,6 @@
 #include"Systems/Hero_ResourcesSystem.hpp"
 #include"Systems/Hero_LevelSystem.hpp"
 #include"Systems/Hero_Renderer2DSystem.hpp"
+#include"Systems/Hero_ProfilerSystem.hpp"
 
 #endif

@@ -6,7 +6,6 @@ g++ -c -D DEBUG -Iinclude  source\Systems\*.cpp
 
 del lib\libHero.lib
 ar rcs -o lib/libHero.lib *.o
-del *.o
 )
 
 echo Build debug game

@@ -47,7 +47,6 @@ void Core::Start()
         }
 
         deltaTime = (double)(SDL_GetTicks() - timer)/1000.0;
-
     }
 
 
