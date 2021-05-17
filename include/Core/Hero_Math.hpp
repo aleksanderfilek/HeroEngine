@@ -6,9 +6,8 @@
 struct int2
 {
     int x, y;
-
-    int2():x(0),y(0){}
-    int2(int _x, int _y):x(_x),y(_y){}
 };
+
+#define int2zero {0, 0}
 
 #endif

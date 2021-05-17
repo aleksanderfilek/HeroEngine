@@ -1,5 +1,5 @@
-#ifndef HERO_EVENT_HPP
-#define HERO_EVENT_HPP
+#ifndef HERO_EVENT_SYSTEM_HPP
+#define HERO_EVENT_SYSTEM_HPP
 
 #include<cstdint>
 #include<cstring>
