@@ -15,9 +15,9 @@ private:
     static Time* instance;
 
     uint32_t startupTime;
-    double deltaTime = 0;
-    double timeScale = 1;
-    double scaledTime = 0;
+    double deltaTime = 0.0;
+    double timeScale = 1.0;
+    double scaledTime = 0.0;
 public:
     Time();
     ~Time();

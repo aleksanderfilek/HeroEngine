@@ -8,7 +8,6 @@ private:
     Hero::Mesh* mesh;
     Hero::Window* window = nullptr;
     Hero::Resources* resources;
-    void* ptr;
 
 public:
     void OnInit()
@@ -20,8 +19,6 @@ public:
         resources = Hero::Core::GetSystem<Hero::Resources>();
         
         resources->AddShader("standardShader.glslbin");
-
-        ptr = Hero::Allocate(124);
 
         float* arr = new float[6];
         arr[0] = -0.5f;
@@ -79,7 +76,6 @@ public:
 
     void OnClose()
     {
-        Hero::Delete(ptr);
         //Hero::UnloadShader(shader);
         Hero::UnloadMesh(mesh);
     }
@@ -95,7 +91,7 @@ int main(int argc, char *argv[])
     core->AddSystem<Hero::Resources>(new Hero::Resources());
     Test* test = new Test();
     core->AddSystem<Hero::Level>(new Hero::Level(test));
-    core->AddSystem<Hero::Profiler>(new Hero::Profiler(Profiler_Memory));
+    core->AddSystem<Hero::Profiler>(new Hero::Profiler(Profiler_Memory | Profiler_FPS));
     core->Start();
 
     delete core;

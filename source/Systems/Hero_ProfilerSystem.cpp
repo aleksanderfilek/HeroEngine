@@ -27,7 +27,12 @@ void Profiler::Init()
 
     if(this->flags & Profiler_Memory)
     {
-        this->usedMemoryLog = new std::pair<uint32_t, size_t>[MEMORYSTACK];
+        this->heapMemoryBuffer = new uint64_t[BufferSize];
+    }
+
+    if(this->flags & Profiler_FPS)
+    {
+        this->fpsBuffer = new uint16_t[BufferSize];
     }
 
     AddMemory(0);
@@ -35,9 +40,22 @@ void Profiler::Init()
 
 void Profiler::Update()
 {
-    if(this->flags & Profiler_Memory && this->memoryLogged == MEMORYSTACK)
+    if(this->flags & Profiler_Memory)
     {
-        SaveMemoryLog();
+        this->heapMemoryBuffer[this->bufferCount] = this->heapMemoryUsage;
+    }
+
+    if(this->flags & Profiler_FPS)
+    {
+        double fps = 1.0 / Time::GetDeltaTime();
+        this->fpsBuffer[this->bufferCount] = (uint16_t)fps;
+    }
+
+    this->bufferCount++;
+
+    if(this->bufferCount == BufferSize)
+    {
+        this->SaveBuffer();
     }
 
     this->frame++;
@@ -47,50 +65,112 @@ void Profiler::Close()
 {
     ISystem::Close();
 
+    SaveLog();
+
     if(this->flags & Profiler_Memory)
     {
-        SaveMemoryLog();
+        delete[] this->heapMemoryBuffer;
+    }
 
-        delete[] this->usedMemoryLog;
+    if(this->flags & Profiler_FPS)
+    {
+        delete[] this->fpsBuffer;
     }
 }
 
 void Profiler::AddMemory(int size)
 {
-    if(instance->flags & Profiler_Memory == 0)
-        return;
-
-    instance->usedMemory += size;
-    if(instance->memoryLogged > 0 && 
-        instance->usedMemoryLog[instance->memoryLogged - 1].first == instance->frame)
-    {
-        instance->usedMemoryLog[instance->memoryLogged - 1].second = instance->usedMemory;
-        return;
-    }
-
-    instance->usedMemoryLog[instance->memoryLogged].first = instance->frame;
-    instance->usedMemoryLog[instance->memoryLogged].second = instance->usedMemory;
-    instance->memoryLogged++;
+    instance->heapMemoryUsage += size;
 }
 
-void Profiler::SaveMemoryLog(){
-    std::ofstream file;
-    file.open("memoryLog.csv");
+void Profiler::SaveBuffer()
+{
+    std::string name = std::to_string(this->buffersNumber) + "profiler.temp";
 
-    if(file.fail())
+    std::ofstream file;
+    file.open(name, std::ios::out | std::ios::binary);
+    if(!file.is_open())
     {
-        std::cout<<"["<<Profiler::name<<"] - Could not create memory log file"<<std::endl;
+        std::cout<<"["<<Profiler::name<<"] - Could not create buffer file: "<<name<<std::endl;
         return;
     }
 
-    for(int i = 0; i < this->memoryLogged; i++)
+    if(this->flags & Profiler_Memory)
     {
-        file<<this->usedMemoryLog[i].first<<", "<<usedMemoryLog[i].second<<std::endl;
+        file.write((const char*)this->heapMemoryBuffer, BufferSize * sizeof(uint32_t));
+    }
+
+    if(this->flags & Profiler_FPS)
+    {
+        file.write((const char*)this->fpsBuffer, BufferSize * sizeof(uint16_t));
     }
 
     file.close();
 
-    this->memoryLogged = 0;
+    this->buffersNumber++;
+    this->bufferCount = 0;
+}
+
+void Profiler::SaveLog(){
+    std::ofstream file;
+    file.open("profiler.csv");
+
+    if(file.fail())
+    {
+        std::cout<<"["<<Profiler::name<<"] - Could not create profiler file"<<std::endl;
+        return;
+    }
+
+    file<<"frame";
+    if(this->flags & Profiler_Memory)
+        file<<", memory";
+    if(this->flags & Profiler_FPS)
+        file<<", fps";
+    file<<std::endl;
+
+    uint32_t tempHeapMemoryBuffer[BufferSize];
+    uint16_t tempfpsBuffer[BufferSize];
+
+    uint32_t frameCounter = 0;
+
+    for(int i = 0; i < this->buffersNumber; i++)
+    {
+        std::string name = std::to_string(i) + "profiler.temp";
+        std::ifstream tempFile;
+        tempFile.open(name, std::ios::in | std::ios::binary);
+        if(this->flags & Profiler_Memory)
+            tempFile.read((char*)tempHeapMemoryBuffer, BufferSize * sizeof(uint32_t));
+        if(this->flags & Profiler_FPS)
+            tempFile.read((char*)tempfpsBuffer, BufferSize * sizeof(uint16_t));
+        tempFile.close();
+
+        for(int j = 0; j < BufferSize; j++)
+        {
+            file<<frameCounter;
+            frameCounter++;
+            if(this->flags & Profiler_Memory)
+                file<<", "<<tempHeapMemoryBuffer[j];
+            if(this->flags & Profiler_FPS)
+                file<<", "<<tempfpsBuffer[j];
+            file<<std::endl;
+        }
+    }
+
+    for(int i = 0; i < this->bufferCount; i++)
+    {
+        file<<frameCounter;
+        frameCounter++;
+        if(this->flags & Profiler_Memory)
+            file<<", "<<heapMemoryBuffer[i];
+        if(this->flags & Profiler_FPS)
+            file<<", "<<fpsBuffer[i];
+        file<<std::endl;
+    }
+
+    file.close();
+    
+    this->buffersNumber++;
+    this->bufferCount = 0;
 }
 
 }

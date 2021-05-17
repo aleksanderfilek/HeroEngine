@@ -10,11 +10,15 @@ Core::Core()
     DEBUG_CODE( std::cout<<"[Core] - Initializing"<<std::endl; )
 
     Core::instance = this;
+
+    this->time = new Time();
 }
 
 Core::~Core()
 {
     DEBUG_CODE( std::cout<<"[Core] - Closing"<<std::endl; )
+
+    delete this->time;
 
     for(ISystem* sys: this->_systems)
     {
@@ -47,6 +51,7 @@ void Core::Start()
         }
 
         deltaTime = (double)(SDL_GetTicks() - timer)/1000.0;
+        this->time->SetDeltaTime(deltaTime);
     }
 
 

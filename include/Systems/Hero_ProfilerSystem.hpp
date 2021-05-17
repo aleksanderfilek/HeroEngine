@@ -2,10 +2,12 @@
 #define HERO_PROFILER_SYSTEM_HPP
 
 #include<fstream>
+#include<string>
 
 #include"Core/Hero_System.hpp"
+#include"Core/Hero_Time.hpp"
 
-#define MEMORYSTACK 1024
+#define BufferSize 1024
 
 #define Profiler_Memory 1
 #define Profiler_FPS 2
@@ -18,15 +20,18 @@ class Profiler : public ISystem
 private:
     static Profiler* instance;
 
-    std::pair<uint32_t, size_t>* usedMemoryLog;
-    uint32_t memoryLogged = 0;
-    size_t usedMemory = 0;
-
-    uint32_t frame = 0;
-
     uint32_t flags;
+    uint32_t frame = 0;
+    uint32_t buffersNumber = 0;
+    uint32_t bufferCount = 0;
 
-    void SaveMemoryLog();
+    size_t heapMemoryUsage = 0;
+    uint64_t* heapMemoryBuffer;
+
+    uint16_t* fpsBuffer;
+
+    void SaveBuffer();
+    void SaveLog();
 
 public:
     Profiler(uint32_t _flags);

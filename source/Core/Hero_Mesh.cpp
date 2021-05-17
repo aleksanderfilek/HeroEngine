@@ -58,6 +58,7 @@ void GenerateMesh(Mesh* mesh)
     glBufferData(GL_ARRAY_BUFFER, buffSize * sizeof(float), NULL, GL_STATIC_DRAW);  
     DEBUG_CODE( glCheckError(); )
     uint32_t buffOffset = 0;
+
     for(auto& buff: mesh->buffers)
     {
         uint32_t size = buff.length * sizeof(float);
@@ -80,6 +81,7 @@ void GenerateMesh(Mesh* mesh)
         buffOffset += buff.length * sizeof(float);
     }
     glBindVertexArray(0);
+
 /*
     for(int i = 0; i < mesh->buffers.size(); i++)
     {

@@ -9,4 +9,4 @@ ar rcs -o lib/libHero.lib *.o
 )
 
 echo Build debug game
-g++ -D DEBUG -Iinclude main.cpp lib\libHero.lib -lSDL2main -lSDL2 -lSDL2_ttf -lsoil -lglew32 -lopengl32 -lglu32 
+g++ -D DEBUG -Iinclude main.cpp lib\libHero.lib -lpsapi -lSDL2main -lSDL2 -lSDL2_ttf -lsoil -lglew32 -lopengl32 -lglu32 
