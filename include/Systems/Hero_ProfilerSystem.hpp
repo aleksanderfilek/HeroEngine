@@ -28,7 +28,7 @@ private:
     size_t heapMemoryUsage = 0;
     uint64_t* heapMemoryBuffer;
 
-    uint16_t* fpsBuffer;
+    double* fpsBuffer;
 
     void SaveBuffer();
     void SaveLog();

@@ -32,7 +32,7 @@ void Profiler::Init()
 
     if(this->flags & Profiler_FPS)
     {
-        this->fpsBuffer = new uint16_t[BufferSize];
+        this->fpsBuffer = new double[BufferSize];
     }
 
     AddMemory(0);
@@ -47,8 +47,7 @@ void Profiler::Update()
 
     if(this->flags & Profiler_FPS)
     {
-        double fps = 1.0 / Time::GetDeltaTime();
-        this->fpsBuffer[this->bufferCount] = (uint16_t)fps;
+        this->fpsBuffer[this->bufferCount] = Time::GetDeltaTime();
     }
 
     this->bufferCount++;
@@ -102,7 +101,7 @@ void Profiler::SaveBuffer()
 
     if(this->flags & Profiler_FPS)
     {
-        file.write((const char*)this->fpsBuffer, BufferSize * sizeof(uint16_t));
+        file.write((const char*)this->fpsBuffer, BufferSize * sizeof(double));
     }
 
     file.close();
@@ -129,7 +128,7 @@ void Profiler::SaveLog(){
     file<<std::endl;
 
     uint32_t tempHeapMemoryBuffer[BufferSize];
-    uint16_t tempfpsBuffer[BufferSize];
+    double tempfpsBuffer[BufferSize];
 
     uint32_t frameCounter = 0;
 
@@ -141,7 +140,7 @@ void Profiler::SaveLog(){
         if(this->flags & Profiler_Memory)
             tempFile.read((char*)tempHeapMemoryBuffer, BufferSize * sizeof(uint32_t));
         if(this->flags & Profiler_FPS)
-            tempFile.read((char*)tempfpsBuffer, BufferSize * sizeof(uint16_t));
+            tempFile.read((char*)tempfpsBuffer, BufferSize * sizeof(double));
         tempFile.close();
 
         for(int j = 0; j < BufferSize; j++)
