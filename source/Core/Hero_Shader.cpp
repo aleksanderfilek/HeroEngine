@@ -16,8 +16,7 @@ void UnloadShader(Shader* shader)
 {
     glDeleteProgram(shader->glId);
     DEBUG_CODE( glProgramCheckError(shader->glId, GL_DELETE_STATUS); )
-    delete shader;
-
+    delete(shader);
 }
 
 void BindShader(const Shader* shader)

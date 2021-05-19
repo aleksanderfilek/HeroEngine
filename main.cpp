@@ -16,9 +16,9 @@ public:
         if(!window)
             std::cout<<"brak okna"<<std::endl;
 
-        resources = Hero::Core::GetSystem<Hero::Resources>();
-        
-        resources->AddShader("standardShader.glslbin");
+        shader = Hero::LoadShader("standardShader.glslbin");
+        std::cout<<"ok"<<std::endl;
+        Hero::BindShader(shader);
 
         float* arr = new float[6];
         arr[0] = -0.5f;
@@ -60,14 +60,6 @@ public:
 
     void OnUpdate()
     {
-        if(shader == nullptr)
-        {
-            shader = resources->GetShaderByName("standardShader.glslbin");
-            if(shader)
-                Hero::BindShader(shader);
-            return;
-
-        }
 
         glClear(GL_COLOR_BUFFER_BIT);
         Hero::DrawMesh(mesh);
@@ -76,7 +68,7 @@ public:
 
     void OnClose()
     {
-        //Hero::UnloadShader(shader);
+        Hero::UnloadShader(shader);
         Hero::UnloadMesh(mesh);
     }
 };
@@ -91,7 +83,7 @@ int main(int argc, char *argv[])
     core->AddSystem<Hero::Resources>(new Hero::Resources());
     Test* test = new Test();
     core->AddSystem<Hero::Level>(new Hero::Level(test));
-    core->AddSystem<Hero::Profiler>(new Hero::Profiler(Profiler_Memory | Profiler_FPS));
+    core->AddSystem<Hero::Profiler>(new Hero::Profiler(Profiler_FPS));
     core->Start();
 
     delete core;

@@ -81,7 +81,6 @@ inline void Delete(void* ptr)
     #endif
 }
 
-
 }
 
 #endif
