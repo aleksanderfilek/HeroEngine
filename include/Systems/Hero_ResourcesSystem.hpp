@@ -1,5 +1,5 @@
 #ifndef HERO_RESOURCES_SYSTEM_HPP
-#define HERo_RESOURCES_SYSTEM_HPP
+#define HERO_RESOURCES_SYSTEM_HPP
 
 #include<vector>
 #include<string>
