@@ -17,7 +17,7 @@ public:
             std::cout<<"brak okna"<<std::endl;
 
         shader = Hero::LoadShader("standardShader.glslbin");
-        std::cout<<"ok"<<std::endl;
+
         Hero::BindShader(shader);
 
         float* arr = new float[6];
@@ -55,6 +55,8 @@ public:
 
         Hero::GenerateMesh(mesh);
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+
+        Hero::matrix2x2 mat = matrix2x2identity;
 
     }
 
