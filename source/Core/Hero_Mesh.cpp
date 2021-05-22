@@ -47,12 +47,6 @@ void GenerateMesh(Mesh* mesh)
     glGenBuffers(1, &mesh->EBO);
     DEBUG_CODE( glCheckError(); )
     glBindVertexArray(mesh->VAO);
-    /*glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), mesh->buffers[0].array, GL_STATIC_DRAW);  
-    DEBUG_CODE( glCheckError(); )*/
-    /*glEnableVertexAttribArray(0);	
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
-    glBindVertexArray(0);*/
 
     glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
     glBufferData(GL_ARRAY_BUFFER, buffSize * sizeof(float), NULL, GL_STATIC_DRAW);  
@@ -81,14 +75,6 @@ void GenerateMesh(Mesh* mesh)
         buffOffset += buff.length * sizeof(float);
     }
     glBindVertexArray(0);
-
-/*
-    for(int i = 0; i < mesh->buffers.size(); i++)
-    {
-        //glVertexAttribDivisor(i, 1);
-        DEBUG_CODE( glCheckError(); )
-    }
-*/
 }
 
 namespace Extra
@@ -103,7 +89,17 @@ Mesh LoadMeshByCopy(const std::string& path)
 
 void UnloadMeshByCopy(Mesh& mesh)
 {
-    
+    for(auto buff: mesh.buffers)
+    {
+       free(buff.array);
+    }
+    mesh.buffers.clear();
+
+    free(mesh.indices.array);
+
+    glDeleteBuffers(1, &mesh.VAO);
+    glDeleteBuffers(1, &mesh.VBO);
+    glDeleteBuffers(1, &mesh.EBO);
 }
 
 }
