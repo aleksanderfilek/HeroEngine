@@ -8,5 +8,6 @@
 #include"Systems/Hero_LevelSystem.hpp"
 #include"Systems/Hero_Renderer2DSystem.hpp"
 #include"Systems/Hero_ProfilerSystem.hpp"
+#include"Systems/Hero_UserInterfaceSystem.hpp"
 
 #endif

@@ -7,8 +7,6 @@ private:
     Hero::Shader* shader;
     Hero::Mesh* mesh;
     Hero::Window* window = nullptr;
-    Hero::Resources* resources;
-
 public:
     void OnInit()
     {
@@ -56,8 +54,6 @@ public:
         Hero::GenerateMesh(mesh);
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
-        Hero::matrix2x2 mat = matrix2x2identity;
-
     }
 
     void OnUpdate()
@@ -83,9 +79,7 @@ int main(int argc, char *argv[])
     core->AddSystem<Hero::Event>(new Hero::Event());
     core->AddSystem<Hero::Input>(new Hero::Input());
     core->AddSystem<Hero::Resources>(new Hero::Resources());
-    Test* test = new Test();
-    core->AddSystem<Hero::Level>(new Hero::Level(test));
-    core->AddSystem<Hero::Profiler>(new Hero::Profiler(Profiler_FPS));
+    core->AddSystem<Hero::Level>(new Hero::Level(new Test()));
     core->Start();
 
     delete core;
