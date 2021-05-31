@@ -7,6 +7,8 @@
 #include"Hero_Config.hpp"
 #include"Core/Hero_Utilities.hpp"
 #include"Core/Hero_Math.hpp"
+#include"Core/Hero_Color.hpp"
+#include"Core/Hero_Font.hpp"
 
 namespace Hero
 {
@@ -31,6 +33,9 @@ Texture* LoadTexture(const std::string& path, uint8_t textureFlags =
 void UnloadTexture(Texture* texture);
 void BindTexture(const Texture* texture);
 void UnbindTexture();
+
+Texture TextureFromText(const std::string& text, Color& color, Font* font);
+
 
 namespace Extra
 {   

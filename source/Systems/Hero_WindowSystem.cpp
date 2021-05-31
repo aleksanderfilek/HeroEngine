@@ -69,7 +69,8 @@ void Window::Init()
 
 void Window::Update()
 {
-
+    SDL_GL_SwapWindow(this->_window);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Window::Close()

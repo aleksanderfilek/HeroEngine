@@ -33,6 +33,44 @@ void UnbindTexture()
     DEBUG_CODE( glCheckError(); )
 }
 
+Texture TextureFromText(const std::string& text, Color& color, Font* font)
+{
+        if(text.length() == 0)
+                return {0, {0,0}, ""};;
+
+        SDL_Surface* surface = TTF_RenderText_Blended( font, text.c_str(), color );
+        if( !surface)
+        {
+                std::cout<<"Unable to render text surface! SDL_ttf Error: "<<TTF_GetError()<<std::endl;
+                return {0, {0,0}, ""};
+        }
+
+        int mode = GL_RGB;
+        if(surface->format->BytesPerPixel == 4)
+                mode = GL_RGBA;
+
+        unsigned int id;
+        glGenTextures(1, &id);
+        DEBUG_CODE(glCheckError();)
+        glBindTexture(GL_TEXTURE_2D, id);
+        DEBUG_CODE(glCheckError();)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0,
+                                GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+        DEBUG_CODE(glCheckError();)
+        glBindTexture(GL_TEXTURE_2D, 0);
+        DEBUG_CODE(glCheckError();)
+
+        Texture texture;
+        texture.glId = id;
+        texture.size = {surface->w, surface->h};
+
+        SDL_FreeSurface(surface);
+
+        return texture;
+}
+
 namespace Extra
 {
 

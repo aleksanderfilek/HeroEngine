@@ -13,6 +13,16 @@ float rad2deg(float radians)
     return (180.0f * radians)/PI;
 }
 
+int ClampI(int value, int min, int max)
+{
+    return (value < min)? min : (value > max)? max : value;
+}
+
+float ClampF(float value, float min, float max)
+{
+    return (value < min)? min : (value > max)? max : value;
+}
+
 int2 AddI2(const int2& A,const int2& B)
 {
     return {A.x + B.x, A.y + B.y};
@@ -707,6 +717,19 @@ matrix4x4 LookAtMatrix(float3 eye, float3 target, float3 up)
     matrix.col[3].z = -DotProductF3(f,eye);
     matrix.col[3].w = 1.0f;
 
+    return matrix;
+}
+
+matrix4x4 OrthographicMatrix(int width, int height, float near, float far)
+{
+    matrix4x4 matrix = matrix4x4identity;
+    matrix.col[0].x = 2.0f/width;
+    matrix.col[1].y = -2.0f/height;
+    matrix.col[2].z = -2.0f/(far - near);
+    matrix.col[3].x = -1;
+    matrix.col[3].y = 1;
+    matrix.col[3].z = (far + near)/(far - near);
+    matrix.col[3].w = 1;
     return matrix;
 }
 

@@ -11,6 +11,9 @@ namespace Hero
 float deg2rad(float degree);
 float rad2deg(float radians);
 
+int ClampI(int value, int min, int max);
+float ClampF(float value, float min, float max);
+
 struct int2
 {
     int x, y;
@@ -156,6 +159,7 @@ void RotateXYZM4x4(matrix4x4& matrix, float3 rotation);
 
 matrix4x4 ProjectionMatrix(int width, int height, float FOV, float near, float far);
 matrix4x4 LookAtMatrix(float3 eye, float3 target, float3 up);
+matrix4x4 OrthographicMatrix(int width, int height, float near, float far);
 
 }
 
