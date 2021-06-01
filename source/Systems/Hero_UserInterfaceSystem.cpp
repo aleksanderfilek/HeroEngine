@@ -10,10 +10,7 @@ UIElement CreateLabel(const std::string& name)
         element.main.type = UIType::Label;
         element.main.name = name;
         element.main.next = nullptr;
-        Font** cast = (Font**)element.custom.data;
-        cast[0] = nullptr;
-        Color* color = (Color*)(cast + 1);
-        *color = {255, 255, 255, 255};
+        element.custom.second.color = {255, 255, 255, 255};
         return element;
 }
 
@@ -34,13 +31,12 @@ void SetTextLabel(UIElement& element, const std::string& text)
 
 void SetFontLabel(UIElement& element, Font* font)
 {
-        Font** cast = (Font**)element.custom.data;
-        cast[0] = font;
+    element.custom.first.font = font;
 }
 
 void SetColorLabel(UIElement& element, Color& color)
 {
-        *(Color*)(element.custom.data + sizeof(Font*)) = color;
+    element.custom.second.color = color;
 }
 
 const char* UserInterface::name = "UserInterface System"; 
@@ -133,9 +129,8 @@ uint32_t UserInterface::Add(const UIElement& element, const char* parent)
         UIData data = element.data;
         if(element.main.type == UIType::Label)
         {
-                Font** cast = (Font**)element.custom.data;
-                Font* font = cast[0];
-                Color color = *(Color*)(cast + 1);
+                Font* font = element.custom.first.font;
+                Color color = element.custom.second.color;
                 Texture texture = TextureFromText(element.main.source, color, font);
 
                 data.glID = texture.glId;    

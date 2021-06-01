@@ -43,9 +43,19 @@ struct UIData
     int4 objectRect;
 };
 
+union First
+{
+    Font* font;
+};
+union Second
+{
+    Color color;
+};
+
 struct UICustom
 {
-    uint8_t data[16];
+    First first;
+    Second second;
 };
 
 struct UIElement
