@@ -3,6 +3,7 @@
 
 #include<string>
 #include<map>
+#include<cstdlib>
 
 #include"Hero_Config.hpp"
 #include"Core/Hero_Math.hpp"
@@ -15,6 +16,8 @@
 
 namespace Hero
 {
+
+typedef uint32_t UIElement;
 
 enum UIType : uint32_t
 {
@@ -42,7 +45,7 @@ struct UIDraw
 union First
 {
     Font* font; //label
-    uint32_t* childs; //canvas, horizontal, vertical
+    UIElement* childs; //canvas, horizontal, vertical
 };
 union Second
 {
@@ -60,8 +63,6 @@ struct UICustom
     Second second;
     Third third;
 };
-
-typedef uint32_t UIElement;
 
 class UserInterface : public ISystem
 {
@@ -95,12 +96,13 @@ public:
     UIElement Element_Create(const std::string& name, UIType type);
     void Element_Remove(const std::string& name);
     void Element_Remove(UIElement element);
+    UIElement Element_Find(const std::string& name);
 
     void Canvas_AddChild(UIElement self, const std::string& name);
-    void Canvas_AddChild(UIElement self, UIElement element);
+    void Canvas_AddChild(UIElement self, UIElement child);
     void Canvas_RemoveChild(UIElement self, const std::string& name);
-    void Canvas_RemoveChild(UIElement self, UIElement element);
-    void Cavnas_SetPosition(UIElement self, const int2& position);
+    void Canvas_RemoveChild(UIElement self, UIElement child);
+    void Canvas_SetPosition(UIElement self, const int2& position);
     void Canvas_SetSize(UIElement self, const int2& size);
 
     void Label_SetPosition(UIElement self, const int2& position);

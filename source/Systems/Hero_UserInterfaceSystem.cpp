@@ -89,53 +89,12 @@ void UserInterface::Close()
                 }
                 glDeleteTextures(1, &d.id);
         }
-}
-/*
-uint32_t UserInterface::Add(const UIElement& element, const char* parent)
-{
-        UIData data = element.data;
-        if(element.main.type == UIType::Label)
+
+        for(int i = 0; i < this->main.size(); i++)
         {
-                Font* font = element.custom.first.font;
-                Color color = element.custom.second.color;
-                Texture texture = TextureFromText(element.main.source, color, font);
-
-                data.glID = texture.glId;    
-                int x = ClampI(texture.size.x, 0.0f, data.size.x);
-                int y = ClampI(texture.size.y, 0.0f, data.size.y);
-
-                data.objectRect = {0, 0, x, y};
-                float w = (float)x / (float)texture.size.x;
-                float h = (float)y / (float)texture.size.y;
-                data.uvRect = {0.0f, 0.0f, w, h};
+                this->Element_Remove(i);
         }
-        else if(element.main.type == UIType::Image)
-        {
-
-        }
-
-        this->main.push_back(element.main);
-        this->data.push_back(data);
-        this->custom.push_back(element.custom);
-
-        return this->main.size() - 1;
 }
-
-void UserInterface::Remove(const std::string& name)
-{
-
-}
-
-UIElement UserInterface::CreateLabel(const std::string& name)
-{
-        UIElement element;
-
-        element.main.type = UIType::Label;
-        element.main.name = name;
-        element.main.next = nullptr;
-        element.custom.second.color = {255, 255, 255, 255};
-        return element;
-}*/
 
 UIElement UserInterface::Element_Create(const std::string& name, UIType type)
 {
@@ -227,6 +186,68 @@ void UserInterface::Element_Remove(UIElement element)
                 }
                 delete[] this->custom[element].first.childs;
         }
+}
+
+UIElement UserInterface::Element_Find(const std::string& name)
+{
+        for(int i = 0; i < this->main.size(); i++)
+        {
+                if(this->main[i].name.compare(name) == 0)
+                {
+                        return i;
+                }
+        }
+        return 0;
+}
+
+void UserInterface::Canvas_AddChild(UIElement self, const std::string& name)
+{
+        UIElement child = this->Element_Find(name);
+        this->Canvas_AddChild(self, child);
+}
+
+void UserInterface::Canvas_AddChild(UIElement self, UIElement child)
+{
+        this->custom[self].second.count++;
+        uint32_t newSize = this->custom[self].second.count * sizeof(UIElement);
+        this->custom[self].first.childs = (UIElement*)std::realloc(this->custom[self].first.childs, newSize);
+        this->custom[self].first.childs[this->custom[self].second.count - 1] = child;
+}
+
+void UserInterface::Canvas_RemoveChild(UIElement self, const std::string& name)
+{
+        UIElement child = this->Element_Find(name);
+        this->Canvas_RemoveChild(self, child);
+}
+
+void UserInterface::Canvas_RemoveChild(UIElement self, UIElement child)
+{
+        //usuwanie child'a i teraz co z tym zrobić 
+        //w miejsce usuniętego wchodzi id self? ale wtedy przy dodawaniu trzeba 
+        //iterować i szukać odpowiedniego miejsca
+        //można zmniejszyć tablice kilka kopiowań
+}
+
+void UserInterface::Canvas_SetPosition(UIElement self, const int2& position)
+{
+        uint32_t diffX = position.x - this->draw[self].rect.x;
+        uint32_t diffY = position.y - this->draw[self].rect.y;
+
+        this->draw[self].rect.x = position.x;
+        this->draw[self].rect.y = position.y;
+
+        int length = this->custom[self].second.count;
+        for(int i = 0; i < length; i++)
+        {
+                this->draw[i].rect.x += diffX;
+                this->draw[i].rect.y += diffY;
+        }
+}
+
+void UserInterface::Canvas_SetSize(UIElement self, const int2& size)
+{
+        this->draw[self].rect.z = size.x;
+        this->draw[self].rect.w = size.y;
 }
 
 void UserInterface::Label_SetPosition(UIElement self, const int2& position)

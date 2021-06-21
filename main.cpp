@@ -6,6 +6,10 @@ class Test:public Hero::ILevel
 private:
     Hero::Shader* shader;
     Hero::Mesh* mesh;
+    Hero::UIElement canvas;
+    Hero::int2 pos = {100, 100};
+    Hero::Input* input;
+    Hero::UserInterface* ui;
 public:
     void OnInit()
     {
@@ -30,7 +34,7 @@ public:
 
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
-        Hero::UserInterface* ui = Hero::Core::GetSystem<Hero::UserInterface>();
+        ui = Hero::Core::GetSystem<Hero::UserInterface>();
 
         Hero::Font* font = Hero::LoadFont("arial.ttf" , 48);
 
@@ -39,15 +43,28 @@ public:
         ui->Label_SetColor(label, color);
         ui->Label_SetFont(label, font);
         ui->Label_SetText(label, "Hello, World!");
-        ui->Label_SetPosition(label, {400, 300});
+        ui->Label_SetPosition(label, {100, 100});
+
+        canvas = ui->Element_Create("canvas1", Hero::UIType::Canvas);
+        ui->Canvas_AddChild(canvas, "label1");
+        ui->Canvas_SetPosition(canvas, pos);
 
         Hero::UnloadFont(font);
+
+        input = Hero::Core::GetSystem<Hero::Input>();
     }
 
     void OnUpdate()
     {
         Hero::BindShader(shader);
         Hero::DrawMesh(mesh);
+
+        if(input->keyPressed(Hero::Input::KeyCode::SPACE))
+        {
+            std::cout<<pos.x<<std::endl;
+            pos = Hero::AddI2(pos, {100 * Hero::Time::GetDeltaTime(), 0});
+            ui->Canvas_SetPosition(canvas, pos);
+        }
     }
 
     void OnClose()
