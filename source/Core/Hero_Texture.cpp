@@ -33,12 +33,9 @@ void UnbindTexture()
     DEBUG_CODE( glCheckError(); )
 }
 
-Texture TextureFromText(const std::string& text, Color& color, Font* font)
+Texture TextureFromText(const char* text, Color& color, Font* font)
 {
-        if(text.length() == 0)
-                return {0, {0,0}, ""};;
-
-        SDL_Surface* surface = TTF_RenderText_Blended( font, text.c_str(), color );
+        SDL_Surface* surface = TTF_RenderText_Blended( font, text, color );
         if( !surface)
         {
                 std::cout<<"Unable to render text surface! SDL_ttf Error: "<<TTF_GetError()<<std::endl;

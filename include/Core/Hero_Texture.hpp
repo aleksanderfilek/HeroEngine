@@ -34,7 +34,7 @@ void UnloadTexture(Texture* texture);
 void BindTexture(const Texture* texture);
 void UnbindTexture();
 
-Texture TextureFromText(const std::string& text, Color& color, Font* font);
+Texture TextureFromText(const char* text, Color& color, Font* font);
 
 
 namespace Extra

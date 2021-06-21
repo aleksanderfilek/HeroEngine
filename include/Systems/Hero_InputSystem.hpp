@@ -12,14 +12,13 @@ namespace Hero
 class Input : public ISystem
 {
 private:
-    static Input* instance;
-
     int keyboard_state_number = 0;
     const std::uint8_t *current_keyboard_state = nullptr;
     std::uint8_t *previous_keyboard_state = nullptr;
     std::int32_t current_mouse_state, previous_mouse_state;
     int mouse_position_X = 0;
     int mouse_position_Y = 0;
+
 public:
     enum Mouse : std::uint8_t;
     enum KeyCode : std::uint16_t;
@@ -36,16 +35,16 @@ public:
 
     std::uint8_t priority(){ return 1; }
 
-    static bool keyPressed(Input::KeyCode key);
-    static bool keyDown(Input::KeyCode key);
-    static bool keyUp(Input::KeyCode key);
+    bool keyPressed(Input::KeyCode key);
+    bool keyDown(Input::KeyCode key);
+    bool keyUp(Input::KeyCode key);
 
-    static bool mouseButtonPressed(Input::Mouse button);
-    static bool mouseButtonDown(Input::Mouse button);
-    static bool mouseButtonUp(Input::Mouse button);
+    bool mouseButtonPressed(Input::Mouse button);
+    bool mouseButtonDown(Input::Mouse button);
+    bool mouseButtonUp(Input::Mouse button);
 
-    static void getMousePosition(int *x, int *y);
-    static void setMousePosition(int x, int y);
+    void getMousePosition(int *x, int *y);
+    void setMousePosition(int x, int y);
 
     enum Mouse : std::uint8_t
     {

@@ -4,13 +4,10 @@ namespace Hero
 {
 
 const char* Input::name = "Input System";
-Input* Input::instance = nullptr;
 
 
 Input::Input()
 {
-    Input::instance = this;
-
     this->current_keyboard_state = SDL_GetKeyboardState(&this->keyboard_state_number);
     this->previous_keyboard_state = new std::uint8_t[this->keyboard_state_number];
 }
@@ -41,37 +38,37 @@ void Input::Close()
 }
 
 bool Input::keyPressed(Input::KeyCode key){
-    return instance->current_keyboard_state[key] && instance->previous_keyboard_state[key];
+    return current_keyboard_state[key] && previous_keyboard_state[key];
 }
 
 bool Input::keyDown(Input::KeyCode key){
-    return instance->current_keyboard_state[key] && !instance->previous_keyboard_state[key];
+    return current_keyboard_state[key] && !previous_keyboard_state[key];
 }
 
 bool Input::keyUp(Input::KeyCode key){
-    return !instance->current_keyboard_state[key] && instance->previous_keyboard_state[key];
+    return !current_keyboard_state[key] && previous_keyboard_state[key];
 }
 
 bool Input::mouseButtonPressed(Input::Mouse button){
-    return instance->current_mouse_state&SDL_BUTTON(button) && instance->previous_mouse_state&SDL_BUTTON(button);
+    return current_mouse_state&SDL_BUTTON(button) && previous_mouse_state&SDL_BUTTON(button);
 }
 
 bool Input::mouseButtonDown(Input::Mouse button){
-    return instance->current_mouse_state&SDL_BUTTON(button) && !instance->previous_mouse_state&SDL_BUTTON(button);
+    return current_mouse_state&SDL_BUTTON(button) && !previous_mouse_state&SDL_BUTTON(button);
 }
 
 bool Input::mouseButtonUp(Input::Mouse button){
-    return !instance->current_mouse_state&SDL_BUTTON(button) && instance->previous_mouse_state&SDL_BUTTON(button);
+    return !current_mouse_state&SDL_BUTTON(button) && previous_mouse_state&SDL_BUTTON(button);
 }
 
 void Input::getMousePosition(int *x,int *y){
-    if(x != NULL) *x = instance->mouse_position_X;
-    if(y != NULL) *y = instance->mouse_position_Y;
+    if(x != NULL) *x = mouse_position_X;
+    if(y != NULL) *y = mouse_position_Y;
 }
 
 void Input::setMousePosition(int x, int y){
-    instance->mouse_position_X = x;
-    instance->mouse_position_Y = y;
+    mouse_position_X = x;
+    mouse_position_Y = y;
 }
 
 }

@@ -33,12 +33,14 @@ public:
         Hero::UserInterface* ui = Hero::Core::GetSystem<Hero::UserInterface>();
 
         Hero::Font* font = Hero::LoadFont("arial.ttf" , 48);
-        Hero::UIElement label = Hero::CreateLabel("label1");
-        Hero::SetTextLabel(label, "tekstowo");
-        Hero::SetFontLabel(label, font);
-        Hero::SetPositionLabel(label, {500, 360});
-        Hero::SetSizeLabel(label, {200, 50});
-        ui->Add(label);
+
+        Hero::UIElement label = ui->Element_Create("label1", Hero::UIType::Label);
+        Hero::Color color = {255, 255, 0, 255};
+        ui->Label_SetColor(label, color);
+        ui->Label_SetFont(label, font);
+        ui->Label_SetText(label, "Hello, World!");
+        ui->Label_SetPosition(label, {400, 300});
+
         Hero::UnloadFont(font);
     }
 

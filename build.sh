@@ -7,7 +7,7 @@ g++ -c -D DEBUG -Iinclude  source/Systems/*.cpp
 
 rm lib/libHero.a
 ar rcs -o lib/libHero.a *.o
-rm *.o
+#rm *.o
 fi
 
 echo Building debug game

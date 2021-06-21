@@ -16,62 +16,52 @@
 namespace Hero
 {
 
-enum UIType
+enum UIType : uint32_t
 {
-    Canvas = 0,
-    Horizontal = 1,
-    Vertical = 2,
-    Grid = 3,
-    Image = 4,
-    Label = 5
+    Canvas,
+    Horizontal,
+    Vertical,
+    //Grid, //maybe custom from vertical and horizontal
+    Image,
+    Label,
+    Custom
 };
 
 struct UIMain
 {
     std::string name;
     UIType type;
-    std::string source;
-    UIMain* next;
 };
 
-struct UIData
+struct UIDraw
 {
-    uint32_t glID = 0;
-    int2 size = int2zero;
-    int2 position = int2zero;
-    float4 uvRect;
-    int4 objectRect;
+    uint32_t id;
+    int4 rect;
 };
 
 union First
 {
-    Font* font;
+    Font* font; //label
+    uint32_t* childs; //canvas, horizontal, vertical
 };
 union Second
 {
-    Color color;
+    Color color; //label
+    uint32_t count; //canvas, horizontal, vertical
+};
+union Third
+{
+    char* text; //label, image
 };
 
 struct UICustom
 {
     First first;
     Second second;
+    Third third;
 };
 
-struct UIElement
-{
-    UIMain main;
-    UIData data;
-    UICustom custom;
-};
-
-UIElement CreateLabel(const std::string& name);
-void SetPositionLabel(UIElement& element, const int2& position);
-void SetSizeLabel(UIElement& element, const int2& size);
-void SetTextLabel(UIElement& element, const std::string& text);
-void SetFontLabel(UIElement& element, Font* font);
-void SetColorLabel(UIElement& element, Color& color);
-
+typedef uint32_t UIElement;
 
 class UserInterface : public ISystem
 {
@@ -81,9 +71,13 @@ private:
 
     matrix4x4 view;
 
+    uint32_t smallestEmpty;
+    std::vector<bool> empty;
     std::vector<UIMain> main;
-    std::vector<UIData> data;
+    std::vector<UIDraw> draw;
     std::vector<UICustom> custom;
+
+    std::vector<std::pair<Texture, uint32_t>> textureSet;
 
 public:
     UserInterface();
@@ -98,8 +92,22 @@ public:
 
     std::uint8_t priority(){ return 254; }
 
-    uint32_t Add(const UIElement& element, const char* parent = nullptr);
-    void Remove(const std::string& name); 
+    UIElement Element_Create(const std::string& name, UIType type);
+    void Element_Remove(const std::string& name);
+    void Element_Remove(UIElement element);
+
+    void Canvas_AddChild(UIElement self, const std::string& name);
+    void Canvas_AddChild(UIElement self, UIElement element);
+    void Canvas_RemoveChild(UIElement self, const std::string& name);
+    void Canvas_RemoveChild(UIElement self, UIElement element);
+    void Cavnas_SetPosition(UIElement self, const int2& position);
+    void Canvas_SetSize(UIElement self, const int2& size);
+
+    void Label_SetPosition(UIElement self, const int2& position);
+    void Label_SetSize(UIElement self, const int2& size);
+    void Label_SetText(UIElement self, const char* _text);
+    void Label_SetFont(UIElement self, Font* font);
+    void Label_SetColor(UIElement self, Color& color);
 };
 
 }
