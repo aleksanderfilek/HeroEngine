@@ -4,6 +4,7 @@
 #include<string>
 #include<map>
 #include<cstdlib>
+#include<cstring>
 
 #include"Hero_Config.hpp"
 #include"Core/Hero_Math.hpp"

@@ -6,7 +6,7 @@ class Test:public Hero::ILevel
 private:
     Hero::Shader* shader;
     Hero::Mesh* mesh;
-    Hero::UIElement canvas;
+    Hero::UIElement canvas, label;
     Hero::int2 pos = {100, 100};
     Hero::Input* input;
     Hero::UserInterface* ui;
@@ -38,15 +38,29 @@ public:
 
         Hero::Font* font = Hero::LoadFont("arial.ttf" , 48);
 
-        Hero::UIElement label = ui->Element_Create("label1", Hero::UIType::Label);
+        label = ui->Element_Create("label1", Hero::UIType::Label);
         Hero::Color color = {255, 255, 0, 255};
         ui->Label_SetColor(label, color);
         ui->Label_SetFont(label, font);
         ui->Label_SetText(label, "Hello, World!");
         ui->Label_SetPosition(label, {100, 100});
 
+        Hero::UIElement label2 = ui->Element_Create("label2", Hero::UIType::Label);
+        ui->Label_SetColor(label2, color);
+        ui->Label_SetFont(label2, font);
+        ui->Label_SetText(label2, "Elo");
+        ui->Label_SetPosition(label2, {100, 200});
+
+        Hero::UIElement label3 = ui->Element_Create("label3", Hero::UIType::Label);
+        ui->Label_SetColor(label3, color);
+        ui->Label_SetFont(label3, font);
+        ui->Label_SetText(label3, "Alek");
+        ui->Label_SetPosition(label3, {100, 300});
+
         canvas = ui->Element_Create("canvas1", Hero::UIType::Canvas);
         ui->Canvas_AddChild(canvas, "label1");
+        ui->Canvas_AddChild(canvas, "label2");
+        ui->Canvas_AddChild(canvas, "label3");
         ui->Canvas_SetPosition(canvas, pos);
 
         Hero::UnloadFont(font);
@@ -64,6 +78,12 @@ public:
             std::cout<<pos.x<<std::endl;
             pos = Hero::AddI2(pos, {100 * Hero::Time::GetDeltaTime(), 0});
             ui->Canvas_SetPosition(canvas, pos);
+        }
+
+        if(input->keyPressed(Hero::Input::KeyCode::P))
+        {
+            std::cout<<"Remove"<<std::endl;
+            ui->Canvas_RemoveChild(canvas, label);
         }
     }
 

@@ -52,9 +52,10 @@ void UserInterface::Update()
                 
         Hero::BindShader(this->shader);
 
-        for(UIDraw& d: this->draw)
+        for(int i = 0; i < this->draw.size(); i++)
         {
-                if(d.id == 0)
+                UIDraw& d = this->draw[i];
+                if(this->empty[i] || d.id == 0)
                 {
                         continue;
                 }
@@ -80,15 +81,6 @@ void UserInterface::Close()
 
         UnloadMesh(this->mesh);
         UnloadShader(this->shader);
-
-        for(UIDraw& d: this->draw)
-        {
-                if(d.id == 0)
-                {
-                        continue;
-                }
-                glDeleteTextures(1, &d.id);
-        }
 
         for(int i = 0; i < this->main.size(); i++)
         {
@@ -159,20 +151,26 @@ void UserInterface::Element_Remove(UIElement element)
         // remove texture if image or label
 
         if(this->main[element].type == UIType::Image)
-        const std::string& name = this->custom[element].third.text;
-        for(int i = 0; i < this->textureSet.size(); i++)
         {
-                if(this->textureSet[i].first.name.compare(name) != 0)
+                const std::string& name = this->custom[element].third.text;
+                for(int i = 0; i < this->textureSet.size(); i++)
                 {
-                        continue;
-                }
+                        if(this->textureSet[i].first.name.compare(name) != 0)
+                        {
+                                continue;
+                        }
 
-                this->textureSet[i].second--;
-                if(this->textureSet[i].second <= 0)
-                {
-                        this->textureSet.erase(this->textureSet.begin() + i);
-                        break;
+                        this->textureSet[i].second--;
+                        if(this->textureSet[i].second <= 0)
+                        {
+                                this->textureSet.erase(this->textureSet.begin() + i);
+                                break;
+                        }
                 }
+        }
+        else if(this->main[element].type == UIType::Label)
+        {
+                glDeleteTextures(1, &this->draw[element].id);
         }
 
         // remove childs if group type
@@ -222,10 +220,37 @@ void UserInterface::Canvas_RemoveChild(UIElement self, const std::string& name)
 
 void UserInterface::Canvas_RemoveChild(UIElement self, UIElement child)
 {
-        //usuwanie child'a i teraz co z tym zrobić 
-        //w miejsce usuniętego wchodzi id self? ale wtedy przy dodawaniu trzeba 
-        //iterować i szukać odpowiedniego miejsca
-        //można zmniejszyć tablice kilka kopiowań
+        int  i = 0;
+        for(i = 0; i < this->custom[self].second.count; i++)
+        {
+                if(this->custom[self].first.childs[i] == child)
+                {
+                        break;
+                }
+        }
+
+        if(i == this->custom[self].second.count)
+        {
+                return;
+        }
+        //std::cout<<i<<std::endl;
+
+        this->Element_Remove(this->custom[self].first.childs[i]);
+
+        this->custom[self].second.count--;
+        UIElement* newArr = new UIElement[this->custom[self].second.count];
+
+        std::memcpy(newArr, this->custom[self].first.childs, i * sizeof(UIElement));
+        std::memcpy(newArr + i, this->custom[self].first.childs + i + 1, 
+                                        (this->custom[self].second.count - i)* sizeof(UIElement));
+
+        delete[] this->custom[self].first.childs;
+        this->custom[self].first.childs = newArr;
+
+        for(int j = 0; j < this->custom[self].second.count; j++)
+        {
+                std::cout<<this->custom[self].first.childs[j]<<std::endl;
+        }
 }
 
 void UserInterface::Canvas_SetPosition(UIElement self, const int2& position)
@@ -239,8 +264,9 @@ void UserInterface::Canvas_SetPosition(UIElement self, const int2& position)
         int length = this->custom[self].second.count;
         for(int i = 0; i < length; i++)
         {
-                this->draw[i].rect.x += diffX;
-                this->draw[i].rect.y += diffY;
+                uint32_t index = this->custom[self].first.childs[i];
+                this->draw[index].rect.x += diffX;
+                this->draw[index].rect.y += diffY;
         }
 }
 
