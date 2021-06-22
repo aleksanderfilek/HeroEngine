@@ -57,11 +57,11 @@ public:
         ui->Label_SetText(label3, "Alek");
         ui->Label_SetPosition(label3, {100, 300});
 
-        canvas = ui->Element_Create("canvas1", Hero::UIType::VerticalBox);
-        ui->Canvas_AddChild(canvas, "label1");
-        ui->Canvas_AddChild(canvas, "label2");
-        ui->Canvas_AddChild(canvas, "label3");
-        ui->Canvas_SetPosition(canvas, pos);
+        canvas = ui->Element_Create("canvas1", Hero::UIType::HorizontalBox);
+        ui->HorizontalBox_AddChild(canvas, "label1");
+        ui->HorizontalBox_AddChild(canvas, "label2");
+        ui->HorizontalBox_AddChild(canvas, "label3");
+        ui->HorizontalBox_SetPosition(canvas, pos);
 
         Hero::UnloadFont(font);
 
@@ -77,13 +77,13 @@ public:
         {
             std::cout<<pos.x<<std::endl;
             pos = Hero::AddI2(pos, {100 * Hero::Time::GetDeltaTime(), 100 * Hero::Time::GetDeltaTime()});
-            ui->Canvas_SetPosition(canvas, pos);
+            ui->HorizontalBox_SetPosition(canvas, pos);
         }
 
         if(input->keyPressed(Hero::Input::KeyCode::P))
         {
             std::cout<<"Remove"<<std::endl;
-            ui->Canvas_RemoveChild(canvas, label);
+            ui->HorizontalBox_RemoveChild(canvas, label);
         }
     }
 

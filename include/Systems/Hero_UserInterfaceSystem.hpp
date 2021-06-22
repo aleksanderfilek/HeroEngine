@@ -106,6 +106,13 @@ public:
     void Canvas_SetPosition(UIElement self, const int2& position);
     void Canvas_SetSize(UIElement self, const int2& size);
 
+    void HorizontalBox_AddChild(UIElement self, const std::string& name);
+    void HorizontalBox_AddChild(UIElement self, UIElement child);
+    void HorizontalBox_RemoveChild(UIElement self, const std::string& name);
+    void HorizontalBox_RemoveChild(UIElement self, UIElement child);
+    void HorizontalBox_SetPosition(UIElement self, const int2& position);
+    void HorizontalBox_SetSize(UIElement self, const int2& size);
+
     void VerticalBox_AddChild(UIElement self, const std::string& name);
     void VerticalBox_AddChild(UIElement self, UIElement child);
     void VerticalBox_RemoveChild(UIElement self, const std::string& name);
