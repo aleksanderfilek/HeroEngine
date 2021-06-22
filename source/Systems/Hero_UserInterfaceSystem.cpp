@@ -176,7 +176,7 @@ void UserInterface::Element_Remove(UIElement element)
         // remove childs if group type
 
         if(UIType::Canvas <= this->main[element].type && 
-                this->main[element].type <= UIType::Vertical)
+                this->main[element].type <= UIType::VerticalBox)
         {
                 for(int i = 0; i < this->custom[element].second.count; i++)
                 {
@@ -274,6 +274,93 @@ void UserInterface::Canvas_SetSize(UIElement self, const int2& size)
 {
         this->draw[self].rect.z = size.x;
         this->draw[self].rect.w = size.y;
+}
+
+void UserInterface::VerticalBox_AddChild(UIElement self, const std::string& name)
+{
+        UIElement child = this->Element_Find(name);
+        this->Canvas_AddChild(self, child);
+}
+
+void UserInterface::VerticalBox_AddChild(UIElement self, UIElement child)
+{
+        this->custom[self].second.count++;
+        uint32_t newSize = this->custom[self].second.count * sizeof(UIElement);
+        this->custom[self].first.childs = (UIElement*)std::realloc(this->custom[self].first.childs, newSize);
+        this->custom[self].first.childs[this->custom[self].second.count - 1] = child;
+
+        this->draw[child].rect.x = this->draw[self].rect.x;
+        int posY = this->draw[self].rect.y;
+        for(int i = 0; i < this->custom[self].second.count; i++)
+        {
+                uint32_t index = this->custom[self].first.childs[i];
+                posY += this->draw[index].rect.w;
+        }
+        this->draw[child].rect.y = posY;
+}
+
+void UserInterface::VerticalBox_RemoveChild(UIElement self, const std::string& name)
+{
+        UIElement child = this->Element_Find(name);
+        this->Canvas_RemoveChild(self, child);
+}
+
+void UserInterface::VerticalBox_RemoveChild(UIElement self, UIElement child)
+{
+        int  i = 0;
+        for(i = 0; i < this->custom[self].second.count; i++)
+        {
+                if(this->custom[self].first.childs[i] == child)
+                {
+                        break;
+                }
+        }
+
+        if(i == this->custom[self].second.count)
+        {
+                return;
+        }
+        //std::cout<<i<<std::endl;
+
+        this->Element_Remove(this->custom[self].first.childs[i]);
+
+        this->custom[self].second.count--;
+        UIElement* newArr = new UIElement[this->custom[self].second.count];
+
+        std::memcpy(newArr, this->custom[self].first.childs, i * sizeof(UIElement));
+        std::memcpy(newArr + i, this->custom[self].first.childs + i + 1, 
+                                        (this->custom[self].second.count - i)* sizeof(UIElement));
+
+        delete[] this->custom[self].first.childs;
+        this->custom[self].first.childs = newArr;
+
+        for(int j = 0; j < this->custom[self].second.count; j++)
+        {
+                std::cout<<this->custom[self].first.childs[j]<<std::endl;
+        }
+}
+
+void UserInterface::VerticalBox_SetPosition(UIElement self, const int2& position)
+{
+        uint32_t diffX = position.x - this->draw[self].rect.x;
+        uint32_t diffY = position.y - this->draw[self].rect.y;
+
+        this->draw[self].rect.x = position.x;
+        this->draw[self].rect.y = position.y;
+
+        int length = this->custom[self].second.count;
+        for(int i = 0; i < length; i++)
+        {
+                uint32_t index = this->custom[self].first.childs[i];
+                this->draw[index].rect.x += diffX;
+                this->draw[index].rect.y += diffY;
+        }
+}
+
+void UserInterface::VerticalBox_SetSize(UIElement self, const int2& size)
+{
+        this->draw[self].rect.z = size.x;
+        this->draw[self].rect.w = size.y; 
 }
 
 void UserInterface::Label_SetPosition(UIElement self, const int2& position)

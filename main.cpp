@@ -7,7 +7,7 @@ private:
     Hero::Shader* shader;
     Hero::Mesh* mesh;
     Hero::UIElement canvas, label;
-    Hero::int2 pos = {100, 100};
+    Hero::int2 pos = {0, 0};
     Hero::Input* input;
     Hero::UserInterface* ui;
 public:
@@ -57,7 +57,7 @@ public:
         ui->Label_SetText(label3, "Alek");
         ui->Label_SetPosition(label3, {100, 300});
 
-        canvas = ui->Element_Create("canvas1", Hero::UIType::Canvas);
+        canvas = ui->Element_Create("canvas1", Hero::UIType::VerticalBox);
         ui->Canvas_AddChild(canvas, "label1");
         ui->Canvas_AddChild(canvas, "label2");
         ui->Canvas_AddChild(canvas, "label3");
@@ -76,7 +76,7 @@ public:
         if(input->keyPressed(Hero::Input::KeyCode::SPACE))
         {
             std::cout<<pos.x<<std::endl;
-            pos = Hero::AddI2(pos, {100 * Hero::Time::GetDeltaTime(), 0});
+            pos = Hero::AddI2(pos, {100 * Hero::Time::GetDeltaTime(), 100 * Hero::Time::GetDeltaTime()});
             ui->Canvas_SetPosition(canvas, pos);
         }
 

@@ -23,8 +23,8 @@ typedef uint32_t UIElement;
 enum UIType : uint32_t
 {
     Canvas,
-    Horizontal,
-    Vertical,
+    HorizontalBox,
+    VerticalBox,
     //Grid, //maybe custom from vertical and horizontal
     Image,
     Label,
@@ -105,6 +105,13 @@ public:
     void Canvas_RemoveChild(UIElement self, UIElement child);
     void Canvas_SetPosition(UIElement self, const int2& position);
     void Canvas_SetSize(UIElement self, const int2& size);
+
+    void VerticalBox_AddChild(UIElement self, const std::string& name);
+    void VerticalBox_AddChild(UIElement self, UIElement child);
+    void VerticalBox_RemoveChild(UIElement self, const std::string& name);
+    void VerticalBox_RemoveChild(UIElement self, UIElement child);
+    void VerticalBox_SetPosition(UIElement self, const int2& position);
+    void VerticalBox_SetSize(UIElement self, const int2& size);
 
     void Label_SetPosition(UIElement self, const int2& position);
     void Label_SetSize(UIElement self, const int2& size);
