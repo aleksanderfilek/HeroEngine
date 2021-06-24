@@ -43,26 +43,31 @@ struct UIDraw
     int4 rect;
 };
 
-union First
+typedef void* UICustom;
+
+struct CanvasData
 {
-    Font* font; //label
-    UIElement* childs; //canvas, horizontal, vertical
-};
-union Second
-{
-    Color color; //label
-    uint32_t count; //canvas, horizontal, vertical
-};
-union Third
-{
-    char* text; //label, image
+    UIElement* childs;
+    uint32_t count;
 };
 
-struct UICustom
+struct HorizontalBoxData
 {
-    First first;
-    Second second;
-    Third third;
+    UIElement* childs;
+    uint32_t count;
+};
+
+struct VerticalBoxData
+{
+    UIElement* childs;
+    uint32_t count;
+};
+
+struct LabelData
+{
+    Font* font;
+    Color color;
+    char* text;
 };
 
 class UserInterface : public ISystem
