@@ -80,7 +80,7 @@ public:
             ui->HorizontalBox_SetPosition(canvas, pos);
         }
 
-        if(input->keyPressed(Hero::Input::KeyCode::P))
+        if(input->keyUp(Hero::Input::KeyCode::P))
         {
             std::cout<<"Remove"<<std::endl;
             ui->HorizontalBox_RemoveChild(canvas, label);

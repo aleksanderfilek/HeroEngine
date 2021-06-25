@@ -33,7 +33,7 @@ public:
     static const char* name; 
     const char* GetName(){ return name; }
 
-    std::uint8_t priority(){ return 1; }
+    //std::uint8_t priority(){ return 1; }
 
     bool keyPressed(Input::KeyCode key);
     bool keyDown(Input::KeyCode key);
