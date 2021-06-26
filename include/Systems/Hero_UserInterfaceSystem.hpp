@@ -25,7 +25,7 @@ enum UIType : uint32_t
     Canvas,
     HorizontalBox,
     VerticalBox,
-    //Grid, //maybe custom from vertical and horizontal
+    //GridBox, //maybe custom from vertical and horizontal
     Image,
     Label,
     Custom
@@ -41,34 +41,10 @@ struct UIDraw
 {
     uint32_t id;
     int4 rect;
+    int4 uv;
 };
 
 typedef void* UICustom;
-
-struct CanvasData
-{
-    UIElement* childs;
-    uint32_t count;
-};
-
-struct HorizontalBoxData
-{
-    UIElement* childs;
-    uint32_t count;
-};
-
-struct VerticalBoxData
-{
-    UIElement* childs;
-    uint32_t count;
-};
-
-struct LabelData
-{
-    Font* font;
-    Color color;
-    char* text;
-};
 
 class UserInterface : public ISystem
 {
@@ -130,6 +106,11 @@ public:
     void Label_SetText(UIElement self, const char* _text);
     void Label_SetFont(UIElement self, Font* font);
     void Label_SetColor(UIElement self, Color& color);
+
+    void Image_SetPosition(UIElement self, const int2& position);
+    void Image_SetSize(UIElement self, const int2& size);
+    void Image_SetTexture(UIElement self, Texture& texture);
+    void Image_SetUV(UIElement self, const int4& uv);
 };
 
 }

@@ -3,6 +3,36 @@
 namespace Hero
 {
 
+struct CanvasData
+{
+    UIElement* childs;
+    uint32_t count;
+};
+
+struct HorizontalBoxData
+{
+    UIElement* childs;
+    uint32_t count;
+};
+
+struct VerticalBoxData
+{
+    UIElement* childs;
+    uint32_t count;
+};
+
+struct LabelData
+{
+    Font* font;
+    Color color;
+    char* text;
+};
+
+struct ImageData
+{
+
+};
+
 const char* UserInterface::name = "UserInterface System"; 
 
 UserInterface::UserInterface()
@@ -88,7 +118,7 @@ void UserInterface::Close()
                 {
                         continue;
                 }
-                
+
                 this->Element_Remove(i);
         }
 }
@@ -552,6 +582,28 @@ void UserInterface::Label_SetFont(UIElement self, Font* font)
 void UserInterface::Label_SetColor(UIElement self, Color& color)
 {
     ((LabelData*)this->custom[self])->color = color;
+}
+
+void UserInterface::Image_SetPosition(UIElement self, const int2& position)
+{
+        this->draw[self].rect.x = position.x;
+        this->draw[self].rect.y = position.y;
+}
+
+void UserInterface::Image_SetSize(UIElement self, const int2& size)
+{
+        this->draw[self].rect.z = size.x;
+        this->draw[self].rect.w = size.y;
+}
+
+void UserInterface::Image_SetTexture(UIElement self, Texture& texture)
+{
+
+}
+
+void UserInterface::Image_SetUV(UIElement self, const int4& uv)
+{
+        
 }
 
 }
