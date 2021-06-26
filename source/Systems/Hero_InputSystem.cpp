@@ -1,5 +1,7 @@
 #include"Systems/Hero_InputSystem.hpp"
 
+#include<cstring>
+
 namespace Hero
 {
 
@@ -10,6 +12,7 @@ Input::Input()
 {
     this->current_keyboard_state = SDL_GetKeyboardState(&this->keyboard_state_number);
     this->previous_keyboard_state = new std::uint8_t[this->keyboard_state_number];
+    std::memset(this->previous_keyboard_state, 0, this->keyboard_state_number * sizeof(std::uint8_t));
 }
 
 Input::~Input()
