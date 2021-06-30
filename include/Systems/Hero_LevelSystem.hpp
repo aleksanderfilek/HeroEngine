@@ -12,8 +12,8 @@ namespace Hero
 class Level: public ISystem
 {
 private:
-    ILevel* currentLevel;
-    ILevel* nextLevel;
+    ILevel* currentLevel = nullptr;
+    ILevel* nextLevel = nullptr;
 
     void CheckLevel();
 public:

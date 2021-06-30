@@ -10,6 +10,7 @@ private:
     Hero::int2 pos = {0, 0};
     Hero::Input* input;
     Hero::UserInterface* ui;
+    Hero::Font* font;
 public:
     void OnInit()
     {
@@ -36,7 +37,7 @@ public:
 
         ui = Hero::Core::GetSystem<Hero::UserInterface>();
 
-        Hero::Font* font = Hero::LoadFont("arial.ttf" , 48);
+        font = Hero::LoadFont("arial.ttf" , 48);
 
         label = ui->Element_Create("label1", Hero::UIType::Label);
         Hero::Color color = {255, 255, 0, 255};
@@ -63,7 +64,12 @@ public:
         ui->HorizontalBox_AddChild(canvas, "label3");
         ui->HorizontalBox_SetPosition(canvas, pos);
 
-        Hero::UnloadFont(font);
+        Hero::UIElement image = ui->Element_Create("image1", Hero::UIType::Image);
+        ui->Image_SetPosition(image, {0, 100});
+        ui->Image_SetSize(image, {640, 360});
+        Hero::Texture tex = Hero::Extra::LoadTextureByCopy("train.png");
+        ui->Image_SetTexture(image, tex);
+        ui->Image_SetUV(image, {0.0f, 0.0f, 0.5f, 0.5f});
 
         input = Hero::Core::GetSystem<Hero::Input>();
     }
@@ -82,8 +88,9 @@ public:
 
         if(input->keyUp(Hero::Input::KeyCode::P))
         {
-            std::cout<<"Remove"<<std::endl;
-            ui->HorizontalBox_RemoveChild(canvas, label);
+            //std::cout<<"Remove"<<std::endl;
+            //ui->HorizontalBox_RemoveChild(canvas, label);
+            ui->Label_SetText(label, "Hello, Alek!");
         }
     }
 
@@ -91,6 +98,7 @@ public:
     {
         Hero::UnloadShader(shader);
         Hero::UnloadMesh(mesh);
+        Hero::UnloadFont(font);
     }
 };
 
@@ -101,9 +109,8 @@ int main(int argc, char *argv[])
     core->AddSystem<Hero::Window>(new Hero::Window("Title", 1280, 720));
     core->AddSystem<Hero::Event>(new Hero::Event());
     core->AddSystem<Hero::Input>(new Hero::Input());
-    core->AddSystem<Hero::Resources>(new Hero::Resources());
-    core->AddSystem<Hero::Level>(new Hero::Level(new Test()));
     core->AddSystem<Hero::UserInterface>(new Hero::UserInterface());
+    core->AddSystem<Hero::Level>(new Hero::Level(new Test()));
     core->Start();
 
     delete core;

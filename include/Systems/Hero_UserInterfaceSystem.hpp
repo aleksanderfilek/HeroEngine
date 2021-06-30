@@ -39,9 +39,9 @@ struct UIMain
 
 struct UIDraw
 {
-    uint32_t id;
+    int id;
     int4 rect;
-    int4 uv;
+    matrix3x3 uvMat;
 };
 
 typedef void* UICustom;
@@ -54,7 +54,7 @@ private:
 
     matrix4x4 view;
 
-    uint32_t smallestEmpty;
+    uint32_t smallestEmpty = 0;
     std::vector<bool> empty;
     std::vector<UIMain> main;
     std::vector<UIDraw> draw;
@@ -110,7 +110,7 @@ public:
     void Image_SetPosition(UIElement self, const int2& position);
     void Image_SetSize(UIElement self, const int2& size);
     void Image_SetTexture(UIElement self, Texture& texture);
-    void Image_SetUV(UIElement self, const int4& uv);
+    void Image_SetUV(UIElement self, const float4& uv);
 };
 
 }

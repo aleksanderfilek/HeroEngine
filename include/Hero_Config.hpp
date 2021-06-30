@@ -1,5 +1,5 @@
-#define Windows 0
-#define Linux 1
+#define Windows 1
+#define Linux 0
 
 #define Profile
 

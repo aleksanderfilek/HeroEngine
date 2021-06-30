@@ -85,7 +85,7 @@ void UserInterface::Update()
         for(int i = 0; i < this->draw.size(); i++)
         {
                 UIDraw& d = this->draw[i];
-                if(this->empty[i] || d.id == 0)
+                if(this->empty[i] || d.id < 0)
                 {
                         continue;
                 }
@@ -97,9 +97,11 @@ void UserInterface::Update()
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (float*)(&(model.col[0])));
                 unsigned int viewLoc = glGetUniformLocation(this->shader->glId, "view");
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (float*)(&(this->view.col[0])));
+                unsigned int uvmatLoc = glGetUniformLocation(this->shader->glId, "uvmat");
+                glUniformMatrix3fv(uvmatLoc, 1, GL_FALSE, (float*)(&(d.uvMat.col[0])));
 
                 glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, d.id);
+                glBindTexture(GL_TEXTURE_2D, this->textureSet[d.id].first.glId);
                 DEBUG_CODE(glCheckError();)
                 Hero::DrawMesh(this->mesh);
         }
@@ -131,8 +133,9 @@ UIElement UserInterface::Element_Create(const std::string& name, UIType type)
         };
 
         UIDraw uidraw = {
-                .id = 0,
-                .rect = int4zero
+                .id = -1,
+                .rect = int4zero,
+                .uvMat = matrix3x3identity
         };
 
         UICustom uicustom;
@@ -198,29 +201,6 @@ void UserInterface::Element_Remove(UIElement element)
 {
         this->empty[element] = true;
 
-        // remove texture if image or label
-
-        /*if(this->main[element].type == UIType::Image)
-        {
-                const std::string& name = this->custom[element].third.text;
-                for(int i = 0; i < this->textureSet.size(); i++)
-                {
-                        if(this->textureSet[i].first.name.compare(name) != 0)
-                        {
-                                continue;
-                        }
-
-                        this->textureSet[i].second--;
-                        if(this->textureSet[i].second <= 0)
-                        {
-                                this->textureSet.erase(this->textureSet.begin() + i);
-                                break;
-                        }
-                }
-        }
-        else */
-
-
         switch (this->main[element].type)
         {
         case UIType::Canvas:
@@ -242,8 +222,20 @@ void UserInterface::Element_Remove(UIElement element)
                 }
                 break;
         case UIType::Label:
+                {
                 LabelData* data = (LabelData*)this->custom[element];
-                glDeleteTextures(1, &this->draw[element].id);
+                //glDeleteTextures(1, &this->draw[element].id);
+                if(data->text)
+                {
+                        delete[] data->text;
+                }
+                this->textureSet[element].second--;
+                if(this->textureSet[element].second == 0)
+                {
+                        this->draw[element].id = -1;
+                        Extra::UnloadTextureByCopy(this->textureSet[element].first);
+                } 
+                }
                 break;
         }
 
@@ -548,9 +540,14 @@ void UserInterface::Label_SetSize(UIElement self, const int2& size)
 void UserInterface::Label_SetText(UIElement self, const char* _text)
 {
         //free old texture
-        if(this->draw[self].id)
+       if(this->draw[self].id >= 0)
         {
-                glDeleteTextures(1, &this->draw[self].id);
+                this->textureSet[self].second--;
+                if(this->textureSet[self].second == 0)
+                {
+                        this->draw[self].id = -1;
+                        Extra::UnloadTextureByCopy(this->textureSet[self].first);
+                } 
         }
 
         LabelData* data = (LabelData*)this->custom[self];
@@ -565,13 +562,35 @@ void UserInterface::Label_SetText(UIElement self, const char* _text)
         data->text = new char[len];
         strcpy(data->text, _text);
 
+        for(int i = 0 ; i < this->textureSet.size() && this->draw[self].id >= 0; i++)//ugh
+        {
+                if(this->textureSet[i].first.name.compare(data->text) != 0)
+                {
+                        continue;
+                }
+
+                this->draw[self].id = i;
+                if(this->draw[self].rect.z == 0 && this->draw[self].rect.w == 0)
+                {
+                        this->draw[self].rect.z = this->textureSet[i].first.size.x;
+                        this->draw[self].rect.w = this->textureSet[i].first.size.y;
+                }
+                return;
+        }
+
         //load new texture
-        Texture newText = TextureFromText(_text, data->color, data->font);
+        Texture newTex = TextureFromText(_text, data->color, data->font);
+        newTex.name = std::string(_text);
 
-        this->draw[self].id = newText.glId;
+        std::pair<Texture, uint32_t> element = {newTex, 1};
+        this->textureSet.push_back(element);
+        this->draw[self].id = this->textureSet.size()-1;
 
-        this->draw[self].rect.z = newText.size.x;
-        this->draw[self].rect.w = newText.size.y;
+        if(this->draw[self].rect.z == 0 && this->draw[self].rect.w == 0)
+        {
+                this->draw[self].rect.z = newTex.size.x;
+                this->draw[self].rect.w = newTex.size.y;
+        }
 }
 
 void UserInterface::Label_SetFont(UIElement self, Font* font)
@@ -598,12 +617,51 @@ void UserInterface::Image_SetSize(UIElement self, const int2& size)
 
 void UserInterface::Image_SetTexture(UIElement self, Texture& texture)
 {
+        //free old texture
+       if(this->draw[self].id >= 0)
+        {
+                this->textureSet[self].second--;
+                if(this->textureSet[self].second == 0)
+                {
+                        this->draw[self].id = -1;
+                        Extra::UnloadTextureByCopy(this->textureSet[self].first);
+                } 
+        }
 
+        for(int i = 0 ; i < this->textureSet.size(); i++)//ugh
+        {
+                if(this->textureSet[i].first.name.compare(texture.name) != 0)
+                {
+                        continue;
+                }
+
+                this->draw[self].id = i;
+                if(this->draw[self].rect.z == 0 && this->draw[self].rect.w == 0)
+                {
+                        this->draw[self].rect.z = this->textureSet[i].first.size.x;
+                        this->draw[self].rect.w = this->textureSet[i].first.size.y;
+                }
+                return;
+        }
+
+        std::pair<Texture, uint32_t> element = {texture, 1};
+        this->textureSet.push_back(element);
+        this->draw[self].id = this->textureSet.size()-1;
+
+        if(this->draw[self].rect.z == 0 && this->draw[self].rect.w == 0)
+        {
+                this->draw[self].rect.z = texture.size.x;
+                this->draw[self].rect.w = texture.size.y;
+        }
 }
 
-void UserInterface::Image_SetUV(UIElement self, const int4& uv)
+void UserInterface::Image_SetUV(UIElement self, const float4& uv)
 {
-        
+       matrix3x3& mat = this->draw[self].uvMat;
+       mat.col[0].x = uv.z - uv.x;
+       mat.col[1].y = uv.w - uv.y;
+       mat.col[3].x = uv.x;
+       mat.col[3].y = uv.y; 
 }
 
 }
