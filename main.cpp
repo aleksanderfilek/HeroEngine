@@ -90,6 +90,7 @@ public:
         {
             //std::cout<<"Remove"<<std::endl;
             //ui->HorizontalBox_RemoveChild(canvas, label);
+            ui->Label_SetSize(label, int2zero);
             ui->Label_SetText(label, "Hello, Alek!");
         }
     }

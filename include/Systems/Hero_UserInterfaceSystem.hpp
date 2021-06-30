@@ -35,10 +35,12 @@ struct UIMain
 {
     std::string name;
     UIType type;
+    int parent;
 };
 
 struct UIDraw
 {
+    bool visible;
     int id;
     int4 rect;
     matrix3x3 uvMat;
@@ -61,6 +63,9 @@ private:
     std::vector<UICustom> custom;
 
     std::vector<std::pair<Texture, uint32_t>> textureSet;
+
+    void VerticalBox_SizeUpdate(UIElement self);
+    void HorizontalBox_SizeUpdate(UIElement self);
 
 public:
     UserInterface();

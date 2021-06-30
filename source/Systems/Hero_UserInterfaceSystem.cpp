@@ -85,7 +85,7 @@ void UserInterface::Update()
         for(int i = 0; i < this->draw.size(); i++)
         {
                 UIDraw& d = this->draw[i];
-                if(this->empty[i] || d.id < 0)
+                if(this->empty[i] || !d.visible || d.id < 0)
                 {
                         continue;
                 }
@@ -130,9 +130,11 @@ UIElement UserInterface::Element_Create(const std::string& name, UIType type)
         UIMain uimain = {
                 .name = name,
                 .type = type,
+                .parent = -1
         };
 
         UIDraw uidraw = {
+                .visible = true,
                 .id = -1,
                 .rect = int4zero,
                 .uvMat = matrix3x3identity
@@ -271,6 +273,7 @@ void UserInterface::Canvas_AddChild(UIElement self, UIElement child)
         uint32_t newSize = data->count * sizeof(UIElement);
         data->childs = (UIElement*)std::realloc(data->childs, newSize);
         data->childs[data->count - 1] = child;
+        this->main[child].parent = (int)self;
 }
 
 void UserInterface::Canvas_RemoveChild(UIElement self, const std::string& name)
@@ -358,6 +361,7 @@ void UserInterface::HorizontalBox_AddChild(UIElement self, UIElement child)
         }
         this->draw[child].rect.x = posX;
         this->draw[child].rect.y = this->draw[self].rect.y;
+        this->main[child].parent = (int)self;
 }
 
 void UserInterface::HorizontalBox_RemoveChild(UIElement self, const std::string& name)
@@ -395,14 +399,7 @@ void UserInterface::HorizontalBox_RemoveChild(UIElement self, UIElement child)
         delete[] data->childs;
         data->childs = newArr;
 
-        for(int j = 0, posX = this->draw[self].rect.x; j < data->count; j++)
-        {
-                uint32_t index = data->childs[j];
-
-                this->draw[index].rect.x = posX;
-                this->draw[index].rect.y = this->draw[self].rect.y;
-                posX += this->draw[index].rect.z;
-        }
+        this->HorizontalBox_SizeUpdate(self);
 }
 
 void UserInterface::HorizontalBox_SetPosition(UIElement self, const int2& position)
@@ -430,6 +427,20 @@ void UserInterface::HorizontalBox_SetSize(UIElement self, const int2& size)
         this->draw[self].rect.w = size.y; 
 }
 
+void UserInterface::HorizontalBox_SizeUpdate(UIElement self)
+{
+        HorizontalBoxData* data = (HorizontalBoxData*)this->custom[self];
+
+        for(int j = 0, posX = this->draw[self].rect.x; j < data->count; j++)
+        {
+                uint32_t index = data->childs[j];
+
+                this->draw[index].rect.x = posX;
+                this->draw[index].rect.y = this->draw[self].rect.y;
+                posX += this->draw[index].rect.z;
+        }
+}
+
 void UserInterface::VerticalBox_AddChild(UIElement self, const std::string& name)
 {
         UIElement child = this->Element_Find(name);
@@ -452,6 +463,7 @@ void UserInterface::VerticalBox_AddChild(UIElement self, UIElement child)
                 posY += this->draw[index].rect.w;
         }
         this->draw[child].rect.y = posY;
+        this->main[child].parent = (int)self;
 }
 
 void UserInterface::VerticalBox_RemoveChild(UIElement self, const std::string& name)
@@ -490,14 +502,7 @@ void UserInterface::VerticalBox_RemoveChild(UIElement self, UIElement child)
         delete[] data->childs;
         data->childs = newArr;
 
-        for(int j = 0, posY = this->draw[self].rect.y; j < data->count; j++)
-        {
-                uint32_t index = data->childs[j];
-
-                this->draw[index].rect.x = this->draw[self].rect.x;
-                this->draw[index].rect.y = posY;
-                posY += this->draw[index].rect.w;
-        }
+        this->VerticalBox_SizeUpdate(self);
 }
 
 void UserInterface::VerticalBox_SetPosition(UIElement self, const int2& position)
@@ -525,6 +530,20 @@ void UserInterface::VerticalBox_SetSize(UIElement self, const int2& size)
         this->draw[self].rect.w = size.y; 
 }
 
+void UserInterface::VerticalBox_SizeUpdate(UIElement self)
+{
+        VerticalBoxData* data = (VerticalBoxData*)this->custom[self];
+
+        for(int j = 0, posY = this->draw[self].rect.y; j < data->count; j++)
+        {
+                uint32_t index = data->childs[j];
+
+                this->draw[index].rect.x = this->draw[self].rect.x;
+                this->draw[index].rect.y = posY;
+                posY += this->draw[index].rect.w;
+        }
+}
+
 void UserInterface::Label_SetPosition(UIElement self, const int2& position)
 {
         this->draw[self].rect.x = position.x;
@@ -535,6 +554,21 @@ void UserInterface::Label_SetSize(UIElement self, const int2& size)
 {
         this->draw[self].rect.z = size.x;
         this->draw[self].rect.w = size.y;
+
+        if(this->main[self].parent < 0)
+        {
+                return;
+        }
+
+        switch(this->main[this->main[self].parent].type)
+        {
+                case UIType::HorizontalBox:
+                        this->HorizontalBox_SizeUpdate(this->main[self].parent);
+                break;
+                case UIType::VerticalBox:
+                        this->VerticalBox_SizeUpdate(this->main[self].parent);
+                break;
+        }
 }
 
 void UserInterface::Label_SetText(UIElement self, const char* _text)
@@ -575,6 +609,20 @@ void UserInterface::Label_SetText(UIElement self, const char* _text)
                         this->draw[self].rect.z = this->textureSet[i].first.size.x;
                         this->draw[self].rect.w = this->textureSet[i].first.size.y;
                 }
+                if(this->main[self].parent < 0)
+                {
+                        return;
+                }
+
+                switch(this->main[this->main[self].parent].type)
+                {
+                        case UIType::HorizontalBox:
+                                this->HorizontalBox_SizeUpdate(this->main[self].parent);
+                        break;
+                        case UIType::VerticalBox:
+                                this->VerticalBox_SizeUpdate(this->main[self].parent);
+                        break;
+                }
                 return;
         }
 
@@ -590,6 +638,20 @@ void UserInterface::Label_SetText(UIElement self, const char* _text)
         {
                 this->draw[self].rect.z = newTex.size.x;
                 this->draw[self].rect.w = newTex.size.y;
+        }
+        if(this->main[self].parent < 0)
+        {
+                return;
+        }
+
+        switch(this->main[this->main[self].parent].type)
+        {
+                case UIType::HorizontalBox:
+                        this->HorizontalBox_SizeUpdate(this->main[self].parent);
+                break;
+                case UIType::VerticalBox:
+                        this->VerticalBox_SizeUpdate(this->main[self].parent);
+                break;
         }
 }
 
@@ -613,6 +675,21 @@ void UserInterface::Image_SetSize(UIElement self, const int2& size)
 {
         this->draw[self].rect.z = size.x;
         this->draw[self].rect.w = size.y;
+
+        if(this->main[self].parent < 0)
+        {
+                return;
+        }
+
+        switch(this->main[this->main[self].parent].type)
+        {
+                case UIType::HorizontalBox:
+                        this->HorizontalBox_SizeUpdate(this->main[self].parent);
+                break;
+                case UIType::VerticalBox:
+                        this->VerticalBox_SizeUpdate(this->main[self].parent);
+                break;
+        }
 }
 
 void UserInterface::Image_SetTexture(UIElement self, Texture& texture)
@@ -641,6 +718,21 @@ void UserInterface::Image_SetTexture(UIElement self, Texture& texture)
                         this->draw[self].rect.z = this->textureSet[i].first.size.x;
                         this->draw[self].rect.w = this->textureSet[i].first.size.y;
                 }
+
+                if(this->main[self].parent < 0)
+                {
+                        return;
+                }
+
+                switch(this->main[this->main[self].parent].type)
+                {
+                        case UIType::HorizontalBox:
+                                this->HorizontalBox_SizeUpdate(this->main[self].parent);
+                        break;
+                        case UIType::VerticalBox:
+                                this->VerticalBox_SizeUpdate(this->main[self].parent);
+                        break;
+                }
                 return;
         }
 
@@ -652,6 +744,21 @@ void UserInterface::Image_SetTexture(UIElement self, Texture& texture)
         {
                 this->draw[self].rect.z = texture.size.x;
                 this->draw[self].rect.w = texture.size.y;
+        }
+
+        if(this->main[self].parent < 0)
+        {
+                return;
+        }
+
+        switch(this->main[this->main[self].parent].type)
+        {
+                case UIType::HorizontalBox:
+                        this->HorizontalBox_SizeUpdate(this->main[self].parent);
+                break;
+                case UIType::VerticalBox:
+                        this->VerticalBox_SizeUpdate(this->main[self].parent);
+                break;
         }
 }
 
