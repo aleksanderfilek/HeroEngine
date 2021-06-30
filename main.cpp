@@ -88,10 +88,11 @@ public:
 
         if(input->keyUp(Hero::Input::KeyCode::P))
         {
+            ui->Element_SetVisibility(label, false);
             //std::cout<<"Remove"<<std::endl;
             //ui->HorizontalBox_RemoveChild(canvas, label);
-            ui->Label_SetSize(label, int2zero);
-            ui->Label_SetText(label, "Hello, Alek!");
+            //ui->Label_SetSize(label, int2zero);
+            //ui->Label_SetText(label, "Hello, Alek!");
         }
     }
 

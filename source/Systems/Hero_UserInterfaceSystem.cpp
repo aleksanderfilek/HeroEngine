@@ -125,6 +125,24 @@ void UserInterface::Close()
         }
 }
 
+void UserInterface::SizeUpdate(UIElement self)
+{
+        if(this->main[self].parent < 0)
+        {
+                return;
+        }
+
+        switch(this->main[this->main[self].parent].type)
+        {
+                case UIType::HorizontalBox:
+                        this->HorizontalBox_SizeUpdate(this->main[self].parent);
+                break;
+                case UIType::VerticalBox:
+                        this->VerticalBox_SizeUpdate(this->main[self].parent);
+                break;
+        }
+}
+
 UIElement UserInterface::Element_Create(const std::string& name, UIType type)
 {
         UIMain uimain = {
@@ -258,6 +276,17 @@ UIElement UserInterface::Element_Find(const std::string& name)
                 }
         }
         return 0;
+}
+
+void UserInterface::Element_SetVisibility(UIElement self, bool visibility)
+{
+        this->draw[self].visible = visibility;
+        this->SizeUpdate(self);
+}
+
+bool UserInterface::Element_IsVisible(UIElement self)
+{
+        return this->draw[self].visible;
 }
 
 void UserInterface::Canvas_AddChild(UIElement self, const std::string& name)
@@ -435,6 +464,9 @@ void UserInterface::HorizontalBox_SizeUpdate(UIElement self)
         {
                 uint32_t index = data->childs[j];
 
+                if(this->draw[index].visible == false)
+                        continue;
+
                 this->draw[index].rect.x = posX;
                 this->draw[index].rect.y = this->draw[self].rect.y;
                 posX += this->draw[index].rect.z;
@@ -538,6 +570,9 @@ void UserInterface::VerticalBox_SizeUpdate(UIElement self)
         {
                 uint32_t index = data->childs[j];
 
+                if(this->draw[index].visible == false)
+                        continue;
+
                 this->draw[index].rect.x = this->draw[self].rect.x;
                 this->draw[index].rect.y = posY;
                 posY += this->draw[index].rect.w;
@@ -555,20 +590,7 @@ void UserInterface::Label_SetSize(UIElement self, const int2& size)
         this->draw[self].rect.z = size.x;
         this->draw[self].rect.w = size.y;
 
-        if(this->main[self].parent < 0)
-        {
-                return;
-        }
-
-        switch(this->main[this->main[self].parent].type)
-        {
-                case UIType::HorizontalBox:
-                        this->HorizontalBox_SizeUpdate(this->main[self].parent);
-                break;
-                case UIType::VerticalBox:
-                        this->VerticalBox_SizeUpdate(this->main[self].parent);
-                break;
-        }
+        this->SizeUpdate(self);
 }
 
 void UserInterface::Label_SetText(UIElement self, const char* _text)
@@ -609,20 +631,9 @@ void UserInterface::Label_SetText(UIElement self, const char* _text)
                         this->draw[self].rect.z = this->textureSet[i].first.size.x;
                         this->draw[self].rect.w = this->textureSet[i].first.size.y;
                 }
-                if(this->main[self].parent < 0)
-                {
-                        return;
-                }
+ 
+                this->SizeUpdate(self);
 
-                switch(this->main[this->main[self].parent].type)
-                {
-                        case UIType::HorizontalBox:
-                                this->HorizontalBox_SizeUpdate(this->main[self].parent);
-                        break;
-                        case UIType::VerticalBox:
-                                this->VerticalBox_SizeUpdate(this->main[self].parent);
-                        break;
-                }
                 return;
         }
 
@@ -639,20 +650,8 @@ void UserInterface::Label_SetText(UIElement self, const char* _text)
                 this->draw[self].rect.z = newTex.size.x;
                 this->draw[self].rect.w = newTex.size.y;
         }
-        if(this->main[self].parent < 0)
-        {
-                return;
-        }
 
-        switch(this->main[this->main[self].parent].type)
-        {
-                case UIType::HorizontalBox:
-                        this->HorizontalBox_SizeUpdate(this->main[self].parent);
-                break;
-                case UIType::VerticalBox:
-                        this->VerticalBox_SizeUpdate(this->main[self].parent);
-                break;
-        }
+        this->SizeUpdate(self);
 }
 
 void UserInterface::Label_SetFont(UIElement self, Font* font)
@@ -676,20 +675,7 @@ void UserInterface::Image_SetSize(UIElement self, const int2& size)
         this->draw[self].rect.z = size.x;
         this->draw[self].rect.w = size.y;
 
-        if(this->main[self].parent < 0)
-        {
-                return;
-        }
-
-        switch(this->main[this->main[self].parent].type)
-        {
-                case UIType::HorizontalBox:
-                        this->HorizontalBox_SizeUpdate(this->main[self].parent);
-                break;
-                case UIType::VerticalBox:
-                        this->VerticalBox_SizeUpdate(this->main[self].parent);
-                break;
-        }
+        this->SizeUpdate(self);
 }
 
 void UserInterface::Image_SetTexture(UIElement self, Texture& texture)
@@ -719,20 +705,7 @@ void UserInterface::Image_SetTexture(UIElement self, Texture& texture)
                         this->draw[self].rect.w = this->textureSet[i].first.size.y;
                 }
 
-                if(this->main[self].parent < 0)
-                {
-                        return;
-                }
-
-                switch(this->main[this->main[self].parent].type)
-                {
-                        case UIType::HorizontalBox:
-                                this->HorizontalBox_SizeUpdate(this->main[self].parent);
-                        break;
-                        case UIType::VerticalBox:
-                                this->VerticalBox_SizeUpdate(this->main[self].parent);
-                        break;
-                }
+                this->SizeUpdate(self);
                 return;
         }
 
@@ -746,20 +719,7 @@ void UserInterface::Image_SetTexture(UIElement self, Texture& texture)
                 this->draw[self].rect.w = texture.size.y;
         }
 
-        if(this->main[self].parent < 0)
-        {
-                return;
-        }
-
-        switch(this->main[this->main[self].parent].type)
-        {
-                case UIType::HorizontalBox:
-                        this->HorizontalBox_SizeUpdate(this->main[self].parent);
-                break;
-                case UIType::VerticalBox:
-                        this->VerticalBox_SizeUpdate(this->main[self].parent);
-                break;
-        }
+        this->SizeUpdate(self);
 }
 
 void UserInterface::Image_SetUV(UIElement self, const float4& uv)

@@ -66,6 +66,7 @@ private:
 
     void VerticalBox_SizeUpdate(UIElement self);
     void HorizontalBox_SizeUpdate(UIElement self);
+    void SizeUpdate(UIElement self);
 
 public:
     UserInterface();
@@ -84,6 +85,8 @@ public:
     void Element_Remove(const std::string& name);
     void Element_Remove(UIElement element);
     UIElement Element_Find(const std::string& name);
+    void Element_SetVisibility(UIElement self, bool visibility);
+    bool Element_IsVisible(UIElement self);
 
     void Canvas_AddChild(UIElement self, const std::string& name);
     void Canvas_AddChild(UIElement self, UIElement child);
