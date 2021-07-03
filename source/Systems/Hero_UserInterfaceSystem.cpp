@@ -790,8 +790,8 @@ void UserInterface::Image_SetUV(UIElement self, const float4& uv)
        matrix3x3& mat = this->draw[self].uvMat;
        mat.col[0].x = uv.z - uv.x;
        mat.col[1].y = uv.w - uv.y;
-       mat.col[3].x = uv.x;
-       mat.col[3].y = uv.y; 
+       mat.col[2].x = uv.x;
+       mat.col[2].y = uv.y; 
 }
 
 }
