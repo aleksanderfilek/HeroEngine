@@ -58,14 +58,14 @@ enum UIEventType:uint8_t
     Hover = 1,
     OffHover = 2,
     OnClick = 3,
-    Click = 4,
+    HoldClick = 4,
     OffClick = 5
 };
 
 struct UIEvent
 {
     uint8_t set;
-    uint8_t state;
+    bool hover;
 };
 
 class UserInterface : public ISystem

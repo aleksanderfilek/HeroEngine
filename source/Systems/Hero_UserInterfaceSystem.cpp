@@ -95,31 +95,70 @@ void UserInterface::Update()
                 if(rect.x <= mouseX && mouseX <= (rect.x + rect.z) &&
                         rect.y <= mouseY && mouseY <= (rect.y + rect.w))
                 {
-                        if(ev.state == false)
+                        if(ev.hover == false)
                         {
-                                ev.state = true;
+                                ev.hover = true;
+                                std::cout<<"onhover"<<std::endl;
                                 if(ev.set & 1)
                                         this->bindedEvents[i][0](this, &i, 1);
                         }
                         else 
                         {
+                               // std::cout<<"hover"<<std::endl;
                                 if(this->event[i].set & 2)
                                         this->bindedEvents[i][1](this, &i, 1);
                         }
                 }
                 else
                 {
-                        if(ev.state == true)
+                        if(ev.hover == true)
                         {
-                                this->event[i].state = false;
+                                ev.hover = false;
                                 if(this->event[i].set & 4)
                                         this->bindedEvents[i][2](this, &i, 1);
                         }
                 }
         }
 
+
         //click check
-                
+        if(input->mouseButtonDown(Input::Mouse::Left))
+        {
+                for(int i = 0; i < this->event.size(); i++)
+                {
+                        UIEvent& ev = this->event[i];
+
+                        if(ev.set & 8 && ev.hover == true)
+                        {
+                                this->bindedEvents[i][3](this, &i, 1);
+                        }
+                }
+        }
+        if(input->mouseButtonPressed(Input::Mouse::Left))
+        {
+                for(int i = 0; i < this->event.size(); i++)
+                {
+                        UIEvent& ev = this->event[i];
+
+                        if(ev.set & 16 && ev.hover == true)
+                        {
+                                this->bindedEvents[i][4](this, &i, 1);
+                        }
+                }
+        }
+        if(input->mouseButtonUp(Input::Mouse::Left))
+        {
+                for(int i = 0; i < this->event.size(); i++)
+                {
+                        UIEvent& ev = this->event[i];
+
+                        if(ev.set & 32 && ev.hover == true)
+                        {
+                                this->bindedEvents[i][5](this, &i, 1);
+                        }
+                }                
+        }
+
         Hero::BindShader(this->shader);
 
         for(int i = 0; i < this->draw.size(); i++)
@@ -218,7 +257,7 @@ UIElement UserInterface::Element_Create(const std::string& name, UIElementType t
         UIEvent uievent = 
         {
                 .set = 0,
-                .state = 0
+                .hover = false
         };
 
         if(this->smallestEmpty >= this->main.size())

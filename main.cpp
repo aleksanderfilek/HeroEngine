@@ -15,6 +15,11 @@ event(OffHover)
     ui->Image_SetUV(*self, {0.0f, 0.0f, 0.5f, 0.5f});
 }
 
+event(OnClick)
+{
+    std::cout<<"Click"<<std::endl;
+}
+
 class Test:public Hero::ILevel
 {
 
@@ -88,6 +93,7 @@ public:
         ui->Image_SetUV(image, {0.0f, 0.0f, 0.5f, 0.5f});
         ui->Element_BindEvent(image, Hero::UIEventType::OnHover, OnHover);
         ui->Element_BindEvent(image, Hero::UIEventType::OffHover, OffHover);
+        ui->Element_BindEvent(image, Hero::UIEventType::OffClick, OnClick);
 
         input = Hero::Core::GetSystem<Hero::Input>();
     }
