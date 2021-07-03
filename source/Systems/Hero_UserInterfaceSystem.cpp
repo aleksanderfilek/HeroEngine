@@ -72,13 +72,53 @@ void UserInterface::Init()
 
         this->view = Hero::OrthographicMatrix(1280, 700, 0.0f, 100.0f);
 
-        smallestEmpty = 0;
+        this->smallestEmpty = 0;
+
+        this->input = Core::GetSystem<Input>();
 }
 
 void UserInterface::Update()
 {
         if(this->main.size() == 0)
                 return;
+
+        input->getMousePosition(&mouseX, &mouseY);
+
+        //hover check
+        for(int i = 0; i < this->event.size(); i++)
+        {
+                UIEvent& ev = this->event[i];
+                if(ev.set & 7 == 0)
+                        continue;
+
+                int4 rect = this->draw[i].rect;
+                if(rect.x <= mouseX && mouseX <= (rect.x + rect.z) &&
+                        rect.y <= mouseY && mouseY <= (rect.y + rect.w))
+                {
+                        if(ev.state == false)
+                        {
+                                ev.state = true;
+                                if(ev.set & 1)
+                                        this->bindedEvents[i][0](this, &i, 1);
+                        }
+                        else 
+                        {
+                                if(this->event[i].set & 2)
+                                        this->bindedEvents[i][1](this, &i, 1);
+                        }
+                }
+                else
+                {
+                        if(ev.state == true)
+                        {
+                                this->event[i].state = false;
+                                if(this->event[i].set & 4)
+                                        this->bindedEvents[i][2](this, &i, 1);
+                        }
+                }
+        }
+
+        //click check
                 
         Hero::BindShader(this->shader);
 
@@ -134,16 +174,16 @@ void UserInterface::SizeUpdate(UIElement self)
 
         switch(this->main[this->main[self].parent].type)
         {
-                case UIType::HorizontalBox:
+                case UIElementType::HorizontalBox:
                         this->HorizontalBox_SizeUpdate(this->main[self].parent);
                 break;
-                case UIType::VerticalBox:
+                case UIElementType::VerticalBox:
                         this->VerticalBox_SizeUpdate(this->main[self].parent);
                 break;
         }
 }
 
-UIElement UserInterface::Element_Create(const std::string& name, UIType type)
+UIElement UserInterface::Element_Create(const std::string& name, UIElementType type)
 {
         UIMain uimain = {
                 .name = name,
@@ -161,19 +201,25 @@ UIElement UserInterface::Element_Create(const std::string& name, UIType type)
         UICustom uicustom;
         switch (type)
         {
-        case UIType::Canvas:
+        case UIElementType::Canvas:
                 uicustom = new CanvasData();
                 break;
-        case UIType::HorizontalBox:
+        case UIElementType::HorizontalBox:
                 uicustom = new HorizontalBoxData();
                 break;
-        case UIType::VerticalBox:
+        case UIElementType::VerticalBox:
                 uicustom = new VerticalBoxData();
                 break;
-        case UIType::Label:
+        case UIElementType::Label:
                 uicustom = new LabelData();
                 break;
         }
+
+        UIEvent uievent = 
+        {
+                .set = 0,
+                .state = 0
+        };
 
         if(this->smallestEmpty >= this->main.size())
         {
@@ -183,6 +229,9 @@ UIElement UserInterface::Element_Create(const std::string& name, UIType type)
                 this->main.push_back(uimain);
                 this->draw.push_back(uidraw);
                 this->custom.push_back(uicustom);
+                this->event.push_back(uievent);
+                std::vector<EventFunction> events(6);
+                this->bindedEvents.push_back(events);
 
                 return this->main.size()-1;
         }
@@ -191,6 +240,8 @@ UIElement UserInterface::Element_Create(const std::string& name, UIType type)
         this->main[this->smallestEmpty] = uimain;
         this->draw[this->smallestEmpty] = uidraw;
         this->custom[this->smallestEmpty] = uicustom;
+        this->event[this->smallestEmpty] = uievent;
+        this->bindedEvents[this->smallestEmpty].clear();
 
         uint32_t returnIndex = this->smallestEmpty;
         this->smallestEmpty++;
@@ -223,25 +274,25 @@ void UserInterface::Element_Remove(UIElement element)
 
         switch (this->main[element].type)
         {
-        case UIType::Canvas:
+        case UIElementType::Canvas:
                 {
                 CanvasData* data = (CanvasData*)this->custom[element];
                 delete[] data->childs;
                }
                break;
-        case UIType::HorizontalBox:
+        case UIElementType::HorizontalBox:
                 {
                 HorizontalBoxData* data = (HorizontalBoxData*)this->custom[element];
                 delete[] data->childs;
                 }
                 break;
-        case UIType::VerticalBox:
+        case UIElementType::VerticalBox:
                 {
                 VerticalBoxData* data = (VerticalBoxData*)this->custom[element];
                 delete[] data->childs;
                 }
                 break;
-        case UIType::Label:
+        case UIElementType::Label:
                 {
                 LabelData* data = (LabelData*)this->custom[element];
                 //glDeleteTextures(1, &this->draw[element].id);
@@ -287,6 +338,18 @@ void UserInterface::Element_SetVisibility(UIElement self, bool visibility)
 bool UserInterface::Element_IsVisible(UIElement self)
 {
         return this->draw[self].visible;
+}
+
+void UserInterface::Element_BindEvent(UIElement self, UIEventType type, EventFunction function)
+{
+    this->event[self].set |= 1<<type;
+    this->bindedEvents[self][type] = function;
+}
+
+void UserInterface::Element_UnbindEvent(UIElement self, UIEventType type)
+{
+        this->event[self].set &= ~(1<<type);
+        this->bindedEvents[self][type] = NULL;
 }
 
 void UserInterface::Canvas_AddChild(UIElement self, const std::string& name)

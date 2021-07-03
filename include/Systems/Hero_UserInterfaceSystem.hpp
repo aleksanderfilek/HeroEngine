@@ -14,28 +14,32 @@
 #include"Core/Hero_Color.hpp"
 #include"Core/Hero_Font.hpp"
 #include"Core/Hero_Texture.hpp"
+#include"Core/Hero_Event.hpp"
+#include"Core/Hero_Core.hpp"
+#include"Systems/Hero_InputSystem.hpp"
 
 namespace Hero
 {
 
 typedef uint32_t UIElement;
 
-enum UIType : uint32_t
+enum UIElementType : uint32_t
 {
     Canvas,
     HorizontalBox,
     VerticalBox,
     //GridBox, //maybe custom from vertical and horizontal
     Image,
-    Label,
-    Custom
+    Label
+    //Custom
 };
 
 struct UIMain
 {
     std::string name;
-    UIType type;
+    UIElementType type;
     int parent;
+    int event;
 };
 
 struct UIDraw
@@ -48,9 +52,28 @@ struct UIDraw
 
 typedef void* UICustom;
 
+enum UIEventType:uint8_t
+{
+    OnHover = 0,
+    Hover = 1,
+    OffHover = 2,
+    OnClick = 3,
+    Click = 4,
+    OffClick = 5
+};
+
+struct UIEvent
+{
+    uint8_t set;
+    uint8_t state;
+};
+
 class UserInterface : public ISystem
 {
 private:
+    Input* input;
+    int mouseX, mouseY;
+
     Mesh* mesh;
     Shader *shader;
 
@@ -61,6 +84,9 @@ private:
     std::vector<UIMain> main;
     std::vector<UIDraw> draw;
     std::vector<UICustom> custom;
+    std::vector<UIEvent> event;
+
+    std::vector<std::vector<EventFunction>> bindedEvents;
 
     std::vector<std::pair<Texture, uint32_t>> textureSet;
 
@@ -81,12 +107,14 @@ public:
 
     std::uint8_t priority(){ return 254; }
 
-    UIElement Element_Create(const std::string& name, UIType type);
+    UIElement Element_Create(const std::string& name, UIElementType type);
     void Element_Remove(const std::string& name);
     void Element_Remove(UIElement element);
     UIElement Element_Find(const std::string& name);
     void Element_SetVisibility(UIElement self, bool visibility);
     bool Element_IsVisible(UIElement self);
+    void Element_BindEvent(UIElement self, UIEventType type, EventFunction function);
+    void Element_UnbindEvent(UIElement self, UIEventType type);
 
     void Canvas_AddChild(UIElement self, const std::string& name);
     void Canvas_AddChild(UIElement self, UIElement child);

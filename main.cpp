@@ -1,8 +1,24 @@
 #include"HeroCore.hpp"
 #include"HeroSystems.hpp"
 
+event(OnHover)
+{
+    Hero::UserInterface* ui = (Hero::UserInterface*)object;
+    Hero::UIElement* self = (Hero::UIElement*)args;
+    ui->Image_SetUV(*self, {0.5f, 0.5f, 1.0f, 1.0f});
+}
+
+event(OffHover)
+{
+    Hero::UserInterface* ui = (Hero::UserInterface*)object;
+    Hero::UIElement* self = (Hero::UIElement*)args;
+    ui->Image_SetUV(*self, {0.0f, 0.0f, 0.5f, 0.5f});
+}
+
 class Test:public Hero::ILevel
 {
+
+
 private:
     Hero::Shader* shader;
     Hero::Mesh* mesh;
@@ -39,37 +55,39 @@ public:
 
         font = Hero::LoadFont("arial.ttf" , 48);
 
-        label = ui->Element_Create("label1", Hero::UIType::Label);
+        label = ui->Element_Create("label1", Hero::UIElementType::Label);
         Hero::Color color = {255, 255, 0, 255};
         ui->Label_SetColor(label, color);
         ui->Label_SetFont(label, font);
         ui->Label_SetText(label, "Hello, World!");
         ui->Label_SetPosition(label, {100, 100});
 
-        Hero::UIElement label2 = ui->Element_Create("label2", Hero::UIType::Label);
+        Hero::UIElement label2 = ui->Element_Create("label2", Hero::UIElementType::Label);
         ui->Label_SetColor(label2, color);
         ui->Label_SetFont(label2, font);
         ui->Label_SetText(label2, "Elo");
         ui->Label_SetPosition(label2, {100, 200});
 
-        Hero::UIElement label3 = ui->Element_Create("label3", Hero::UIType::Label);
+        Hero::UIElement label3 = ui->Element_Create("label3", Hero::UIElementType::Label);
         ui->Label_SetColor(label3, color);
         ui->Label_SetFont(label3, font);
         ui->Label_SetText(label3, "Alek");
         ui->Label_SetPosition(label3, {100, 300});
 
-        canvas = ui->Element_Create("canvas1", Hero::UIType::HorizontalBox);
+        canvas = ui->Element_Create("canvas1", Hero::UIElementType::HorizontalBox);
         ui->HorizontalBox_AddChild(canvas, "label1");
         ui->HorizontalBox_AddChild(canvas, "label2");
         ui->HorizontalBox_AddChild(canvas, "label3");
         ui->HorizontalBox_SetPosition(canvas, pos);
 
-        Hero::UIElement image = ui->Element_Create("image1", Hero::UIType::Image);
+        Hero::UIElement image = ui->Element_Create("image1", Hero::UIElementType::Image);
         ui->Image_SetPosition(image, {0, 100});
         ui->Image_SetSize(image, {640, 360});
         Hero::Texture tex = Hero::Extra::LoadTextureByCopy("train.png");
         ui->Image_SetTexture(image, tex);
         ui->Image_SetUV(image, {0.0f, 0.0f, 0.5f, 0.5f});
+        ui->Element_BindEvent(image, Hero::UIEventType::OnHover, OnHover);
+        ui->Element_BindEvent(image, Hero::UIEventType::OffHover, OffHover);
 
         input = Hero::Core::GetSystem<Hero::Input>();
     }
