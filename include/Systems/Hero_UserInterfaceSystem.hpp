@@ -1,26 +1,89 @@
 #ifndef HERO_USERINTERFACE_SYSTEM_HPP
 #define HERO_USERINTERFACE_SYSTEM_HPP
 
-#include<string>
-#include<map>
-#include<cstdlib>
-#include<cstring>
+// #include<string>
+// #include<map>
+// #include<cstdlib>
+// #include<cstring>
 
 #include"Hero_Config.hpp"
 #include"Core/Hero_Math.hpp"
 #include"Core/Hero_System.hpp"
-#include"Core/Hero_Mesh.hpp"
-#include"Core/Hero_Shader.hpp"
-#include"Core/Hero_Color.hpp"
-#include"Core/Hero_Font.hpp"
-#include"Core/Hero_Texture.hpp"
-#include"Core/Hero_Event.hpp"
-#include"Core/Hero_Core.hpp"
-#include"Systems/Hero_InputSystem.hpp"
+// #include"Core/Hero_Texture.hpp"
+// #include"Core/Hero_Event.hpp"
+// #include"Core/Hero_Core.hpp"
+
 
 namespace Hero
 {
 
+// forward declaration
+class ISystem;
+class Input;
+struct Mesh;
+struct Shader;
+
+// pointer to object in array of ui elemenets
+typedef uint32_t* UIElement;
+
+// ui enums
+enum UIElementType : uint32_t
+{
+    Canvas,
+    HorizontalBox,
+    VerticalBox,
+    //GridBox, //maybe custom from vertical and horizontal
+    Image,
+    Label
+    //Custom
+};
+
+enum UIEventType:uint8_t
+{
+    OnHover = 0,
+    Hover = 1,
+    OffHover = 2,
+    OnLeftClick = 3,
+    HoldLeftClick = 4,
+    OffLeftClick = 5,
+    Count = 6
+};
+
+// forward declaration of ui element struct to hide data
+struct UIMain;
+struct UIDraw;
+struct UIEvent;
+
+// user interface class
+class UserInterface : public ISystem
+{
+// basic system class setup
+public:
+    UserInterface();
+    ~UserInterface();
+
+    void Init();
+    void Update();
+    void Close();
+
+    static const char* name; 
+    const char* GetName(){ return name; }
+
+    std::uint8_t priority(){ return 254; }
+
+// rendering data
+private:
+    Mesh* mesh;
+    Shader *shader;
+    matrix4x4 view;
+
+// events data
+private:
+    Input* input;
+    int mouseX, mouseY;
+};
+
+/*
 typedef uint32_t UIElement;
 
 enum UIElementType : uint32_t
@@ -47,6 +110,7 @@ struct UIDraw
     bool visible;
     int id;
     int4 rect;
+    uint8_t zorder;
     matrix3x3 uvMat;
 };
 
@@ -59,7 +123,8 @@ enum UIEventType:uint8_t
     OffHover = 2,
     OnClick = 3,
     HoldClick = 4,
-    OffClick = 5
+    OffClick = 5,
+    Count = 6
 };
 
 struct UIEvent
@@ -115,6 +180,7 @@ public:
     bool Element_IsVisible(UIElement self);
     void Element_BindEvent(UIElement self, UIEventType type, EventFunction function);
     void Element_UnbindEvent(UIElement self, UIEventType type);
+    void Element_SetZOrder(UIElement self, uint32_t zorder);
 
     void Canvas_AddChild(UIElement self, const std::string& name);
     void Canvas_AddChild(UIElement self, UIElement child);
@@ -148,7 +214,7 @@ public:
     void Image_SetTexture(UIElement self, Texture& texture);
     void Image_SetUV(UIElement self, const float4& uv);
 };
-
+*/
 }
 
 #endif

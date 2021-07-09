@@ -1,37 +1,12 @@
 #include"Systems/Hero_UserInterfaceSystem.hpp"
+#include"Core/Hero_Mesh.hpp"
+#include"Core/Hero_Shader.hpp"
+#include"Systems/Hero_InputSystem.hpp"
+#include"Core/Hero_Color.hpp"
+#include"Core/Hero_Font.hpp"
 
 namespace Hero
 {
-
-struct CanvasData
-{
-    UIElement* childs;
-    uint32_t count;
-};
-
-struct HorizontalBoxData
-{
-    UIElement* childs;
-    uint32_t count;
-};
-
-struct VerticalBoxData
-{
-    UIElement* childs;
-    uint32_t count;
-};
-
-struct LabelData
-{
-    Font* font;
-    Color color;
-    char* text;
-};
-
-struct ImageData
-{
-
-};
 
 const char* UserInterface::name = "UserInterface System"; 
 
@@ -48,7 +23,7 @@ UserInterface::~UserInterface()
 void UserInterface::Init()
 {
         ISystem::Init();
-
+/*
         float* vertices = new float[8]
                 {0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f};
         float* uvs = new float[8]
@@ -74,11 +49,12 @@ void UserInterface::Init()
 
         this->smallestEmpty = 0;
 
-        this->input = Core::GetSystem<Input>();
+        this->input = Core::GetSystem<Input>();*/
 }
 
 void UserInterface::Update()
 {
+        /*
         if(this->main.size() == 0)
                 return;
 
@@ -170,7 +146,7 @@ void UserInterface::Update()
                 }
 
                 Hero::matrix4x4 model = matrix4x4identity;
-                Hero::TranslateM4x4(model, {(float)d.rect.x, (float)d.rect.y ,0});
+                Hero::TranslateM4x4(model, {(float)d.rect.x, (float)d.rect.y , (float)d.zorder/256.0f});
                 Hero::ScaleM4x4(model, {(float)d.rect.z, (float)d.rect.w, 0});
                 unsigned int modelLoc = glGetUniformLocation(this->shader->glId, "model");
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (float*)(&(model.col[0])));
@@ -184,10 +160,12 @@ void UserInterface::Update()
                 DEBUG_CODE(glCheckError();)
                 Hero::DrawMesh(this->mesh);
         }
+        */
 }
 
 void UserInterface::Close()
 {
+        /*
         ISystem::Close();
 
         UnloadMesh(this->mesh);
@@ -202,8 +180,66 @@ void UserInterface::Close()
 
                 this->Element_Remove(i);
         }
+        */
 }
 
+// main data of element
+struct UIMain
+{
+  const char* name;
+  UIElementType type;
+  UIElement parent;
+  void* typeData;
+};
+
+// element data to render
+struct UIDraw
+{
+  bool isVisible;
+  int4 rect;
+  uint32_t textureID;
+  matrix3x3 textureMat;
+};
+
+// element data to handle event states
+struct UIEvent
+{
+  uint8_t set;
+  uint32_t state;
+};
+
+// custom data structs for elment types
+struct CanvasData
+{
+    UIElement* childs;
+    uint32_t count;
+};
+
+struct HorizontalBoxData
+{
+    UIElement* childs;
+    uint32_t count;
+};
+
+struct VerticalBoxData
+{
+    UIElement* childs;
+    uint32_t count;
+};
+
+struct LabelData
+{
+    Font* font;
+    Color color;
+    char* text;
+};
+
+struct ImageData
+{
+
+};
+
+/*
 void UserInterface::SizeUpdate(UIElement self)
 {
         if(this->main[self].parent < 0)
@@ -234,6 +270,7 @@ UIElement UserInterface::Element_Create(const std::string& name, UIElementType t
                 .visible = true,
                 .id = -1,
                 .rect = int4zero,
+                .zorder = 0,
                 .uvMat = matrix3x3identity
         };
 
@@ -389,6 +426,39 @@ void UserInterface::Element_UnbindEvent(UIElement self, UIEventType type)
 {
         this->event[self].set &= ~(1<<type);
         this->bindedEvents[self][type] = NULL;
+}
+
+void UserInterface::Element_SetZOrder(UIElement self, uint32_t zorder)
+{
+        this->draw[self].zorder = zorder;
+
+        switch(this->main[self].type)
+        {
+                case UIElementType::Canvas:
+                {
+                      CanvasData* data = (CanvasData*)this->custom[self];
+                      for(int i = 0; i < data->count; i++)
+                      {
+                              this->draw[data->childs[i]].zorder = zorder;
+                      }  
+                }break;
+                case UIElementType::HorizontalBox:
+                {
+                      HorizontalBoxData* data = (HorizontalBoxData*)this->custom[self];
+                      for(int i = 0; i < data->count; i++)
+                      {
+                              this->draw[data->childs[i]].zorder = zorder;
+                      }  
+                }break;
+                case UIElementType::VerticalBox:
+                {
+                      VerticalBoxData* data = (VerticalBoxData*)this->custom[self];
+                      for(int i = 0; i < data->count; i++)
+                      {
+                              this->draw[data->childs[i]].zorder = zorder;
+                      }  
+                }break;
+        }
 }
 
 void UserInterface::Canvas_AddChild(UIElement self, const std::string& name)
@@ -588,7 +658,7 @@ void UserInterface::VerticalBox_AddChild(UIElement self, UIElement child)
         uint32_t newSize = data->count * sizeof(UIElement);
         data->childs = (UIElement*)std::realloc(data->childs, newSize);
         data->childs[data->count - 1] = child;
-
+        this->draw[child].zorder = this->draw[self].zorder;
         this->draw[child].rect.x = this->draw[self].rect.x;
         int posY = this->draw[self].rect.y;
         for(int i = 0; i < data->count - 1; i++)
@@ -832,5 +902,5 @@ void UserInterface::Image_SetUV(UIElement self, const float4& uv)
        mat.col[2].x = uv.x;
        mat.col[2].y = uv.y; 
 }
-
+*/
 }

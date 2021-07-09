@@ -1,6 +1,6 @@
 #include"HeroCore.hpp"
 #include"HeroSystems.hpp"
-
+/*
 event(OnHover)
 {
     Hero::UserInterface* ui = (Hero::UserInterface*)object;
@@ -19,7 +19,7 @@ event(OnClick)
 {
     std::cout<<"Click"<<std::endl;
 }
-
+*/
 class Test:public Hero::ILevel
 {
 
@@ -27,7 +27,7 @@ class Test:public Hero::ILevel
 private:
     Hero::Shader* shader;
     Hero::Mesh* mesh;
-    Hero::UIElement canvas, label;
+    //Hero::UIElement canvas, label;
     Hero::int2 pos = {0, 0};
     Hero::Input* input;
     Hero::UserInterface* ui;
@@ -59,7 +59,7 @@ public:
         ui = Hero::Core::GetSystem<Hero::UserInterface>();
 
         font = Hero::LoadFont("arial.ttf" , 48);
-
+/*
         label = ui->Element_Create("label1", Hero::UIElementType::Label);
         Hero::Color color = {255, 255, 0, 255};
         ui->Label_SetColor(label, color);
@@ -94,7 +94,7 @@ public:
         ui->Element_BindEvent(image, Hero::UIEventType::OnHover, OnHover);
         ui->Element_BindEvent(image, Hero::UIEventType::OffHover, OffHover);
         ui->Element_BindEvent(image, Hero::UIEventType::OffClick, OnClick);
-
+*/
         input = Hero::Core::GetSystem<Hero::Input>();
     }
 
@@ -102,7 +102,7 @@ public:
     {
         Hero::BindShader(shader);
         Hero::DrawMesh(mesh);
-
+/*
         if(input->keyPressed(Hero::Input::KeyCode::SPACE))
         {
             std::cout<<pos.x<<std::endl;
@@ -117,7 +117,7 @@ public:
             //ui->HorizontalBox_RemoveChild(canvas, label);
             //ui->Label_SetSize(label, int2zero);
             //ui->Label_SetText(label, "Hello, Alek!");
-        }
+        }*/
     }
 
     void OnClose()
