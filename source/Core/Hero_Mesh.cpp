@@ -12,16 +12,16 @@ void UnloadMesh(Mesh* mesh)
 {
     for(auto buff: mesh->buffers)
     {
-       free(buff.array);
+       delete[] buff.array;
     }
     mesh->buffers.clear();
 
-    free(mesh->indices.array);
+    delete[] mesh->indices.array;
 
     glDeleteBuffers(1, &mesh->VAO);
     glDeleteBuffers(1, &mesh->VBO);
     glDeleteBuffers(1, &mesh->EBO);
-    free(mesh);
+    delete mesh;
 }
 
 void DrawMesh(const Mesh* mesh)
