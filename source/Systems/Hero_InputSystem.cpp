@@ -18,7 +18,7 @@ Input::Input()
 Input::~Input()
 {
     //delete this->current_keyboard_state;
-    delete this->previous_keyboard_state;
+    delete[] this->previous_keyboard_state;
 }
 
 void Input::Init()
