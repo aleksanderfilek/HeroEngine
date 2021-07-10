@@ -14,5 +14,6 @@
 #include"Core/Hero_Event.hpp"
 #include"Core/Hero_Color.hpp"
 #include"Core/Hero_Font.hpp"
+#include"Core/Hero_Stdlib.hpp"
 
 #endif
